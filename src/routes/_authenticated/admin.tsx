@@ -44,13 +44,15 @@ function AdminPage() {
   });
 
   const upsert = useMutation({
-    mutationFn: adminUpsertSubscription,
+    mutationFn: (v: Parameters<typeof adminUpsertSubscription>[0]["data"]) =>
+      adminUpsertSubscription({ data: v }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-subs"] });
     },
   });
   const setStatus = useMutation({
-    mutationFn: adminSetSubscriptionStatus,
+    mutationFn: (v: Parameters<typeof adminSetSubscriptionStatus>[0]["data"]) =>
+      adminSetSubscriptionStatus({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
   });
 
