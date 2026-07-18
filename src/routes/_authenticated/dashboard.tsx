@@ -278,7 +278,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
 
       {!checkoutSecret ? (
         <div className="mt-5">
-          <label className="text-xs font-medium text-muted-foreground">MT5 账户 UID</label>
+          <label className="text-sm font-medium text-foreground font-sans">MT5 账户 UID</label>
           <input
             value={mt5Uid}
             onChange={(e) => setMt5Uid(e.target.value.trim())}
