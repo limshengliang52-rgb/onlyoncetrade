@@ -137,7 +137,7 @@ function HowItWorks() {
     {
       n: "01",
       icon: KeyRound,
-      title: "提交 MT5 UID",
+      title: <>提交 <span className="font-sans">MT5</span> UID</>,
       desc: "会员付款后提交交易账号 UID，我们把账号加入 EA 授权白名单，仅授权账号能启动策略。",
     },
     {
