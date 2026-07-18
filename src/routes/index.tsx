@@ -197,7 +197,7 @@ function Features() {
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
           eyebrow="Features"
-          title={<>专为 MT5 EA 授权 <span className="gold-text">而设计</span></>}
+          title={<>专为 <span className="font-sans">MT5</span> EA 授权 <span className="gold-text">而设计</span></>}
           sub="从授权、风控到策略更新，全部围绕订阅制运作"
         />
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
