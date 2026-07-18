@@ -182,7 +182,7 @@ function Features() {
     { icon: RefreshCw, title: "EA 策略版本更新", desc: "策略迭代时统一推送新版本，会员始终使用最新参数。" },
     { icon: ShieldCheck, title: "每日亏损保护", desc: "内建 Daily Loss Guard，触发阈值自动停止当日交易。" },
     { icon: Coins, title: "黄金 / BTC 模式", desc: "可选 XAUUSD 或 BTCUSD 策略版本，或同时开启。" },
-    { icon: FlaskConical, title: "实盘前 Demo 验证", desc: "建议先在 Demo 账户挂载 EA，确认表现与风险后再实盘。" },
+    { icon: FlaskConical, title: "实盘前测试验证", desc: "建议先用小资金账户挂载 EA，确认表现与风险后再逐步放大。" },
   ];
   return (
     <section id="features" className="relative border-y border-border/50 bg-surface/40 py-24">
@@ -375,7 +375,7 @@ function MinCapital() {
                 但实际风险比例可能会被最小手数放大，不适合直接实盘放大。
               </p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-                我们建议先用 <span className="text-foreground">Demo 账户</span> 或 500 USD 起始资金验证策略表现，
+                我们建议先用 <span className="text-foreground">小资金账户</span> 或 500 USD 起始资金验证策略表现，
                 确认对回撤、点差与滑点的承受度后再逐步加大。
               </p>
             </div>
@@ -390,7 +390,7 @@ function Risk() {
   const points = [
     { icon: Gauge, title: "EA 是执行工具，不是收益保证", desc: "策略按预设逻辑自动执行，无法保证任何收益率或胜率。" },
     { icon: LineChart, title: "结果受市场与执行环境影响", desc: "交易结果会受市场行情、点差、滑点、网络延迟与策略表现影响。" },
-    { icon: FlaskConical, title: "先 Demo 或小资金验证", desc: "建议先用 Demo 或小资金账户挂载 EA，确认表现后再逐步实盘。" },
+    { icon: FlaskConical, title: "先小资金验证", desc: "建议先用小资金账户挂载 EA，确认表现与风险后再逐步实盘。" },
   ];
   return (
     <section id="risk" className="relative border-t border-border/50 bg-surface/40 py-24">
