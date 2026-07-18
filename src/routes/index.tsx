@@ -337,19 +337,28 @@ function PlanCard({ plan }: { plan: Plan }) {
         ))}
       </ul>
 
-      <a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noreferrer"
-        className={
-          "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
-          (plan.highlight
-            ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
-            : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
-        }
-      >
-        <MessageCircle className="h-4 w-4" /> {plan.cta}
-      </a>
+      {plan.name === "Managed Setup" ? (
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-5 py-3 text-sm font-semibold text-gold hover:bg-gold/10"
+        >
+          <MessageCircle className="h-4 w-4" /> WhatsApp 预约
+        </a>
+      ) : (
+        <a
+          href="/auth"
+          className={
+            "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
+            (plan.highlight
+              ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
+              : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
+          }
+        >
+          注册开通 <ArrowRight className="h-4 w-4" />
+        </a>
+      )}
     </div>
   );
 }
