@@ -84,7 +84,7 @@ function Hero() {
       <div className="absolute inset-0 bg-grid-faint opacity-40" aria-hidden />
       <div className="relative mx-auto max-w-6xl px-5 pb-24 pt-20 md:pt-28">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gold">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-xs font-medium text-gold font-sans">
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
             MT5 EA · Monthly License
           </span>
