@@ -231,9 +231,9 @@ const plans: Plan[] = [
   {
     name: "Basic Access",
     tagline: "适合先测试一个品种",
-    price: "$49",
-    original: "$79",
-    priceNote: "/ 月",
+    price: "$25",
+    original: "$49",
+    priceNote: "/ 30 天",
     features: [
       "1 个 MT5 UID 授权",
       "BTC 或黄金 二选一",
@@ -245,9 +245,9 @@ const plans: Plan[] = [
   {
     name: "Pro Access",
     tagline: "适合同时跑两个品种",
-    price: "$79",
-    original: "$99",
-    priceNote: "/ 月",
+    price: "$25",
+    original: "$79",
+    priceNote: "/ 30 天",
     highlight: true,
     features: [
       "1 个 MT5 UID 授权",
