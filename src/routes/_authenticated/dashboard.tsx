@@ -173,7 +173,7 @@ function DashboardPage() {
                   <tr>
                     <th className="px-5 py-3 text-left">时间</th>
                     <th className="px-5 py-3 text-left">方案</th>
-                    <th className="px-5 py-3 text-left">MT5 UID</th>
+                    <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">金额</th>
                     <th className="px-5 py-3 text-left">状态</th>
                   </tr>
