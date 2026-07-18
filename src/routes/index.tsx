@@ -322,7 +322,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
       {plan.original && (
         <div className="mt-2 flex items-center gap-2">
-          <span className="price-strike font-display text-base font-semibold">
+          <span className="price-strike font-display text-lg font-bold">
             {plan.original}
             <span className="price-strike-line" />
           </span>
