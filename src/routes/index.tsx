@@ -48,7 +48,7 @@ function Nav() {
             <Sparkles className="h-4 w-4" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
-            AITrade <span className="gold-text">Access</span>
+            OnlyOnce <span className="gold-text">EA Trade</span>
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
