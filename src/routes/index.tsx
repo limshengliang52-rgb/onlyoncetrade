@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const WHATSAPP_URL = "https://wa.me/60000000000?text=" + encodeURIComponent("你好，我想开通 AITrade Access EA 月费权限");
+const WHATSAPP_URL = "https://wa.me/60000000000?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");
 
 function Landing() {
   return (
@@ -48,7 +48,7 @@ function Nav() {
             <Sparkles className="h-4 w-4" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
-            AITrade <span className="gold-text">Access</span>
+            OnlyOnce <span className="gold-text">EA Trade</span>
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
@@ -94,7 +94,7 @@ function Hero() {
             让系统按策略自动执行交易
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            AITrade Access 采用 <span className="text-foreground">UID 白名单授权</span> 模式，会员开通后把 EA 挂在自己的 MT5 账户，
+            OnlyOnce EA Trade 采用 <span className="text-foreground">UID 白名单授权</span> 模式，会员开通后把 EA 挂在自己的 MT5 账户，
             系统根据策略信号、风险比例与每日亏损保护自动执行 —— 不是一次性卖 EA 文件，到期自动停止授权。
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -478,10 +478,10 @@ function Footer() {
           <span className="grid h-6 w-6 place-items-center rounded bg-gold-gradient text-primary-foreground">
             <Sparkles className="h-3 w-3" />
           </span>
-          <span className="font-display font-semibold text-foreground">AITrade Access</span>
+          <span className="font-display font-semibold text-foreground">OnlyOnce EA Trade</span>
         </div>
         <p className="text-center">
-          © {new Date().getFullYear()} AITrade Access · MT5 EA 月费授权服务 · 交易涉及风险
+          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务 · 交易涉及风险
         </p>
       </div>
     </footer>

@@ -71,14 +71,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AITrade Access · MT5 EA 月费授权服务" },
+      { title: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
       {
         name: "description",
         content:
-          "AITrade Access 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。",
+          "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。",
       },
-      { name: "author", content: "AITrade Access" },
-      { property: "og:title", content: "AITrade Access · MT5 EA 月费授权" },
+      { name: "author", content: "OnlyOnce EA Trade" },
+      { property: "og:title", content: "OnlyOnce EA Trade · MT5 EA 月费授权" },
       {
         property: "og:description",
         content: "付月费开通 EA 权限，让系统按策略自动执行交易。UID 授权，到期自动停止。",

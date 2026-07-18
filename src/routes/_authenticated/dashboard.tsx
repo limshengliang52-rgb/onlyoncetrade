@@ -66,7 +66,7 @@ function DashboardPage() {
               <Sparkles className="h-4 w-4" />
             </span>
             <span className="font-display text-lg font-bold">
-              AITrade <span className="gold-text">Access</span>
+              OnlyOnce <span className="gold-text">EA Trade</span>
             </span>
           </Link>
           <div className="flex items-center gap-3 text-sm">
