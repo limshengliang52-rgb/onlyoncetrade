@@ -24,9 +24,9 @@ export const PLAN_CATALOG: Record<
   access: {
     key: "access",
     name: "Access",
-    priceId: "plan_access_30d_promo25",
-    amountUSD: 25,
-    originalUSD: 79,
+    priceId: "plan_access_30d_usd",
+    amountUSD: 79,
+    originalUSD: 99,
     tagline: "适合同时跑两个品种",
     features: ["1 个 MT5 UID 授权", "BTC 与黄金 同时开启", "优先参数检查", "30 天权限，到期自动停止"],
   },
