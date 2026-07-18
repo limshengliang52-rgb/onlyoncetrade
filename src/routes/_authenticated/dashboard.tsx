@@ -265,7 +265,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
           <p className="mt-1 text-xs text-muted-foreground">{plan.tagline}</p>
         </div>
         <div className="text-right">
-          <div className="font-display text-2xl font-bold gold-text">RM{plan.amountMYR}</div>
+          <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">/ 月</div>
         </div>
       </div>
