@@ -117,7 +117,7 @@ function DashboardPage() {
               <table className="w-full text-sm">
                 <thead className="bg-background/40 text-xs uppercase tracking-wider text-muted-foreground">
                   <tr>
-                    <th className="px-5 py-3 text-left">MT5 UID</th>
+                    <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">方案</th>
                     <th className="px-5 py-3 text-left">状态</th>
                     <th className="px-5 py-3 text-left">到期时间</th>
@@ -173,7 +173,7 @@ function DashboardPage() {
                   <tr>
                     <th className="px-5 py-3 text-left">时间</th>
                     <th className="px-5 py-3 text-left">方案</th>
-                    <th className="px-5 py-3 text-left">MT5 UID</th>
+                    <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">金额</th>
                     <th className="px-5 py-3 text-left">状态</th>
                   </tr>
@@ -278,7 +278,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
 
       {!checkoutSecret ? (
         <div className="mt-5">
-          <label className="text-xs font-medium text-muted-foreground">MT5 账户 UID</label>
+          <label className="text-sm font-medium text-foreground font-sans">MT5 账户 UID</label>
           <input
             value={mt5Uid}
             onChange={(e) => setMt5Uid(e.target.value.trim())}
