@@ -257,19 +257,6 @@ const plans: Plan[] = [
     ],
     cta: "WhatsApp 开通",
   },
-  {
-    name: "Managed Setup",
-    tagline: "适合需要协助安装与检查的人",
-    price: "预约开通",
-    priceNote: "一次性服务",
-    features: [
-      "远程 MT5 安装",
-      "账户风险检查",
-      "EA 权限配置",
-      "运行状态确认",
-    ],
-    cta: "WhatsApp 预约",
-  },
 ];
 
 function Pricing() {
@@ -281,7 +268,7 @@ function Pricing() {
           title={<>选择你的 <span className="gold-text">EA 授权方案</span></>}
           sub="限时优惠价，可随时通过 WhatsApp 咨询升级或续费"
         />
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
             <PlanCard key={p.name} plan={p} />
           ))}
@@ -345,28 +332,17 @@ function PlanCard({ plan }: { plan: Plan }) {
         ))}
       </ul>
 
-      {plan.name === "Managed Setup" ? (
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-5 py-3 text-sm font-semibold text-gold hover:bg-gold/10"
-        >
-          <MessageCircle className="h-4 w-4" /> WhatsApp 预约
-        </a>
-      ) : (
-        <a
-          href="/auth"
-          className={
-            "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
-            (plan.highlight
-              ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
-              : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
-          }
-        >
-          注册开通 <ArrowRight className="h-4 w-4" />
-        </a>
-      )}
+      <a
+        href="/auth"
+        className={
+          "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
+          (plan.highlight
+            ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
+            : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
+        }
+      >
+        注册开通 <ArrowRight className="h-4 w-4" />
+      </a>
     </div>
   );
 }
