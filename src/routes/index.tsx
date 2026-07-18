@@ -245,8 +245,8 @@ const plans: Plan[] = [
   {
     name: "Pro Access",
     tagline: "适合同时跑两个品种",
-    price: "$25",
-    original: "$79",
+    price: "$79",
+    original: "$99",
     priceNote: "/ 30 天",
     highlight: true,
     features: [
