@@ -165,7 +165,7 @@ function HowItWorks() {
           {steps.map((s, i) => (
             <div key={s.n} className="card-lux relative rounded-2xl p-7">
               <div className="flex items-center justify-between">
-                <span className="font-display text-4xl font-bold text-gold/30">{s.n}</span>
+                <span className="font-display text-4xl font-bold text-gold/15">{s.n}</span>
                 <span className="grid h-11 w-11 place-items-center rounded-xl border border-gold/25 bg-gold/5 text-gold">
                   <s.icon className="h-5 w-5" />
                 </span>
