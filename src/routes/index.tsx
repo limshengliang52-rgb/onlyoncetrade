@@ -57,14 +57,22 @@ function Nav() {
           <a href="#pricing" className="transition hover:text-foreground">订阅方案</a>
           <a href="#risk" className="transition hover:text-foreground">风险说明</a>
         </nav>
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/10"
-        >
-          <MessageCircle className="h-4 w-4" /> WhatsApp 申请
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            href="/auth"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground"
+          >
+            登录
+          </a>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden items-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/10 md:inline-flex"
+          >
+            <MessageCircle className="h-4 w-4" /> WhatsApp
+          </a>
+        </div>
       </div>
     </header>
   );
