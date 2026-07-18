@@ -375,7 +375,7 @@ function MinCapital() {
                 但实际风险比例可能会被最小手数放大，不适合直接实盘放大。
               </p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-                我们建议先用 <span className="text-foreground">小资金账户</span> 或 500 USD 起始资金验证策略表现，
+                我们建议先用 <span className="text-foreground">500 USD 起始资金</span> 验证策略表现，
                 确认对回撤、点差与滑点的承受度后再逐步加大。
               </p>
             </div>
