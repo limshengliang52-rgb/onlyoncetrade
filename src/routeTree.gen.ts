@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedEaLicensesRouteImport } from './routes/_authenticated/ea-licenses'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicCheckRouteImport } from './routes/api/public/check'
 import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicEaLicenseCheckRouteImport } from './routes/api/public/ea-license/check'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -31,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEaLicensesRoute = AuthenticatedEaLicensesRouteImport.update({
+  id: '/ea-licenses',
+  path: '/ea-licenses',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -59,14 +66,21 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEaLicenseCheckRoute = ApiPublicEaLicenseCheckRouteImport.update({
+  id: '/api/public/ea-license/check',
+  path: '/api/public/ea-license/check',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -74,8 +88,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -85,8 +101,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -96,8 +114,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin'
     | '/dashboard'
+    | '/ea-licenses'
     | '/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -105,8 +125,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin'
     | '/dashboard'
+    | '/ea-licenses'
     | '/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -115,8 +137,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/_authenticated/ea-licenses'
     | '/_authenticated/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -125,6 +149,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicCheckRoute: typeof ApiPublicCheckRoute
+  ApiPublicEaLicenseCheckRoute: typeof ApiPublicEaLicenseCheckRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -150,6 +175,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ea-licenses': {
+      id: '/_authenticated/ea-licenses'
+      path: '/ea-licenses'
+      fullPath: '/ea-licenses'
+      preLoaderRoute: typeof AuthenticatedEaLicensesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -186,18 +218,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ea-license/check': {
+      id: '/api/public/ea-license/check'
+      path: '/api/public/ea-license/check'
+      fullPath: '/api/public/ea-license/check'
+      preLoaderRoute: typeof ApiPublicEaLicenseCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEaLicensesRoute: typeof AuthenticatedEaLicensesRoute
   AuthenticatedCheckoutPlanRoute: typeof AuthenticatedCheckoutPlanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEaLicensesRoute: AuthenticatedEaLicensesRoute,
   AuthenticatedCheckoutPlanRoute: AuthenticatedCheckoutPlanRoute,
 }
 
@@ -209,18 +250,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicCheckRoute: ApiPublicCheckRoute,
+  ApiPublicEaLicenseCheckRoute: ApiPublicEaLicenseCheckRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

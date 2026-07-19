@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      ea_licenses: {
+        Row: {
+          created_at: string
+          email: string | null
+          expires_at: string
+          id: string
+          member_name: string
+          mt5_account_id: string
+          notes: string | null
+          phone: string | null
+          product: string
+          status: string
+          uid: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          expires_at: string
+          id?: string
+          member_name: string
+          mt5_account_id: string
+          notes?: string | null
+          phone?: string | null
+          product: string
+          status?: string
+          uid?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          expires_at?: string
+          id?: string
+          member_name?: string
+          mt5_account_id?: string
+          notes?: string | null
+          phone?: string | null
+          product?: string
+          status?: string
+          uid?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount_cents: number

@@ -90,6 +90,14 @@ function AdminPage() {
       </header>
 
       <div className="mx-auto max-w-6xl px-5 py-10">
+        <div className="mb-6">
+          <Link
+            to="/ea-licenses"
+            className="inline-flex items-center gap-2 rounded-lg border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold hover:bg-gold/10"
+          >
+            <Sparkles className="h-3.5 w-3.5" /> EA 会员授权管理 →
+          </Link>
+        </div>
         <section className="card-lux rounded-2xl p-6">
           <h2 className="font-display text-lg font-semibold">手动开通 / 延期</h2>
           <p className="mt-1 text-xs text-muted-foreground">
