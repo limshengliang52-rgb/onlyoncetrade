@@ -254,22 +254,18 @@ function SuccessBlock({
           <span className="font-mono text-foreground">{mt5Uid}</span> 已进入白名单。
         </p>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
-          <a
-            href="/downloads/OnlyOnceEA.zip"
-            download
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
-          >
-            <Download className="h-4 w-4" /> 下载 EA 文件
-          </a>
+        <div className="mt-8 grid gap-3">
           <a
             href={waUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-5 py-3 text-sm font-semibold text-gold transition hover:bg-gold/10"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
           >
-            <MessageCircle className="h-4 w-4" /> 通过 WhatsApp 领取
+            <MessageCircle className="h-4 w-4" /> 通过 WhatsApp 领取 EA 文件
           </a>
+          <p className="text-[11px] text-muted-foreground">
+            为确保你收到最新版本与安装指引，EA 文件由客服在 WhatsApp 内直接发送。
+          </p>
         </div>
 
         <div className="mt-8 rounded-xl border border-border/60 bg-background/40 p-5 text-left text-xs leading-relaxed text-muted-foreground">
