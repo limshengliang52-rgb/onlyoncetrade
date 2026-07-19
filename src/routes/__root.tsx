@@ -87,8 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
       { name: "twitter:description", content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8bcbb0d7-98aa-4e76-bfd6-aaeb10a682c7/id-preview-8d285470--fa1380a5-91bf-45f9-8a53-6acb38a612f7.lovable.app-1784396009863.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8bcbb0d7-98aa-4e76-bfd6-aaeb10a682c7/id-preview-8d285470--fa1380a5-91bf-45f9-8a53-6acb38a612f7.lovable.app-1784396009863.png" },
+    
     ],
     links: [
       { rel: "stylesheet", href: appCss },
