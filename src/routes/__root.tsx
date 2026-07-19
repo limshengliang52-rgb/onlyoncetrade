@@ -84,9 +84,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "OnlyOnce EA Trade" },
+      { property: "og:image", content: "https://onlyoncetrade.com/og-cover.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
       { name: "twitter:description", content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。" },
+      { name: "twitter:image", content: "https://onlyoncetrade.com/og-cover.jpg" },
     
     ],
     links: [

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /ea-licenses
+Disallow: /checkout/
+Disallow: /api/
+
+Sitemap: https://onlyoncetrade.com/sitemap.xml

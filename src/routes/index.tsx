@@ -480,15 +480,23 @@ function CTA() {
 function Footer() {
   return (
     <footer className="border-t border-border/60 py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 text-xs text-muted-foreground md:flex-row">
-        <div className="flex items-center gap-2">
-          <span className="grid h-6 w-6 place-items-center rounded bg-gold-gradient text-primary-foreground">
-            <Sparkles className="h-3 w-3" />
-          </span>
-          <span className="font-display font-semibold text-foreground">OnlyOnce EA Trade</span>
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 text-xs text-muted-foreground">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex items-center gap-2">
+            <span className="grid h-6 w-6 place-items-center rounded bg-gold-gradient text-primary-foreground">
+              <Sparkles className="h-3 w-3" />
+            </span>
+            <span className="font-display font-semibold text-foreground">OnlyOnce EA Trade</span>
+          </div>
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <a href="/risk-disclosure" className="transition hover:text-foreground">风险声明</a>
+            <a href="/terms" className="transition hover:text-foreground">服务条款</a>
+            <a href="/refund-policy" className="transition hover:text-foreground">退款政策</a>
+            <a href="/privacy-policy" className="transition hover:text-foreground">隐私政策</a>
+          </nav>
         </div>
         <p className="text-center">
-          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务 · 交易涉及风险
+          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务 · 交易涉及风险，请谨慎参与
         </p>
       </div>
     </footer>

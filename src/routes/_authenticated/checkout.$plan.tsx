@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { createEACheckoutSession } from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+
 import {
   Sparkles,
   ArrowLeft,
@@ -43,6 +43,7 @@ function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [riskAccepted, setRiskAccepted] = useState(false);
 
   const success = search.checkout === "success";
 
@@ -68,6 +69,10 @@ function CheckoutPage() {
       setError("MT5 UID 需 3-32 位字母数字（可含 _ / -）");
       return;
     }
+    if (!riskAccepted) {
+      setError("请先阅读并勾选风险声明后再继续付款");
+      return;
+    }
     setLoading(true);
     try {
       const result = await createEACheckoutSession({
@@ -90,7 +95,7 @@ function CheckoutPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <PaymentTestModeBanner />
+
       <header className="border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
           <Link to="/" className="flex items-center gap-2">
@@ -189,10 +194,24 @@ function CheckoutPage() {
                     </p>
                   )}
 
+                  <label className="mt-6 flex items-start gap-3 rounded-lg border border-border/60 bg-background/40 p-3 text-xs leading-relaxed text-muted-foreground cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={riskAccepted}
+                      onChange={(e) => setRiskAccepted(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
+                    />
+                    <span>
+                      我已阅读并理解{" "}
+                      <a href="/risk-disclosure" target="_blank" className="text-gold underline">风险声明</a>
+                      ，明白 EA 不保证盈利，交易亏损风险由我自行承担。
+                    </span>
+                  </label>
+
                   <button
                     onClick={startCheckout}
-                    disabled={loading}
-                    className="mt-6 w-full rounded-full bg-gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110 disabled:opacity-60"
+                    disabled={loading || !riskAccepted}
+                    className="mt-4 w-full rounded-full bg-gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {loading ? "正在创建结账..." : `付款 $${plan.amountUSD} 立即开通 30 天`}
                   </button>
