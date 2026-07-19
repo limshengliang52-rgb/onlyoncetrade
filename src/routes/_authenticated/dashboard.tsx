@@ -13,7 +13,7 @@ import {
   getMyPayments,
 } from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+
 import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
