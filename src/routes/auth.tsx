@@ -126,20 +126,21 @@ function AuthPage() {
           </p>
 
           <button
+            type="button"
             onClick={handleGoogle}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background/60 px-4 py-3 text-sm font-medium transition hover:bg-background"
+            className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3.5 text-sm font-semibold text-gray-800 shadow-lg shadow-black/30 ring-1 ring-white/20 transition hover:bg-gray-50 active:scale-[0.98]"
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
-              <path
-                fill="currentColor"
-                d="M21.35 11.1H12v3.2h5.35c-.23 1.5-1.6 4.4-5.35 4.4a5.7 5.7 0 010-11.4c1.63 0 2.73.7 3.35 1.3l2.3-2.2C15.9 5 14.15 4.3 12 4.3a8.2 8.2 0 100 16.4c4.73 0 7.85-3.3 7.85-8 0-.53-.05-.94-.1-1.35z"
-              />
+            <svg className="h-5 w-5" viewBox="0 0 48 48" aria-hidden="true">
+              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+              <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.3c-2 1.4-4.6 2.3-7.4 2.3-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.6 39.6 16.2 44 24 44z"/>
+              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.3 5.3C41.6 35.2 44 30 44 24c0-1.3-.1-2.4-.4-3.5z"/>
             </svg>
-            使用 Google 登录
+            使用 Google 一键登录
           </button>
 
           <div className="my-6 flex items-center gap-3 text-[11px] uppercase tracking-widest text-muted-foreground">
-            <span className="h-px flex-1 bg-border" /> 或 <span className="h-px flex-1 bg-border" />
+            <span className="h-px flex-1 bg-border" /> 或使用邮箱 <span className="h-px flex-1 bg-border" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
