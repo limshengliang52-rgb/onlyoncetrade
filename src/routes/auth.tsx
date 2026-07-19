@@ -62,7 +62,26 @@ function AuthPage() {
         }
       }
     } catch (err: any) {
-      setError(err?.message ?? "操作失败");
+      setError(translateAuthError(err?.message));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function translateAuthError(msg?: string): string {
+    if (!msg) return "操作失败，请重试";
+    const m = msg.toLowerCase();
+    if (m.includes("invalid login")) return "邮箱或密码错误";
+    if (m.includes("email not confirmed")) return "邮箱未验证，请查收验证邮件";
+    if (m.includes("user already registered")) return "该邮箱已注册，请直接登录";
+    if (m.includes("password should be at least")) return "密码至少 6 位";
+    if (m.includes("weak") || m.includes("pwned")) return "密码过于简单，请使用更复杂的密码";
+    if (m.includes("rate limit") || m.includes("too many")) return "请求过于频繁，请稍后再试";
+    if (m.includes("invalid email")) return "邮箱格式不正确";
+    return msg;
+  }
+
+  async function _unusedCatchTail() {
     } finally {
       setLoading(false);
     }
