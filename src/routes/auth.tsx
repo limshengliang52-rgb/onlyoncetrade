@@ -81,11 +81,6 @@ function AuthPage() {
     return msg;
   }
 
-  async function _unusedCatchTail() {
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleGoogle() {
     setError(null);
