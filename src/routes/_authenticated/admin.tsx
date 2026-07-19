@@ -125,6 +125,7 @@ function AdminPage() {
                       <th className="px-4 py-3 text-left">用户</th>
                       <th className="px-4 py-3 text-left">MT5 UID</th>
                       <th className="px-4 py-3 text-left">方案</th>
+                      <th className="px-4 py-3 text-left">授权产品</th>
                       <th className="px-4 py-3 text-left">状态</th>
                       <th className="px-4 py-3 text-left">到期</th>
                       <th className="px-4 py-3 text-left">操作</th>
@@ -138,6 +139,9 @@ function AdminPage() {
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">{s.mt5_uid}</td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
+                        <td className="px-4 py-3 font-mono text-[11px] uppercase">
+                          {Array.isArray(s.products) && s.products.length ? s.products.join(" + ") : "-"}
+                        </td>
                         <td className="px-4 py-3">{s.status}</td>
                         <td className="px-4 py-3 text-xs text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
@@ -150,6 +154,7 @@ function AdminPage() {
                                   id: s.id,
                                   mt5_uid: s.mt5_uid,
                                   plan: s.plan,
+                                  products: s.products ?? undefined,
                                   extend_days: 30,
                                 })
                               }
