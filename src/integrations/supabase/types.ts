@@ -147,6 +147,7 @@ export type Database = {
           mt5_uid: string
           notes: string | null
           plan: Database["public"]["Enums"]["plan_type"]
+          products: string[]
           started_at: string | null
           status: Database["public"]["Enums"]["subscription_status"]
           stripe_session_id: string | null
@@ -160,6 +161,7 @@ export type Database = {
           mt5_uid: string
           notes?: string | null
           plan: Database["public"]["Enums"]["plan_type"]
+          products?: string[]
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
           stripe_session_id?: string | null
@@ -173,6 +175,7 @@ export type Database = {
           mt5_uid?: string
           notes?: string | null
           plan?: Database["public"]["Enums"]["plan_type"]
+          products?: string[]
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
           stripe_session_id?: string | null
