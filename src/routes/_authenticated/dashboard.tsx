@@ -52,6 +52,12 @@ function DashboardPage() {
     queryKey: ["my-pays"],
     queryFn: () => getMyPayments(),
   });
+  const downloadsQuery = useQuery({
+    queryKey: ["my-ea-downloads"],
+    queryFn: () => getEADownloads(),
+    refetchOnWindowFocus: false,
+  });
+
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -161,6 +167,10 @@ function DashboardPage() {
             )}
           </div>
         </section>
+
+        <EADownloadSection query={downloadsQuery} />
+
+
 
         <section className="mt-12">
           <h2 className="font-display text-xl font-semibold">付款记录</h2>
