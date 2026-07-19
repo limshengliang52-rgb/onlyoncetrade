@@ -69,6 +69,10 @@ function CheckoutPage() {
       setError("MT5 UID 需 3-32 位字母数字（可含 _ / -）");
       return;
     }
+    if (!riskAccepted) {
+      setError("请先阅读并勾选风险声明后再继续付款");
+      return;
+    }
     setLoading(true);
     try {
       const result = await createEACheckoutSession({
