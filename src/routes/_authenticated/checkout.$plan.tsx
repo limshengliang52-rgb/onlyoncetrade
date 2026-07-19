@@ -14,7 +14,6 @@ import {
   ArrowLeft,
   Check,
   ShieldCheck,
-  Download,
   MessageCircle,
   CheckCircle2,
 } from "lucide-react";
