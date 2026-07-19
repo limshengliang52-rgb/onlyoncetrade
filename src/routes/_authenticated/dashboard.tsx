@@ -12,9 +12,11 @@ import {
   getMySubscriptions,
   getMyPayments,
 } from "@/lib/subscriptions.functions";
+import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 
-import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, FileText, AlertTriangle } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
@@ -50,6 +52,12 @@ function DashboardPage() {
     queryKey: ["my-pays"],
     queryFn: () => getMyPayments(),
   });
+  const downloadsQuery = useQuery({
+    queryKey: ["my-ea-downloads"],
+    queryFn: () => getEADownloads(),
+    refetchOnWindowFocus: false,
+  });
+
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -159,6 +167,10 @@ function DashboardPage() {
             )}
           </div>
         </section>
+
+        <EADownloadSection query={downloadsQuery} />
+
+
 
         <section className="mt-12">
           <h2 className="font-display text-xl font-semibold">付款记录</h2>
@@ -319,3 +331,91 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
     </div>
   );
 }
+
+function EADownloadSection({
+  query,
+}: {
+  query: ReturnType<typeof useQuery<Awaited<ReturnType<typeof getEADownloads>>>>;
+}) {
+  const data = query.data;
+
+  return (
+    <section className="mt-12">
+      <h2 className="font-display text-xl font-semibold">下载你的 OnlyOnce EA</h2>
+      <div className="card-lux mt-4 rounded-2xl p-6">
+        {query.isLoading ? (
+          <p className="text-sm text-muted-foreground">正在验证授权...</p>
+        ) : !data?.authorized ? (
+          <div className="flex items-start gap-3 text-sm">
+            <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-400" />
+            <div>
+              <p className="text-foreground">你的 EA 权限尚未开通或已过期，请先完成订阅。</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                完成付款并获得授权后，下载按钮会自动出现。
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="grid gap-3 text-xs text-muted-foreground sm:grid-cols-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider">MT5 UID</div>
+                <div className="mt-1 font-mono text-sm text-foreground">{data.mt5_uid}</div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider">当前方案</div>
+                <div className="mt-1 text-sm text-foreground">
+                  {PLAN_CATALOG[data.plan as PlanKey]?.name ?? data.plan}
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider">到期时间</div>
+                <div className="mt-1 text-sm text-foreground">
+                  {data.expires_at ? new Date(data.expires_at).toLocaleString() : "-"}
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-wider">授权状态</div>
+                <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-400">
+                  <CheckCircle2 className="h-3 w-3" /> 生效中
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+              {data.files.map((f) => {
+                const Icon = f.key === "guide" ? FileText : Download;
+                const disabled = !f.url || f.missing;
+                return (
+                  <a
+                    key={f.key}
+                    href={f.url ?? "#"}
+                    onClick={(e) => {
+                      if (disabled) e.preventDefault();
+                    }}
+                    className={
+                      "inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition " +
+                      (disabled
+                        ? "cursor-not-allowed border-border/60 bg-muted/30 text-muted-foreground"
+                        : f.key === "guide"
+                          ? "border-border/60 bg-background/60 text-foreground hover:border-gold/60"
+                          : "border-transparent bg-gold-gradient text-primary-foreground hover:brightness-110")
+                    }
+                  >
+                    <Icon className="h-4 w-4" />
+                    {f.label}
+                    {disabled && <span className="text-[10px]">（待上传）</span>}
+                  </a>
+                );
+              })}
+            </div>
+            <p className="mt-4 text-[11px] text-muted-foreground">
+              下载链接为临时签名 URL，5 分钟内有效。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
