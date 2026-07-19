@@ -12,9 +12,11 @@ import {
   getMySubscriptions,
   getMyPayments,
 } from "@/lib/subscriptions.functions";
+import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 
-import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, FileText, AlertTriangle } from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
