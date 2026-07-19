@@ -5,11 +5,15 @@ import { lovable } from "@/integrations/lovable";
 import { Sparkles, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" ? s.next : undefined,
+  }),
   component: AuthPage,
 });
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,11 +21,20 @@ function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
 
+  const goNext = () => {
+    if (next && next.startsWith("/")) {
+      window.location.assign(next);
+    } else {
+      navigate({ to: "/dashboard" });
+    }
+  };
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/dashboard" });
+      if (data.user) goNext();
     });
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,12 +45,12 @@ function AuthPage() {
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard" });
+        goNext();
       } else {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/dashboard"}` },
         });
         if (error) throw error;
         // 邮箱已开启自动确认，直接登录
@@ -45,7 +58,7 @@ function AuthPage() {
         if (signInErr) {
           setInfo("注册成功，请使用邮箱和密码登录。");
         } else {
-          navigate({ to: "/dashboard" });
+          goNext();
         }
       }
     } catch (err: any) {
@@ -66,7 +79,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/dashboard" });
+      goNext();
     } catch (err: any) {
       setError(err?.message ?? "Google 登录失败");
     }

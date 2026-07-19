@@ -233,6 +233,7 @@ function Features() {
 }
 
 type Plan = {
+  key: "basic" | "access";
   name: string;
   tagline: string;
   price: string;
@@ -245,6 +246,7 @@ type Plan = {
 
 const plans: Plan[] = [
   {
+    key: "basic",
     name: "Basic Access",
     tagline: "适合先测试一个品种",
     price: "$25",
@@ -256,9 +258,10 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "默认风控参数",
     ],
-    cta: "WhatsApp 开通",
+    cta: "立即开通",
   },
   {
+    key: "access",
     name: "Pro Access",
     tagline: "适合同时跑两个品种",
     price: "$79",
@@ -271,7 +274,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "优先参数检查",
     ],
-    cta: "WhatsApp 开通",
+    cta: "立即开通",
   },
 ];
 
@@ -349,7 +352,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </ul>
 
       <a
-        href="/auth"
+        href={`/checkout/${plan.key}`}
         className={
           "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
@@ -357,7 +360,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        注册开通 <ArrowRight className="h-4 w-4" />
+        {plan.cta} <ArrowRight className="h-4 w-4" />
       </a>
     </div>
   );
