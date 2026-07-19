@@ -35,7 +35,23 @@ function Landing() {
       <Risk />
       <CTA />
       <Footer />
+      <FloatingWhatsApp />
     </main>
+  );
+}
+
+function FloatingWhatsApp() {
+  return (
+    <a
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="WhatsApp 客服"
+      className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 rounded-full bg-gold-gradient px-4 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-6px_var(--gold)] transition-transform hover:scale-105 active:scale-95"
+    >
+      <MessageCircle className="h-5 w-5" />
+      <span className="hidden sm:inline">WhatsApp</span>
+    </a>
   );
 }
 
