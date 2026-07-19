@@ -43,6 +43,7 @@ function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [riskAccepted, setRiskAccepted] = useState(false);
 
   const success = search.checkout === "success";
 
