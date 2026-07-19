@@ -40,7 +40,13 @@ function AuthPage() {
           options: { emailRedirectTo: `${window.location.origin}/dashboard` },
         });
         if (error) throw error;
-        setInfo("注册成功，请查收邮箱验证邮件后登录。");
+        // 邮箱已开启自动确认，直接登录
+        const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInErr) {
+          setInfo("注册成功，请使用邮箱和密码登录。");
+        } else {
+          navigate({ to: "/dashboard" });
+        }
       }
     } catch (err: any) {
       setError(err?.message ?? "操作失败");
