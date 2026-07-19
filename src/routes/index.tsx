@@ -233,6 +233,7 @@ function Features() {
 }
 
 type Plan = {
+  key: "basic" | "access";
   name: string;
   tagline: string;
   price: string;
@@ -245,6 +246,7 @@ type Plan = {
 
 const plans: Plan[] = [
   {
+    key: "basic",
     name: "Basic Access",
     tagline: "适合先测试一个品种",
     price: "$25",
@@ -256,9 +258,10 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "默认风控参数",
     ],
-    cta: "WhatsApp 开通",
+    cta: "立即开通",
   },
   {
+    key: "access",
     name: "Pro Access",
     tagline: "适合同时跑两个品种",
     price: "$79",
@@ -271,7 +274,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "优先参数检查",
     ],
-    cta: "WhatsApp 开通",
+    cta: "立即开通",
   },
 ];
 
