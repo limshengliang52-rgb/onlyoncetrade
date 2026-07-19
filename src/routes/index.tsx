@@ -17,8 +17,20 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import ogImage from "@/assets/og-image.jpg";
+
+const SITE_URL = "https://onlyoncetrade.com";
+
 export const Route = createFileRoute("/")({
   component: Landing,
+  head: () => ({
+    meta: [
+      { property: "og:image", content: `${SITE_URL}${ogImage}` },
+      { name: "twitter:image", content: `${SITE_URL}${ogImage}` },
+      { property: "og:url", content: SITE_URL },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+  }),
 });
 
 const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");

@@ -178,6 +178,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
     mt5_uid: string;
     plan: PlanKey;
     extend_days: number;
+    products?: string[];
     notes?: string;
   }) => {
     const schema = z.object({
@@ -186,6 +187,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
       mt5_uid: z.string().regex(mt5UidRe),
       plan: z.enum(["basic", "access"]),
       extend_days: z.number().int().min(1).max(3650),
+      products: z.array(z.enum(["xau", "btc"])).min(1).max(2).optional(),
       notes: z.string().max(500).optional(),
     });
     return schema.parse(d);
@@ -193,6 +195,12 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await requireAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const products =
+      data.products && data.products.length
+        ? Array.from(new Set(data.products))
+        : data.plan === "access"
+          ? ["xau", "btc"]
+          : ["xau"];
     let subId = data.id;
     let userId: string | null = null;
 
@@ -215,6 +223,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
           plan: data.plan,
           mt5_uid: data.mt5_uid,
           status: "active",
+          products,
           expires_at: newExpires.toISOString(),
           started_at: existing.expires_at ?? new Date().toISOString(),
           notes: data.notes ?? null,
@@ -242,6 +251,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
         mt5_uid: data.mt5_uid,
         plan: data.plan,
         status: "active",
+        products,
         started_at: startedAt.toISOString(),
         expires_at: expiresAt.toISOString(),
         notes: data.notes ?? "手动开通",
