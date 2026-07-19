@@ -242,6 +242,7 @@ function ManualForm({
     mt5_uid: string;
     plan: PlanKey;
     extend_days: number;
+    products?: string[];
     notes?: string;
   }) => void;
   loading: boolean;
@@ -252,6 +253,13 @@ function ManualForm({
   const [mt5, setMt5] = useState("");
   const [plan, setPlan] = useState<PlanKey>("basic");
   const [days, setDays] = useState(30);
+  const [products, setProducts] = useState<string[]>(["xau"]);
+
+  function toggle(p: string) {
+    setProducts((prev) =>
+      prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p],
+    );
+  }
 
   return (
     <form
@@ -263,6 +271,7 @@ function ManualForm({
           mt5_uid: mt5.trim(),
           plan,
           extend_days: days,
+          products: products.length ? products : undefined,
         });
       }}
       className="mt-4 grid gap-3 md:grid-cols-6"
@@ -288,7 +297,11 @@ function ManualForm({
       />
       <select
         value={plan}
-        onChange={(e) => setPlan(e.target.value as PlanKey)}
+        onChange={(e) => {
+          const p = e.target.value as PlanKey;
+          setPlan(p);
+          setProducts(p === "access" ? ["xau", "btc"] : ["xau"]);
+        }}
         className="rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2"
       >
         {Object.values(PLAN_CATALOG).map((p) => (
@@ -303,8 +316,22 @@ function ManualForm({
         max={3650}
         value={days}
         onChange={(e) => setDays(parseInt(e.target.value) || 30)}
+        placeholder="天数"
         className="rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2"
       />
+      <div className="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2">
+        <span className="text-muted-foreground">授权产品:</span>
+        {(["xau", "btc"] as const).map((p) => (
+          <label key={p} className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={products.includes(p)}
+              onChange={() => toggle(p)}
+            />
+            <span className="uppercase font-mono">{p}</span>
+          </label>
+        ))}
+      </div>
       <button
         type="submit"
         disabled={loading}
