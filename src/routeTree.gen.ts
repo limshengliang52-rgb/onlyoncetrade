@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedEaLicensesRouteImport } from './routes/_authenticated/ea-licenses'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicCheckRouteImport } from './routes/api/public/check'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEaLicensesRoute = AuthenticatedEaLicensesRouteImport.update({
+  id: '/ea-licenses',
+  path: '/ea-licenses',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
   '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
   '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/ea-licenses': typeof AuthenticatedEaLicensesRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
   '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin'
     | '/dashboard'
+    | '/ea-licenses'
     | '/checkout/$plan'
     | '/api/public/check'
     | '/api/public/ea-license/check'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin'
     | '/dashboard'
+    | '/ea-licenses'
     | '/checkout/$plan'
     | '/api/public/check'
     | '/api/public/ea-license/check'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/_authenticated/ea-licenses'
     | '/_authenticated/checkout/$plan'
     | '/api/public/check'
     | '/api/public/ea-license/check'
@@ -163,6 +175,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ea-licenses': {
+      id: '/_authenticated/ea-licenses'
+      path: '/ea-licenses'
+      fullPath: '/ea-licenses'
+      preLoaderRoute: typeof AuthenticatedEaLicensesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -212,12 +231,14 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEaLicensesRoute: typeof AuthenticatedEaLicensesRoute
   AuthenticatedCheckoutPlanRoute: typeof AuthenticatedCheckoutPlanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEaLicensesRoute: AuthenticatedEaLicensesRoute,
   AuthenticatedCheckoutPlanRoute: AuthenticatedCheckoutPlanRoute,
 }
 
