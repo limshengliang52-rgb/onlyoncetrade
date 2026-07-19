@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const WHATSAPP_URL = "https://wa.me/0136330303?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");
+const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");
 
 function Landing() {
   return (
