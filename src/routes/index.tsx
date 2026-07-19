@@ -352,7 +352,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </ul>
 
       <a
-        href="/auth"
+        href={`/checkout/${plan.key}`}
         className={
           "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
@@ -360,7 +360,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        注册开通 <ArrowRight className="h-4 w-4" />
+        {plan.cta} <ArrowRight className="h-4 w-4" />
       </a>
     </div>
   );
