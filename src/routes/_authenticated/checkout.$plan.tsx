@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { createEACheckoutSession } from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+
 import {
   Sparkles,
   ArrowLeft,
