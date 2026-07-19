@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RiskDisclosureRouteImport } from './routes/risk-disclosure'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -30,6 +31,11 @@ const TermsRoute = TermsRouteImport.update({
 const RiskDisclosureRoute = RiskDisclosureRouteImport.update({
   id: '/risk-disclosure',
   path: '/risk-disclosure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -87,6 +93,7 @@ const ApiPublicEaLicenseCheckRoute = ApiPublicEaLicenseCheckRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
   '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/refund-policy'
     | '/risk-disclosure'
     | '/terms'
     | '/admin'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/refund-policy'
     | '/risk-disclosure'
     | '/terms'
     | '/admin'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/refund-policy'
     | '/risk-disclosure'
     | '/terms'
     | '/_authenticated/admin'
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   RiskDisclosureRoute: typeof RiskDisclosureRoute
   TermsRoute: typeof TermsRoute
   ApiPublicCheckRoute: typeof ApiPublicCheckRoute
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/risk-disclosure'
       fullPath: '/risk-disclosure'
       preLoaderRoute: typeof RiskDisclosureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   RiskDisclosureRoute: RiskDisclosureRoute,
   TermsRoute: TermsRoute,
   ApiPublicCheckRoute: ApiPublicCheckRoute,
