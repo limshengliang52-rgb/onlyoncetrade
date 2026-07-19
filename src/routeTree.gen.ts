@@ -17,6 +17,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as ApiPublicCheckRouteImport } from './routes/api/public/check'
 import { Route as AuthenticatedCheckoutPlanRouteImport } from './routes/_authenticated/checkout.$plan'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicEaLicenseCheckRouteImport } from './routes/api/public/ea-license/check'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -59,6 +60,11 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEaLicenseCheckRoute = ApiPublicEaLicenseCheckRouteImport.update({
+  id: '/api/public/ea-license/check',
+  path: '/api/public/ea-license/check',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/checkout/$plan': typeof AuthenticatedCheckoutPlanRoute
   '/api/public/check': typeof ApiPublicCheckRoute
+  '/api/public/ea-license/check': typeof ApiPublicEaLicenseCheckRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/checkout/$plan'
     | '/api/public/check'
+    | '/api/public/ea-license/check'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicCheckRoute: typeof ApiPublicCheckRoute
+  ApiPublicEaLicenseCheckRoute: typeof ApiPublicEaLicenseCheckRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -186,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ea-license/check': {
+      id: '/api/public/ea-license/check'
+      path: '/api/public/ea-license/check'
+      fullPath: '/api/public/ea-license/check'
+      preLoaderRoute: typeof ApiPublicEaLicenseCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicCheckRoute: ApiPublicCheckRoute,
+  ApiPublicEaLicenseCheckRoute: ApiPublicEaLicenseCheckRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
