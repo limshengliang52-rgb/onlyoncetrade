@@ -4,9 +4,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // File paths inside the private `ea-files` bucket.
 // Upload the actual EA files via the Supabase Storage UI at these keys.
 const FILE_PATHS = {
-  xau: "xau/OnlyOnce_XAU.ex5",
-  btc: "btc/OnlyOnce_BTC.ex5",
-  guide: "docs/OnlyOnce_Install_Guide.pdf",
+  xau: "OnlyOnce_XAUUSD_EA.ex5",
+  btc: "OnlyOnce_BTC_EA.ex5",
+  guide: "OnlyOnce_Install_Guide.pdf",
 } as const;
 
 export type EADownloadFile = {
