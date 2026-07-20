@@ -71,24 +71,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
+      { title: "OnlyOnce EA Trade · MT5 EA 自动交易服务" },
       {
         name: "description",
         content:
-          "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。",
+          "OnlyOnce EA Trade 提供 MT5 EA 自动交易服务，按月订阅获取黄金与 BTC 策略执行权限，让系统按预设规则自动交易。",
       },
       { name: "author", content: "OnlyOnce EA Trade" },
-      { property: "og:title", content: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
+      { property: "og:title", content: "OnlyOnce EA Trade · MT5 EA 自动交易服务" },
       {
         property: "og:description",
-        content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。",
+        content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易服务，按月订阅获取黄金与 BTC 策略执行权限，让系统按预设规则自动交易。",
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "OnlyOnce EA Trade" },
       { property: "og:image", content: "https://onlyoncetrade.com/og-cover.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "OnlyOnce EA Trade · MT5 EA 月费授权服务" },
-      { name: "twitter:description", content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易月费授权：提交 UID 加入白名单，按月开通黄金/BTC 策略权限，内建每日亏损保护与实盘前 Demo 验证。" },
+      { name: "twitter:title", content: "OnlyOnce EA Trade · MT5 EA 自动交易服务" },
+      { name: "twitter:description", content: "OnlyOnce EA Trade 提供 MT5 EA 自动交易服务，按月订阅获取黄金与 BTC 策略执行权限，让系统按预设规则自动交易。" },
       { name: "twitter:image", content: "https://onlyoncetrade.com/og-cover.jpg" },
     
     ],
