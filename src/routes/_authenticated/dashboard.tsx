@@ -384,7 +384,8 @@ function EADownloadSection({
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.files.map((f) => {
-                const Icon = f.key === "guide" ? FileText : Download;
+                const isGuide = f.key === "guide_cn" || f.key === "guide_en";
+                const Icon = isGuide ? FileText : Download;
                 const disabled = !f.url || f.missing;
                 return (
                   <a
@@ -397,7 +398,7 @@ function EADownloadSection({
                       "inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition " +
                       (disabled
                         ? "cursor-not-allowed border-border/60 bg-muted/30 text-muted-foreground"
-                        : f.key === "guide"
+                        : isGuide
                           ? "border-border/60 bg-background/60 text-foreground hover:border-gold/60"
                           : "border-transparent bg-gold-gradient text-primary-foreground hover:brightness-110")
                     }

@@ -4,13 +4,14 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // File paths inside the private `ea-files` bucket.
 // Upload the actual EA files via the Supabase Storage UI at these keys.
 const FILE_PATHS = {
-  xau: "OnlyOnce_XAUUSD_EA.ex5",
-  btc: "OnlyOnce_BTC_EA.ex5",
-  guide: "OnlyOnce_Install_Guide.pdf",
+  xau: "OnlyOnce_XAUUSD_EA-2.ex5",
+  btc: "OnlyOnce_BTC_SMC_H4_H1_OB_A.ex5",
+  guide_cn: "OnlyOnce_EA_Install_Guide_CN.pdf",
+  guide_en: "OnlyOnce_EA_Install_Guide_EN.pdf",
 } as const;
 
 export type EADownloadFile = {
-  key: "xau" | "btc" | "guide";
+  key: "xau" | "btc" | "guide_cn" | "guide_en";
   label: string;
   url: string | null;
   missing?: boolean;
@@ -53,10 +54,11 @@ export const getEADownloads = createServerFn({ method: "GET" })
           : ["xau"];
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const wanted: { key: "xau" | "btc" | "guide"; label: string; path: string }[] = [];
+    const wanted: { key: "xau" | "btc" | "guide_cn" | "guide_en"; label: string; path: string }[] = [];
     if (products.includes("xau")) wanted.push({ key: "xau", label: "下载 XAUUSD EA", path: FILE_PATHS.xau });
     if (products.includes("btc")) wanted.push({ key: "btc", label: "下载 BTC EA", path: FILE_PATHS.btc });
-    wanted.push({ key: "guide", label: "下载安装说明", path: FILE_PATHS.guide });
+    wanted.push({ key: "guide_cn", label: "下载安装说明 (中文)", path: FILE_PATHS.guide_cn });
+    wanted.push({ key: "guide_en", label: "Download Guide (English)", path: FILE_PATHS.guide_en });
 
     const files = await Promise.all(
       wanted.map(async (f) => {
