@@ -54,10 +54,11 @@ export const getEADownloads = createServerFn({ method: "GET" })
           : ["xau"];
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const wanted: { key: "xau" | "btc" | "guide"; label: string; path: string }[] = [];
+    const wanted: { key: "xau" | "btc" | "guide_cn" | "guide_en"; label: string; path: string }[] = [];
     if (products.includes("xau")) wanted.push({ key: "xau", label: "下载 XAUUSD EA", path: FILE_PATHS.xau });
     if (products.includes("btc")) wanted.push({ key: "btc", label: "下载 BTC EA", path: FILE_PATHS.btc });
-    wanted.push({ key: "guide", label: "下载安装说明", path: FILE_PATHS.guide });
+    wanted.push({ key: "guide_cn", label: "下载安装说明 (中文)", path: FILE_PATHS.guide_cn });
+    wanted.push({ key: "guide_en", label: "Download Guide (English)", path: FILE_PATHS.guide_en });
 
     const files = await Promise.all(
       wanted.map(async (f) => {
