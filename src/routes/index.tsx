@@ -190,8 +190,8 @@ function HowItWorks() {
           sub="从付款到 EA 在你的 MT5 上运行，全程清晰可追溯"
         />
         <div className="mt-14 grid gap-5 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <div key={s.n} className="card-lux relative rounded-2xl p-7">
+          {steps.map((s) => (
+            <div key={s.n} className="card-lux rounded-2xl p-7">
               <div className="flex items-center justify-between">
                 <span className="font-display text-4xl font-bold text-gold/45">{s.n}</span>
                 <span className="grid h-11 w-11 place-items-center rounded-xl border border-gold/25 bg-gold/5 text-gold">
@@ -200,9 +200,6 @@ function HowItWorks() {
               </div>
               <h3 className="mt-6 text-lg font-semibold">{s.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-              {i < steps.length - 1 && (
-                <div className="pointer-events-none absolute -right-3 top-1/2 hidden h-px w-6 -translate-y-1/2 bg-gradient-to-r from-gold/60 to-transparent md:block" />
-              )}
             </div>
           ))}
         </div>
