@@ -257,10 +257,14 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
     }
     setLoading(true);
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      const email = userData.user?.email;
+      if (!email) throw new Error("请先登录以获取邮箱");
       const result = await createEACheckoutSession({
         data: {
           plan: plan.key,
           mt5Uid,
+          email,
           returnUrl: `${window.location.origin}/dashboard?checkout=success`,
           environment: getStripeEnvironment(),
         },
