@@ -41,17 +41,21 @@ async function resolveOrCreateCustomer(
   return created.id;
 }
 
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const createEACheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: {
     plan: PlanKey;
     mt5Uid: string;
+    email: string;
     returnUrl: string;
     environment: StripeEnv;
   }) => {
     const schema = z.object({
       plan: z.enum(["basic", "access"]),
       mt5Uid: z.string().regex(mt5UidRe, "MT5 UID 需 3-32 位字母数字"),
+      email: z.string().regex(emailRe, "请输入有效的邮箱地址"),
       returnUrl: z.string().url(),
       environment: z.enum(["sandbox", "live"]),
     });
