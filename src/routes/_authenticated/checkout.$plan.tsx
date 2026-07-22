@@ -69,6 +69,10 @@ function CheckoutPage() {
       setError("MT5 UID 需 3-32 位字母数字（可含 _ / -）");
       return;
     }
+    if (!email) {
+      setError("请先登录以获取邮箱");
+      return;
+    }
     if (!riskAccepted) {
       setError("请先阅读并勾选风险声明后再继续付款");
       return;
@@ -79,6 +83,7 @@ function CheckoutPage() {
         data: {
           plan: plan.key,
           mt5Uid,
+          email,
           returnUrl: `${window.location.origin}/checkout/${plan.key}?checkout=success&uid=${encodeURIComponent(mt5Uid)}`,
           environment: getStripeEnvironment(),
         },
