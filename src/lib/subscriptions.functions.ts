@@ -66,7 +66,10 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
       const catalog = PLAN_CATALOG[data.plan];
       const stripe = createStripeClient(data.environment);
       const { data: userData } = await context.supabase.auth.getUser();
-      const email = userData.user?.email;
+      const authEmail = userData.user?.email;
+      // Prefer the email the user typed in at checkout (e.g. Gmail for EA delivery),
+      // but fall back to their auth email if they left it blank.
+      const email = data.email?.trim() || authEmail;
       const customerId = await resolveOrCreateCustomer(stripe, {
         email: email ?? undefined,
         userId: context.userId,
