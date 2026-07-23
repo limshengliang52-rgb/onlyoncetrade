@@ -193,7 +193,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
       user_email: z.string().email().optional(),
       mt5_uid: z.string().regex(mt5UidRe),
       plan: z.enum(["basic", "access"]),
-      extend_days: z.number().int().min(1).max(3650),
+      extend_days: z.number().int().min(-3650).max(3650).refine((n) => n !== 0, "天数不能为 0"),
       products: z.array(z.enum(["xau", "btc"])).min(1).max(2).optional(),
       notes: z.string().max(500).optional(),
     });
