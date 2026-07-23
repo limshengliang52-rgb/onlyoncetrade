@@ -241,6 +241,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
     }
 
     if (!data.user_email) throw new Error("必须提供订阅 ID 或用户邮箱");
+    if (data.extend_days < 1) throw new Error("新建订阅时天数必须大于 0");
     const { data: prof } = await supabaseAdmin
       .from("profiles")
       .select("id")
