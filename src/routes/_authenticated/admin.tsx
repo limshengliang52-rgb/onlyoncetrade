@@ -345,11 +345,11 @@ function ManualForm({
       </select>
       <input
         type="number"
-        min={1}
+        min={-3650}
         max={3650}
         value={days}
         onChange={(e) => setDays(parseInt(e.target.value) || 30)}
-        placeholder="天数"
+        placeholder="天数（正=延期 / 负=扣减，仅对已有订阅）"
         className="rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2"
       />
       <div className="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2">
