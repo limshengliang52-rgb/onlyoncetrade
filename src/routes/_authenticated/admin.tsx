@@ -163,6 +163,39 @@ function AdminPage() {
                               +30天
                             </button>
                             <button
+                              onClick={() => {
+                                if (!confirm("确认扣除 30 天？")) return;
+                                upsert.mutate({
+                                  id: s.id,
+                                  mt5_uid: s.mt5_uid,
+                                  plan: s.plan,
+                                  products: s.products ?? undefined,
+                                  extend_days: -30,
+                                });
+                              }}
+                              className="rounded-md border border-orange-500/40 bg-orange-500/5 px-2 py-1 text-[10px] font-semibold text-orange-400 hover:bg-orange-500/10"
+                            >
+                              -30天
+                            </button>
+                            <button
+                              onClick={() => {
+                                const raw = prompt("自定义天数（正数=延期，负数=扣减）", "7");
+                                if (!raw) return;
+                                const n = parseInt(raw);
+                                if (!Number.isInteger(n) || n === 0) return alert("请输入非零整数");
+                                upsert.mutate({
+                                  id: s.id,
+                                  mt5_uid: s.mt5_uid,
+                                  plan: s.plan,
+                                  products: s.products ?? undefined,
+                                  extend_days: n,
+                                });
+                              }}
+                              className="rounded-md border border-border bg-background/40 px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                            >
+                              自定义
+                            </button>
+                            <button
                               onClick={() => setStatus.mutate({ id: s.id, status: "cancelled" })}
                               className="rounded-md border border-red-500/40 bg-red-500/5 px-2 py-1 text-[10px] font-semibold text-red-400 hover:bg-red-500/10"
                             >
