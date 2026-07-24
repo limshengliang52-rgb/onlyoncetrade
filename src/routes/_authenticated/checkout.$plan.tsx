@@ -6,7 +6,10 @@ import {
 } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
-import { createEACheckoutSession } from "@/lib/subscriptions.functions";
+import {
+  createEACheckoutSession,
+  verifyEACheckoutSession,
+} from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 
 import {
