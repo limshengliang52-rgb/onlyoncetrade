@@ -109,6 +109,7 @@ function Nav() {
 }
 
 function Hero() {
+  const memberCount = useMemberCount();
   return (
     <section id="top" className="relative overflow-hidden bg-hero-radial">
       <div className="absolute inset-0 bg-grid-faint opacity-40" aria-hidden />
