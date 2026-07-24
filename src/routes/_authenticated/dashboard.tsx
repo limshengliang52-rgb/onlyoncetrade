@@ -230,7 +230,7 @@ function DashboardPage() {
                 EA 会通过 <span className="text-foreground">UID、产品类型和授权密钥</span> 检查会员是否有效；如果会员过期或未授权，EA 将停止执行新交易。
               </p>
               <p className="mt-2 text-xs">
-                <span className="text-amber-400">注意：</span>真实的 api_key 仅供 EA 内部使用，请勿在公开渠道分享。如需获取密钥请通过 WhatsApp 联系客服。
+                <span className="text-amber-400">注意：</span>真实的 api_key 仅供 EA 内部使用，请勿在公开渠道分享。如需安装协助可 WhatsApp 私信客服。
               </p>
               <p className="mt-3 flex items-center gap-1 text-xs">
                 <Clock className="h-3 w-3" /> 到期后接口自动返回未授权状态，EA 停止交易。
