@@ -351,11 +351,11 @@ function Backtest() {
             <div>
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">Net Profit · Jan–Jul 2026</span>
               <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+832.80</span>
-                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">USD</span>
+                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.6</span>
+                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">%</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+166.6%</span>
+                起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+832.80 USD</span>
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2">
