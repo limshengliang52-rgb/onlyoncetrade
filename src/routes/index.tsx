@@ -442,6 +442,7 @@ function Backtest() {
   );
 }
 
+function Pricing() {
   return (
     <section id="pricing" className="relative py-24">
       <div className="mx-auto max-w-6xl px-5">
