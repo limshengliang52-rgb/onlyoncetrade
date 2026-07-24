@@ -14,6 +14,7 @@ import {
 } from "@/lib/subscriptions.functions";
 import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
+import { PlatformNotice } from "@/components/PlatformNotice";
 
 import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, FileText, AlertTriangle } from "lucide-react";
 
