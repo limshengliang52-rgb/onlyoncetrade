@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
-const BASE_COUNT = 33;
+const BASE_COUNT = 25;
 
 export const getMemberCount = createServerFn({ method: "GET" }).handler(async () => {
   try {
