@@ -257,10 +257,12 @@ function AdminPage() {
                 <thead className="bg-background/40 text-xs uppercase tracking-wider text-muted-foreground">
                   <tr>
                     <th className="px-4 py-3 text-left">时间</th>
+                    <th className="px-4 py-3 text-left">邮箱</th>
                     <th className="px-4 py-3 text-left">方案</th>
                     <th className="px-4 py-3 text-left">MT5 UID</th>
                     <th className="px-4 py-3 text-left">金额</th>
                     <th className="px-4 py-3 text-left">状态</th>
+                    <th className="px-4 py-3 text-left">Stripe Session / PI</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -269,6 +271,7 @@ function AdminPage() {
                       <td className="px-4 py-3 text-xs text-muted-foreground">
                         {new Date(p.created_at).toLocaleString()}
                       </td>
+                      <td className="px-4 py-3 text-xs">{p.customer_email ?? "-"}</td>
                       <td className="px-4 py-3">
                         {p.plan ? PLAN_CATALOG[p.plan as PlanKey]?.name ?? p.plan : "-"}
                       </td>
@@ -276,7 +279,29 @@ function AdminPage() {
                       <td className="px-4 py-3">
                         {(p.amount_cents / 100).toFixed(2)} {p.currency?.toUpperCase()}
                       </td>
-                      <td className="px-4 py-3">{p.status}</td>
+                      <td className="px-4 py-3">
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
+                          p.status === "paid"
+                            ? "bg-emerald-500/10 text-emerald-400"
+                            : "bg-muted text-muted-foreground"
+                        }`}>
+                          {p.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-[10px] text-muted-foreground">
+                        {p.stripe_session_id ? (
+                          <div className="max-w-[200px] truncate" title={p.stripe_session_id}>
+                            {p.stripe_session_id}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground/50">-</span>
+                        )}
+                        {p.stripe_payment_intent && (
+                          <div className="max-w-[200px] truncate text-muted-foreground/70" title={p.stripe_payment_intent}>
+                            {p.stripe_payment_intent}
+                          </div>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
