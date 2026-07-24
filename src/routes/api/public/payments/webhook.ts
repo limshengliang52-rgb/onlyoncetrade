@@ -17,6 +17,10 @@ function getAdmin(): SupabaseClient {
 
 const MONTH_MS = 30 * 86400_000;
 
+function productsFor(plan: "basic" | "access"): string[] {
+  return plan === "access" ? ["xau", "btc"] : ["xau"];
+}
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const admin = getAdmin();
   const userId = session.metadata?.userId as string | undefined;
