@@ -17,6 +17,10 @@ function getAdmin(): SupabaseClient {
 
 const MONTH_MS = 30 * 86400_000;
 
+function productsFor(plan: "basic" | "access"): string[] {
+  return plan === "access" ? ["xau", "btc"] : ["xau"];
+}
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const admin = getAdmin();
   const userId = session.metadata?.userId as string | undefined;
@@ -75,6 +79,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         status: "active",
         started_at: activeSub.expires_at ?? now.toISOString(),
         expires_at: newExpires.toISOString(),
+        products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
         customer_email: customerEmail,
@@ -93,6 +98,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         status: "active",
         started_at: now.toISOString(),
         expires_at: new Date(now.getTime() + MONTH_MS).toISOString(),
+        products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
         customer_email: customerEmail,

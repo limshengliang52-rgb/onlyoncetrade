@@ -118,6 +118,19 @@ function AdminPage() {
             ) : !subs.data?.length ? (
               <p className="p-6 text-sm text-muted-foreground">暂无订阅</p>
             ) : (
+              (() => {
+                const lastPayBySub = new Map<string, string>();
+                const lastPayByUid = new Map<string, string>();
+                for (const p of (pays.data ?? []) as any[]) {
+                  if (p.status !== "paid") continue;
+                  if (p.subscription_id && !lastPayBySub.has(p.subscription_id)) {
+                    lastPayBySub.set(p.subscription_id, p.created_at);
+                  }
+                  if (p.mt5_uid && !lastPayByUid.has(p.mt5_uid)) {
+                    lastPayByUid.set(p.mt5_uid, p.created_at);
+                  }
+                }
+                return (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-background/40 text-xs uppercase tracking-wider text-muted-foreground">
@@ -129,12 +142,19 @@ function AdminPage() {
                       <th className="px-4 py-3 text-left">来源</th>
                       <th className="px-4 py-3 text-left">状态</th>
                       <th className="px-4 py-3 text-left">到期</th>
+                      <th className="px-4 py-3 text-left">剩余天数</th>
+                      <th className="px-4 py-3 text-left">最后付款</th>
                       <th className="px-4 py-3 text-left">Stripe</th>
                       <th className="px-4 py-3 text-left">操作</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {subs.data.map((s: any) => (
+                    {subs.data.map((s: any) => {
+                      const lastPay = lastPayBySub.get(s.id) ?? lastPayByUid.get(s.mt5_uid);
+                      const remainingDays = s.expires_at
+                        ? Math.ceil((new Date(s.expires_at).getTime() - Date.now()) / 86400_000)
+                        : null;
+                      return (
                       <tr key={s.id} className="border-t border-border/40">
                         <td className="px-4 py-3">
                           <div className="text-xs">{s.profile?.email ?? s.customer_email ?? s.user_id}</div>
@@ -156,6 +176,20 @@ function AdminPage() {
                         <td className="px-4 py-3">{s.status}</td>
                         <td className="px-4 py-3 text-xs text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
+                        </td>
+                        <td className={`px-4 py-3 text-xs font-semibold ${
+                          remainingDays === null
+                            ? "text-muted-foreground"
+                            : remainingDays <= 0
+                              ? "text-red-400"
+                              : remainingDays <= 7
+                                ? "text-orange-400"
+                                : "text-emerald-400"
+                        }`}>
+                          {remainingDays === null ? "-" : remainingDays <= 0 ? "已过期" : `${remainingDays} 天`}
+                        </td>
+                        <td className="px-4 py-3 text-xs text-muted-foreground">
+                          {lastPay ? new Date(lastPay).toLocaleString() : "-"}
                         </td>
                         <td className="px-4 py-3 font-mono text-[10px] text-muted-foreground">
                           {s.stripe_session_id ? (
@@ -237,10 +271,13 @@ function AdminPage() {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
+                );
+              })()
             )}
           </div>
         </section>
