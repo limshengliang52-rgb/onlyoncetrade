@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { getMemberCount } from "@/lib/member-count.functions";
+import { PlatformNotice } from "@/components/PlatformNotice";
 import {
   ShieldCheck,
   KeyRound,
