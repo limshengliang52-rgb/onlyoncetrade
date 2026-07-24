@@ -167,7 +167,7 @@ function Hero() {
               rel="noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-7 py-3.5 text-sm font-semibold text-foreground transition hover:border-gold/40 sm:w-auto"
             >
-              <MessageCircle className="h-4 w-4" /> WhatsApp 咨询
+              <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
             </a>
           </div>
           <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border/60 pt-8 text-left sm:gap-8">
