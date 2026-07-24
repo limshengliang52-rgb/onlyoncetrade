@@ -300,6 +300,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
         started_at: startedAt.toISOString(),
         expires_at: expiresAt.toISOString(),
         notes: data.notes ?? "手动开通",
+        source: "manual",
       })
       .select("id")
       .single();
