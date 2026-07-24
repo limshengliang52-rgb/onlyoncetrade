@@ -479,22 +479,30 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              提交 UID，开通你的
+              一键开通你的
               <br className="hidden sm:block" />
               <span className="gold-text"> EA 月费权限</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              通过 WhatsApp 联系我们，提供你的 MT5 UID 与所选方案，
-              我们会在确认付款后完成白名单授权。
+              选择方案 → 填写 MT5 UID → Stripe 付款成功后系统自动开通授权与解锁下载，全程无需人工。
+              安装遇到问题可 WhatsApp 私信客服协助。
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-9 inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
-            >
-              <MessageCircle className="h-5 w-5" /> WhatsApp 申请开通
-            </a>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#pricing"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
+              >
+                查看订阅方案 <ArrowRight className="h-5 w-5" />
+              </a>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
+              >
+                <MessageCircle className="h-5 w-5" /> WhatsApp 私信客服
+              </a>
+            </div>
           </div>
         </div>
       </div>
