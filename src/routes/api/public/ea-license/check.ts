@@ -42,16 +42,16 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
 
         const expectedKey = process.env.EA_LICENSE_API_KEY;
         if (!expectedKey || signature !== expectedKey) {
-          return respond({ ok: false, status: "unauthorized", message: "Invalid signature" }, 401);
+          return respond({ authorized: false, reason: "invalid_signature" }, 401);
         }
         if (!ID_RE.test(account_id) || !ID_RE.test(product)) {
-          return respond({ ok: false, status: "invalid", message: "Invalid parameters" }, 400);
+          return respond({ authorized: false, reason: "invalid_params" }, 400);
         }
 
         const admin = getAdmin();
         const nowIso = new Date().toISOString();
 
-        // Lazy-expire
+        // Lazy-expire ea_licenses
         await admin
           .from("ea_licenses")
           .update({ status: "expired" })
@@ -69,129 +69,67 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
 
         if (error) {
           console.error("ea-license check error", error);
-          return respond({ ok: false, status: "server_error", message: "Server error" }, 500);
+          return respond({ authorized: false, reason: "server_error" }, 500);
         }
 
-        // Fallback: look up in subscriptions table by MT5 UID (real paid customers)
-        if (!data) {
-          const productKey = product.toLowerCase().includes("btc")
-            ? "btc"
-            : product.toLowerCase().includes("xau") || product.toLowerCase().includes("gold")
-              ? "xau"
-              : product.toLowerCase();
-
-          await admin
-            .from("subscriptions")
-            .update({ status: "expired" })
-            .eq("mt5_uid", account_id)
-            .eq("status", "active")
-            .lt("expires_at", nowIso);
-
-          const { data: sub } = await admin
-            .from("subscriptions")
-            .select("plan, products, status, expires_at")
-            .eq("mt5_uid", account_id)
-            .in("status", ["active", "expired", "cancelled"])
-            .order("expires_at", { ascending: false })
-            .limit(1)
-            .maybeSingle();
-
-          if (!sub) {
-            return respond({
-              authorized: false,
-              status: "not_found",
-              account_id,
-              product,
-              server_time: nowIso,
-              message: "License not found",
-            });
+        if (data) {
+          if (data.status === "suspended") {
+            return respond({ authorized: false, reason: "suspended" });
           }
-          if (sub.status !== "active" || !sub.expires_at || new Date(sub.expires_at as string) < new Date()) {
-            return respond({
-              authorized: false,
-              status: sub.status === "cancelled" ? "suspended" : "expired",
-              account_id,
-              product,
-              expires_at: sub.expires_at,
-              server_time: nowIso,
-              message: sub.status === "cancelled" ? "License suspended" : "Membership expired",
-            });
+          if (data.status !== "active" || new Date(data.expires_at) < new Date()) {
+            return respond({ authorized: false, reason: "expired", expires_at: data.expires_at });
           }
-          const allowed: string[] =
-            Array.isArray(sub.products) && sub.products.length
-              ? (sub.products as string[])
-              : sub.plan === "access"
-                ? ["xau", "btc"]
-                : ["xau"];
-          if (!allowed.includes(productKey)) {
-            return respond({
-              authorized: false,
-              status: "product_not_allowed",
-              account_id,
-              product,
-              expires_at: sub.expires_at,
-              server_time: nowIso,
-              message: `plan ${sub.plan} not authorized for ${productKey}`,
-            });
-          }
-          if (uid && uid !== account_id) {
-            // uid parameter is informational for subscriptions path
+          if (uid && data.uid && uid !== data.uid) {
+            return respond({ authorized: false, reason: "uid_mismatch" });
           }
           void version;
-          return respond({
-            authorized: true,
-            status: "active",
-            account_id,
-            product,
-            expires_at: sub.expires_at,
-            server_time: nowIso,
-            message: "Authorized",
-          });
+          return respond({ authorized: true, status: "active", expires_at: data.expires_at });
         }
 
-        if (data.status === "suspended") {
-          return respond({
-            ok: false,
-            status: "suspended",
-            account_id,
-            product,
-            server_time: nowIso,
-            message: "License suspended",
-          });
-        }
-        if (data.status !== "active" || new Date(data.expires_at) < new Date()) {
-          return respond({
-            ok: false,
-            status: "expired",
-            account_id,
-            product,
-            expires_at: data.expires_at,
-            server_time: nowIso,
-            message: "Membership expired",
-          });
-        }
-        if (uid && data.uid && uid !== data.uid) {
-          return respond({
-            ok: false,
-            status: "uid_mismatch",
-            account_id,
-            product,
-            server_time: nowIso,
-            message: "UID mismatch",
-          });
-        }
+        // Fallback: subscriptions by MT5 UID (real paid customers)
+        const productKey = product.toLowerCase().includes("btc")
+          ? "btc"
+          : product.toLowerCase().includes("xau") || product.toLowerCase().includes("gold")
+            ? "xau"
+            : product.toLowerCase();
 
+        await admin
+          .from("subscriptions")
+          .update({ status: "expired" })
+          .eq("mt5_uid", account_id)
+          .eq("status", "active")
+          .lt("expires_at", nowIso);
+
+        const { data: sub } = await admin
+          .from("subscriptions")
+          .select("plan, products, status, expires_at")
+          .eq("mt5_uid", account_id)
+          .in("status", ["active", "expired", "cancelled"])
+          .order("expires_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (!sub) {
+          return respond({ authorized: false, reason: "not_found" });
+        }
+        if (sub.status === "cancelled") {
+          return respond({ authorized: false, reason: "suspended" });
+        }
+        if (sub.status !== "active" || !sub.expires_at || new Date(sub.expires_at as string) < new Date()) {
+          return respond({ authorized: false, reason: "expired", expires_at: sub.expires_at });
+        }
+        const allowed: string[] =
+          Array.isArray(sub.products) && sub.products.length
+            ? (sub.products as string[])
+            : sub.plan === "access"
+              ? ["xau", "btc"]
+              : ["xau"];
+        if (!allowed.includes(productKey)) {
+          return respond({ authorized: false, reason: "product_not_allowed" });
+        }
+        void uid;
         void version;
-
-        return respond({
-          authorized: true,
-          status: "active",
-          account_id,
-          product,
-          expires_at: data.expires_at,
-          server_time: nowIso,
-          message: "Authorized",
-        });
+        return respond({ authorized: true, status: "active", expires_at: sub.expires_at });
       },
     },
   },
