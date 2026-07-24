@@ -117,7 +117,8 @@ function Nav() {
 }
 
 function useMemberCount() {
-  const [count, setCount] = useState<number>(33);
+  const { memberCount: initial } = Route.useLoaderData();
+  const [count, setCount] = useState<number>(initial);
   useEffect(() => {
     getMemberCount().then((r) => {
       if (r && typeof r.count === "number") setCount(r.count);
