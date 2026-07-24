@@ -432,12 +432,13 @@ function Pricing() {
         </div>
 
         <div className="mt-8 max-w-4xl mx-auto">
-          <PlatformNotice />
+          <PlatformNotice variant="banner" />
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
           * 优惠价为限时活动价，恢复原价后可能调整。所有月费方案到期后自动停止 EA 授权。
         </p>
+
       </div>
     </section>
   );
