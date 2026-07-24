@@ -27,6 +27,7 @@ export const Route = createFileRoute("/_authenticated/checkout/$plan")({
   validateSearch: (s: Record<string, unknown>) => ({
     checkout: typeof s.checkout === "string" ? s.checkout : undefined,
     uid: typeof s.uid === "string" ? s.uid : undefined,
+    session_id: typeof s.session_id === "string" ? s.session_id : undefined,
   }),
   component: CheckoutPage,
 });
@@ -87,7 +88,7 @@ function CheckoutPage() {
           plan: plan.key,
           mt5Uid,
           email,
-          returnUrl: `${window.location.origin}/checkout/${plan.key}?checkout=success&uid=${encodeURIComponent(mt5Uid)}`,
+          returnUrl: `${window.location.origin}/checkout/${plan.key}?checkout=success&uid=${encodeURIComponent(mt5Uid)}&session_id={CHECKOUT_SESSION_ID}`,
           environment: getStripeEnvironment(),
         },
       });
@@ -136,7 +137,7 @@ function CheckoutPage() {
         </Link>
 
         {success ? (
-          <SuccessBlock plan={plan} mt5Uid={mt5Uid || search.uid || ""} />
+          <SuccessBlock plan={plan} mt5Uid={mt5Uid || search.uid || ""} sessionId={search.session_id ?? null} />
         ) : (
           <div className="mt-6 grid gap-8 md:grid-cols-[1fr_1.1fr]">
             <section className="card-lux rounded-2xl p-7">
@@ -260,10 +261,55 @@ function CheckoutPage() {
 function SuccessBlock({
   plan,
   mt5Uid,
+  sessionId,
 }: {
   plan: (typeof PLAN_CATALOG)[PlanKey];
   mt5Uid: string;
+  sessionId: string | null;
 }) {
+  const [state, setState] = useState<
+    | { status: "checking" }
+    | { status: "verified"; amount: number | null; currency: string | null; email: string | null }
+    | { status: "pending"; message: string }
+    | { status: "error"; message: string }
+  >(sessionId ? { status: "checking" } : { status: "error", message: "缺少 session_id，无法确认付款。请勿手动跳转此页面。" });
+
+  useEffect(() => {
+    if (!sessionId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await verifyEACheckoutSession({
+          data: { sessionId, environment: getStripeEnvironment() },
+        });
+        if (cancelled) return;
+        if ("verified" in res && res.verified) {
+          setState({
+            status: "verified",
+            amount: (res as any).amount_total ?? null,
+            currency: (res as any).currency ?? null,
+            email: (res as any).customer_email ?? null,
+          });
+        } else if ("payment_status" in res) {
+          setState({
+            status: "pending",
+            message: `Stripe 状态：${(res as any).payment_status ?? "未知"}。若已扣款请稍等或联系客服。`,
+          });
+        } else {
+          setState({
+            status: "error",
+            message: (res as any).error ?? "无法验证付款，请联系客服。",
+          });
+        }
+      } catch (e: any) {
+        if (!cancelled) setState({ status: "error", message: e?.message ?? "验证失败" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId]);
+
   const waMsg = encodeURIComponent(
     `你好，我刚开通了 OnlyOnce EA Trade「${plan.name}」，MT5 UID: ${mt5Uid}，请发送 EA 文件与安装指引，谢谢！`,
   );
@@ -272,38 +318,80 @@ function SuccessBlock({
   return (
     <div className="mx-auto mt-8 max-w-2xl">
       <div className="card-lux rounded-2xl p-8 text-center">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-500/15 text-emerald-400">
-          <CheckCircle2 className="h-7 w-7" />
-        </div>
-        <h1 className="mt-5 font-display text-3xl font-bold">付款成功</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {plan.name} 已开通 30 天。UID{" "}
-          <span className="font-mono text-foreground">{mt5Uid}</span> 已进入白名单。
-        </p>
+        {state.status === "checking" && (
+          <>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gold/15 text-gold animate-pulse">
+              <ShieldCheck className="h-7 w-7" />
+            </div>
+            <h1 className="mt-5 font-display text-2xl font-bold">正在向 Stripe 确认付款…</h1>
+            <p className="mt-2 text-sm text-muted-foreground">请勿关闭此页面。</p>
+          </>
+        )}
 
-        <div className="mt-8 grid gap-3">
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
-          >
-            <MessageCircle className="h-4 w-4" /> 通过 WhatsApp 领取 EA 文件
-          </a>
-          <p className="text-[11px] text-muted-foreground">
-            为确保你收到最新版本与安装指引，EA 文件由客服在 WhatsApp 内直接发送。
-          </p>
-        </div>
+        {state.status === "pending" && (
+          <>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-orange-500/15 text-orange-400">
+              <ShieldCheck className="h-7 w-7" />
+            </div>
+            <h1 className="mt-5 font-display text-2xl font-bold">付款尚未确认</h1>
+            <p className="mt-2 text-sm text-muted-foreground">{state.message}</p>
+          </>
+        )}
 
-        <div className="mt-8 rounded-xl border border-border/60 bg-background/40 p-5 text-left text-xs leading-relaxed text-muted-foreground">
-          <p className="text-foreground">EA 安装步骤：</p>
-          <ol className="mt-2 list-decimal space-y-1 pl-5">
-            <li>下载 EA 文件（<span className="font-sans">.ex5</span>）并放入 <span className="font-sans">MT5</span> → 数据文件夹 → MQL5/Experts。</li>
-            <li>重启 <span className="font-sans">MT5</span>，在导航栏找到 OnlyOnce EA，拖到 XAUUSD 或 BTCUSD 图表。</li>
-            <li>EA 启动后会自动校验你的 UID，白名单内即可开始交易。</li>
-          </ol>
-          <p className="mt-3">如下载失败或需要旧版本，请通过 WhatsApp 获取。</p>
-        </div>
+        {state.status === "error" && (
+          <>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-red-500/15 text-red-400">
+              <ShieldCheck className="h-7 w-7" />
+            </div>
+            <h1 className="mt-5 font-display text-2xl font-bold">无法确认付款</h1>
+            <p className="mt-2 text-sm text-muted-foreground">{state.message}</p>
+          </>
+        )}
+
+        {state.status === "verified" && (
+          <>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-500/15 text-emerald-400">
+              <CheckCircle2 className="h-7 w-7" />
+            </div>
+            <h1 className="mt-5 font-display text-3xl font-bold">付款已确认</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {plan.name} 已开通 30 天。UID{" "}
+              <span className="font-mono text-foreground">{mt5Uid}</span> 已进入白名单。
+              {state.amount != null && state.currency && (
+                <>
+                  {" "}
+                  已收款 <span className="text-foreground">
+                    {(state.amount / 100).toFixed(2)} {state.currency.toUpperCase()}
+                  </span>
+                  。
+                </>
+              )}
+            </p>
+
+            <div className="mt-8 grid gap-3">
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
+              >
+                <MessageCircle className="h-4 w-4" /> 通过 WhatsApp 领取 EA 文件
+              </a>
+              <p className="text-[11px] text-muted-foreground">
+                为确保你收到最新版本与安装指引，EA 文件由客服在 WhatsApp 内直接发送。
+              </p>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-border/60 bg-background/40 p-5 text-left text-xs leading-relaxed text-muted-foreground">
+              <p className="text-foreground">EA 安装步骤：</p>
+              <ol className="mt-2 list-decimal space-y-1 pl-5">
+                <li>下载 EA 文件（<span className="font-sans">.ex5</span>）并放入 <span className="font-sans">MT5</span> → 数据文件夹 → MQL5/Experts。</li>
+                <li>重启 <span className="font-sans">MT5</span>，在导航栏找到 OnlyOnce EA，拖到 XAUUSD 或 BTCUSD 图表。</li>
+                <li>EA 启动后会自动校验你的 UID，白名单内即可开始交易。</li>
+              </ol>
+            </div>
+          </>
+        )}
 
         <div className="mt-6 flex items-center justify-center gap-3 text-xs">
           <Link
