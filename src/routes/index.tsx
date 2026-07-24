@@ -125,6 +125,10 @@ function Hero() {
             OnlyOnce EA Trade 采用 <span className="text-foreground">UID 白名单授权</span> 模式，会员开通后把 EA 挂在自己的 MT5 账户，
             系统根据策略信号、风险比例与每日亏损保护自动执行 —— 不是一次性卖 EA 文件，到期自动停止授权。
           </p>
+          <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
+            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+            <span>已有 <span className="font-semibold text-foreground">23</span> 位会员付款开通 EA 权限</span>
+          </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#pricing"
