@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");
+const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想咨询 OnlyOnce EA Trade");
 
 function Landing() {
   return (
