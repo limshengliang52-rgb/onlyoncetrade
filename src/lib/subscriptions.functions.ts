@@ -102,6 +102,43 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
     }
   });
 
+export const verifyEACheckoutSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+    return z
+      .object({
+        sessionId: z.string().min(10).max(200),
+        environment: z.enum(["sandbox", "live"]),
+      })
+      .parse(data);
+  })
+  .handler(async ({ data, context }) => {
+    try {
+      const stripe = createStripeClient(data.environment);
+      const session = await stripe.checkout.sessions.retrieve(data.sessionId);
+      const metadataUserId = (session.metadata as any)?.userId;
+      if (metadataUserId && metadataUserId !== context.userId) {
+        return { verified: false as const, reason: "user_mismatch" };
+      }
+      const paid = session.payment_status === "paid";
+      return {
+        verified: paid,
+        payment_status: session.payment_status,
+        amount_total: session.amount_total,
+        currency: session.currency,
+        plan: (session.metadata as any)?.plan ?? null,
+        mt5_uid: (session.metadata as any)?.mt5_uid ?? null,
+        customer_email:
+          (session.customer_details?.email as string | undefined) ??
+          (session.customer_email as string | undefined) ??
+          null,
+      };
+    } catch (error) {
+      console.error("verifyEACheckoutSession failed", error);
+      return { verified: false as const, reason: "stripe_error", error: getStripeErrorMessage(error) };
+    }
+  });
+
 export const getMySubscriptions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
