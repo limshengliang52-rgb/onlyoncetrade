@@ -126,8 +126,10 @@ function AdminPage() {
                       <th className="px-4 py-3 text-left">MT5 UID</th>
                       <th className="px-4 py-3 text-left">方案</th>
                       <th className="px-4 py-3 text-left">授权产品</th>
+                      <th className="px-4 py-3 text-left">来源</th>
                       <th className="px-4 py-3 text-left">状态</th>
                       <th className="px-4 py-3 text-left">到期</th>
+                      <th className="px-4 py-3 text-left">Stripe</th>
                       <th className="px-4 py-3 text-left">操作</th>
                     </tr>
                   </thead>
@@ -135,16 +137,39 @@ function AdminPage() {
                     {subs.data.map((s: any) => (
                       <tr key={s.id} className="border-t border-border/40">
                         <td className="px-4 py-3">
-                          <div className="text-xs">{s.profile?.email ?? s.user_id}</div>
+                          <div className="text-xs">{s.profile?.email ?? s.customer_email ?? s.user_id}</div>
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">{s.mt5_uid}</td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
                         <td className="px-4 py-3 font-mono text-[11px] uppercase">
                           {Array.isArray(s.products) && s.products.length ? s.products.join(" + ") : "-"}
                         </td>
+                        <td className="px-4 py-3">
+                          <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
+                            s.source === "stripe"
+                              ? "bg-emerald-500/10 text-emerald-400"
+                              : "bg-orange-500/10 text-orange-400"
+                          }`}>
+                            {s.source === "stripe" ? "Stripe 付款" : "手动"}
+                          </span>
+                        </td>
                         <td className="px-4 py-3">{s.status}</td>
                         <td className="px-4 py-3 text-xs text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
+                        </td>
+                        <td className="px-4 py-3 font-mono text-[10px] text-muted-foreground">
+                          {s.stripe_session_id ? (
+                            <div className="max-w-[180px] truncate" title={s.stripe_session_id}>
+                              {s.stripe_session_id}
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground/50">-</span>
+                          )}
+                          {s.stripe_payment_intent && (
+                            <div className="max-w-[180px] truncate text-muted-foreground/70" title={s.stripe_payment_intent}>
+                              {s.stripe_payment_intent}
+                            </div>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1.5">
