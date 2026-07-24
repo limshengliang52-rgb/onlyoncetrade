@@ -79,6 +79,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         status: "active",
         started_at: activeSub.expires_at ?? now.toISOString(),
         expires_at: newExpires.toISOString(),
+        products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
         customer_email: customerEmail,
