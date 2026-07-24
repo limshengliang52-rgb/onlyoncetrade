@@ -53,6 +53,7 @@ function Landing() {
       <Hero />
       <HowItWorks />
       <Features />
+      <Backtest />
       <Pricing />
       <MinCapital />
       <Risk />
