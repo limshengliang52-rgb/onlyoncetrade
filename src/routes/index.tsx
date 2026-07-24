@@ -17,6 +17,7 @@ import {
   MessageCircle,
   LineChart,
   Sparkles,
+  TrendingUp,
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
@@ -43,7 +44,7 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想开通 OnlyOnce EA Trade 月费权限");
+const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想咨询 OnlyOnce EA Trade");
 
 function Landing() {
   return (
@@ -52,6 +53,7 @@ function Landing() {
       <Hero />
       <HowItWorks />
       <Features />
+      <Backtest />
       <Pricing />
       <MinCapital />
       <Risk />
@@ -165,7 +167,7 @@ function Hero() {
               rel="noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-7 py-3.5 text-sm font-semibold text-foreground transition hover:border-gold/40 sm:w-auto"
             >
-              <MessageCircle className="h-4 w-4" /> WhatsApp 咨询
+              <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
             </a>
           </div>
           <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border/60 pt-8 text-left sm:gap-8">
@@ -312,6 +314,133 @@ const plans: Plan[] = [
     cta: "立即开通",
   },
 ];
+
+const BACKTEST_MONTHS = [
+  { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
+  { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
+  { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
+  { m: "Apr", profit: 69.23, pf: 1.12, wr: 44.74, trades: 38 },
+  { m: "May", profit: 2.45, pf: 1.01, wr: 34.62, trades: 26 },
+  { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
+  { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
+];
+
+function Backtest() {
+  const maxProfit = Math.max(...BACKTEST_MONTHS.map((x) => x.profit));
+  const stats = [
+    { label: "Starting Balance", value: "500", unit: "USD" },
+    { label: "Profit Factor", value: "1.26", unit: "" },
+    { label: "Win Rate", value: "38.33", unit: "%" },
+    { label: "Trades", value: "180", unit: "" },
+    { label: "Max Drawdown", value: "22.8", unit: "%" },
+  ];
+  return (
+    <section id="backtest" className="relative border-y border-border/50 bg-surface/40 py-24">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Backtest Report"
+          title={<>OnlyOnce <span className="font-sans">XAUUSD</span> EA <span className="gold-text">回测战绩</span></>}
+          sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率和风险波动。"
+          icon={<TrendingUp className="h-4 w-4" />}
+        />
+
+        {/* Hero net profit */}
+        <div className="mt-12 card-lux relative overflow-hidden rounded-3xl p-8 md:p-12">
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
+          <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">Net Profit · Jan–Jul 2026</span>
+              <div className="mt-4 flex items-end gap-3">
+                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+832.80</span>
+                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">USD</span>
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground md:text-base">
+                起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+166.6%</span>
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2">
+              {stats.map((s) => (
+                <div key={s.label} className="rounded-xl border border-border/60 bg-background/40 p-4">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
+                  <div className="mt-2 font-display text-xl font-bold text-foreground">
+                    <span className="font-sans">{s.value}</span>
+                    {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Monthly chart + table */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+          <div className="card-lux rounded-2xl p-6 md:p-8">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg font-semibold">每月盈利分布</h3>
+              <span className="text-[11px] font-sans text-muted-foreground">USD</span>
+            </div>
+            <div className="mt-8 flex h-56 items-end justify-between gap-2 md:gap-3">
+              {BACKTEST_MONTHS.map((row) => {
+                const h = Math.max(6, (row.profit / maxProfit) * 100);
+                return (
+                  <div key={row.m} className="group flex flex-1 flex-col items-center gap-2">
+                    <span className="font-sans text-[10px] font-semibold text-gold opacity-80 group-hover:opacity-100">
+                      +{row.profit.toFixed(0)}
+                    </span>
+                    <div className="relative w-full overflow-hidden rounded-t-md bg-border/40" style={{ height: "180px" }}>
+                      <div
+                        className="absolute bottom-0 left-0 right-0 rounded-t-md bg-gold-gradient shadow-[0_-4px_20px_-6px_var(--gold)] transition-all"
+                        style={{ height: `${h}%` }}
+                      />
+                    </div>
+                    <span className="font-sans text-[11px] text-muted-foreground">{row.m}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="card-lux rounded-2xl p-6 md:p-8">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg font-semibold">每月明细</h3>
+              <span className="text-[11px] font-sans text-muted-foreground">2026</span>
+            </div>
+            <div className="mt-6 overflow-hidden rounded-xl border border-border/60">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-3 py-3 text-left font-sans">Month</th>
+                    <th className="px-3 py-3 text-right font-sans">Profit</th>
+                    <th className="px-3 py-3 text-right font-sans">PF</th>
+                    <th className="px-3 py-3 text-right font-sans">Win</th>
+                    <th className="px-3 py-3 text-right font-sans">Trades</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {BACKTEST_MONTHS.map((row, i) => (
+                    <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
+                      <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
+                      <td className="px-3 py-2.5 text-right font-sans font-semibold text-gold">+{row.profit.toFixed(2)}</td>
+                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
+                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
+                      <td className="px-3 py-2.5 text-right font-sans text-muted-foreground">{row.trades}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground">
+          回测数据来自 <span className="font-sans">MT5 Strategy Tester</span>，历史表现不代表未来收益保证。
+          <br className="hidden sm:block" />
+          <span className="font-sans">Backtest data from MT5 Strategy Tester. Past performance does not guarantee future results.</span>
+        </p>
+      </div>
+    </section>
+  );
+}
 
 function Pricing() {
   return (
@@ -477,22 +606,30 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              提交 UID，开通你的
+              一键开通你的
               <br className="hidden sm:block" />
               <span className="gold-text"> EA 月费权限</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              通过 WhatsApp 联系我们，提供你的 MT5 UID 与所选方案，
-              我们会在确认付款后完成白名单授权。
+              选择方案 → 填写 MT5 UID → Stripe 付款成功后系统自动开通授权与解锁下载，全程无需人工。
+              安装遇到问题可 WhatsApp 私信客服协助。
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-9 inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
-            >
-              <MessageCircle className="h-5 w-5" /> WhatsApp 申请开通
-            </a>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#pricing"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
+              >
+                查看订阅方案 <ArrowRight className="h-5 w-5" />
+              </a>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
+              >
+                <MessageCircle className="h-5 w-5" /> WhatsApp 私信客服
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -369,16 +369,22 @@ function SuccessBlock({
             </p>
 
             <div className="mt-8 grid gap-3">
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
+              >
+                前往 Dashboard 下载 EA 文件
+              </Link>
               <a
                 href={waUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition hover:border-gold/40"
               >
-                <MessageCircle className="h-4 w-4" /> 通过 WhatsApp 领取 EA 文件
+                <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
               </a>
               <p className="text-[11px] text-muted-foreground">
-                为确保你收到最新版本与安装指引，EA 文件由客服在 WhatsApp 内直接发送。
+                系统已自动开通授权并解锁下载，如需安装协助可 WhatsApp 私信客服。
               </p>
             </div>
 
