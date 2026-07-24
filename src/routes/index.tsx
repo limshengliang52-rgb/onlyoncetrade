@@ -326,7 +326,6 @@ const BACKTEST_MONTHS = [
 ];
 
 function Backtest() {
-  const maxProfit = Math.max(...BACKTEST_MONTHS.map((x) => x.profit));
   const stats = [
     { label: "Starting Balance", value: "500", unit: "USD" },
     { label: "Profit Factor", value: "1.26", unit: "" },
@@ -372,35 +371,9 @@ function Backtest() {
           </div>
         </div>
 
-        {/* Monthly chart + table */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div className="card-lux rounded-2xl p-6 md:p-8">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">每月盈利分布</h3>
-              <span className="text-[11px] font-sans text-muted-foreground">USD</span>
-            </div>
-            <div className="mt-8 flex h-56 items-end justify-between gap-2 md:gap-3">
-              {BACKTEST_MONTHS.map((row) => {
-                const h = Math.max(6, (row.profit / maxProfit) * 100);
-                return (
-                  <div key={row.m} className="group flex flex-1 flex-col items-center gap-2">
-                    <span className="font-sans text-[10px] font-semibold text-gold opacity-80 group-hover:opacity-100">
-                      +{row.profit.toFixed(0)}
-                    </span>
-                    <div className="relative w-full overflow-hidden rounded-t-md bg-border/40" style={{ height: "180px" }}>
-                      <div
-                        className="absolute bottom-0 left-0 right-0 rounded-t-md bg-gold-gradient shadow-[0_-4px_20px_-6px_var(--gold)] transition-all"
-                        style={{ height: `${h}%` }}
-                      />
-                    </div>
-                    <span className="font-sans text-[11px] text-muted-foreground">{row.m}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="card-lux rounded-2xl p-6 md:p-8">
+        {/* Monthly table */}
+        <div className="mt-8">
+          <div className="card-lux mx-auto max-w-3xl rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-lg font-semibold">每月明细</h3>
               <span className="text-[11px] font-sans text-muted-foreground">2026</span>
