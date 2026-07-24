@@ -387,6 +387,10 @@ function EADownloadSection({
               </div>
             </div>
 
+            <div className="mt-6">
+              <PlatformNotice />
+            </div>
+
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.files.map((f) => {
                 const isGuide = f.key === "guide_cn" || f.key === "guide_en";
