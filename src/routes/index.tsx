@@ -127,7 +127,7 @@ function Hero() {
           </p>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
-            <span>已有 <span className="font-semibold text-foreground">23</span> 位会员付款开通 EA 权限</span>
+            <span>已有 <span className="font-semibold text-foreground">33</span> 位会员付款开通 EA 权限</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
