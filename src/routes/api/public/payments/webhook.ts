@@ -23,9 +23,21 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const plan = (session.metadata?.plan as "basic" | "access" | undefined) ?? null;
   const mt5Uid = session.metadata?.mt5_uid as string | undefined;
   const sessionId = session.id as string;
+  const paymentIntent =
+    typeof session.payment_intent === "string" ? session.payment_intent : null;
+  const customerEmail =
+    (session.customer_details?.email as string | undefined) ??
+    (session.customer_email as string | undefined) ??
+    null;
 
   if (!userId || !plan || !mt5Uid) {
     console.error("Webhook missing metadata", { userId, plan, mt5Uid, sessionId });
+    return;
+  }
+
+  // Only credit access once payment is actually collected.
+  if (session.payment_status && session.payment_status !== "paid") {
+    console.log("Webhook received unpaid session; skipping", sessionId, session.payment_status);
     return;
   }
 
@@ -64,6 +76,9 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         started_at: activeSub.expires_at ?? now.toISOString(),
         expires_at: newExpires.toISOString(),
         stripe_session_id: sessionId,
+        stripe_payment_intent: paymentIntent,
+        customer_email: customerEmail,
+        source: "stripe",
       })
       .eq("id", activeSub.id);
     if (error) throw error;
@@ -79,6 +94,9 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         started_at: now.toISOString(),
         expires_at: new Date(now.getTime() + MONTH_MS).toISOString(),
         stripe_session_id: sessionId,
+        stripe_payment_intent: paymentIntent,
+        customer_email: customerEmail,
+        source: "stripe",
       })
       .select("id")
       .single();
@@ -87,18 +105,19 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   }
 
   const amount = Number(session.amount_total ?? 0);
-  const currency = String(session.currency ?? "myr");
+  const currency = String(session.currency ?? "usd");
   const { error: payErr } = await admin.from("payments").insert({
     user_id: userId,
     subscription_id: subId,
     stripe_session_id: sessionId,
-    stripe_payment_intent:
-      typeof session.payment_intent === "string" ? session.payment_intent : null,
+    stripe_payment_intent: paymentIntent,
+    customer_email: customerEmail,
     amount_cents: amount,
     currency,
     status: "paid",
     plan,
     mt5_uid: mt5Uid,
+    source: "stripe",
     metadata: { environment: env },
   });
   if (payErr && !payErr.message.includes("duplicate")) throw payErr;

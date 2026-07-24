@@ -64,10 +64,12 @@ export type Database = {
           amount_cents: number
           created_at: string
           currency: string
+          customer_email: string | null
           id: string
           metadata: Json | null
           mt5_uid: string | null
           plan: Database["public"]["Enums"]["plan_type"] | null
+          source: string
           status: Database["public"]["Enums"]["payment_status"]
           stripe_payment_intent: string | null
           stripe_session_id: string | null
@@ -79,10 +81,12 @@ export type Database = {
           amount_cents: number
           created_at?: string
           currency?: string
+          customer_email?: string | null
           id?: string
           metadata?: Json | null
           mt5_uid?: string | null
           plan?: Database["public"]["Enums"]["plan_type"] | null
+          source?: string
           status?: Database["public"]["Enums"]["payment_status"]
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
@@ -94,10 +98,12 @@ export type Database = {
           amount_cents?: number
           created_at?: string
           currency?: string
+          customer_email?: string | null
           id?: string
           metadata?: Json | null
           mt5_uid?: string | null
           plan?: Database["public"]["Enums"]["plan_type"] | null
+          source?: string
           status?: Database["public"]["Enums"]["payment_status"]
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
@@ -142,42 +148,51 @@ export type Database = {
       subscriptions: {
         Row: {
           created_at: string
+          customer_email: string | null
           expires_at: string | null
           id: string
           mt5_uid: string
           notes: string | null
           plan: Database["public"]["Enums"]["plan_type"]
           products: string[]
+          source: string
           started_at: string | null
           status: Database["public"]["Enums"]["subscription_status"]
+          stripe_payment_intent: string | null
           stripe_session_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          customer_email?: string | null
           expires_at?: string | null
           id?: string
           mt5_uid: string
           notes?: string | null
           plan: Database["public"]["Enums"]["plan_type"]
           products?: string[]
+          source?: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_payment_intent?: string | null
           stripe_session_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          customer_email?: string | null
           expires_at?: string | null
           id?: string
           mt5_uid?: string
           notes?: string | null
           plan?: Database["public"]["Enums"]["plan_type"]
           products?: string[]
+          source?: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_payment_intent?: string | null
           stripe_session_id?: string | null
           updated_at?: string
           user_id?: string

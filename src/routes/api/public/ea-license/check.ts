@@ -71,16 +71,84 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
           console.error("ea-license check error", error);
           return respond({ ok: false, status: "server_error", message: "Server error" }, 500);
         }
+
+        // Fallback: look up in subscriptions table by MT5 UID (real paid customers)
         if (!data) {
+          const productKey = product.toLowerCase().includes("btc")
+            ? "btc"
+            : product.toLowerCase().includes("xau") || product.toLowerCase().includes("gold")
+              ? "xau"
+              : product.toLowerCase();
+
+          await admin
+            .from("subscriptions")
+            .update({ status: "expired" })
+            .eq("mt5_uid", account_id)
+            .eq("status", "active")
+            .lt("expires_at", nowIso);
+
+          const { data: sub } = await admin
+            .from("subscriptions")
+            .select("plan, products, status, expires_at")
+            .eq("mt5_uid", account_id)
+            .in("status", ["active", "expired", "cancelled"])
+            .order("expires_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          if (!sub) {
+            return respond({
+              authorized: false,
+              status: "not_found",
+              account_id,
+              product,
+              server_time: nowIso,
+              message: "License not found",
+            });
+          }
+          if (sub.status !== "active" || !sub.expires_at || new Date(sub.expires_at as string) < new Date()) {
+            return respond({
+              authorized: false,
+              status: sub.status === "cancelled" ? "suspended" : "expired",
+              account_id,
+              product,
+              expires_at: sub.expires_at,
+              server_time: nowIso,
+              message: sub.status === "cancelled" ? "License suspended" : "Membership expired",
+            });
+          }
+          const allowed: string[] =
+            Array.isArray(sub.products) && sub.products.length
+              ? (sub.products as string[])
+              : sub.plan === "access"
+                ? ["xau", "btc"]
+                : ["xau"];
+          if (!allowed.includes(productKey)) {
+            return respond({
+              authorized: false,
+              status: "product_not_allowed",
+              account_id,
+              product,
+              expires_at: sub.expires_at,
+              server_time: nowIso,
+              message: `plan ${sub.plan} not authorized for ${productKey}`,
+            });
+          }
+          if (uid && uid !== account_id) {
+            // uid parameter is informational for subscriptions path
+          }
+          void version;
           return respond({
-            ok: false,
-            status: "not_found",
+            authorized: true,
+            status: "active",
             account_id,
             product,
+            expires_at: sub.expires_at,
             server_time: nowIso,
-            message: "License not found",
+            message: "Authorized",
           });
         }
+
         if (data.status === "suspended") {
           return respond({
             ok: false,
@@ -113,11 +181,10 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
           });
         }
 
-        // Optional: log version
         void version;
 
         return respond({
-          ok: true,
+          authorized: true,
           status: "active",
           account_id,
           product,
