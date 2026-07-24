@@ -14,6 +14,7 @@ import {
 } from "@/lib/subscriptions.functions";
 import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
+import { PlatformNotice } from "@/components/PlatformNotice";
 
 import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, FileText, AlertTriangle } from "lucide-react";
 
@@ -384,6 +385,10 @@ function EADownloadSection({
                   <CheckCircle2 className="h-3 w-3" /> 生效中
                 </div>
               </div>
+            </div>
+
+            <div className="mt-6">
+              <PlatformNotice />
             </div>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">

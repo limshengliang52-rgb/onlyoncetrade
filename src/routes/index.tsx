@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { getMemberCount } from "@/lib/member-count.functions";
+import { PlatformNotice } from "@/components/PlatformNotice";
 import {
   ShieldCheck,
   KeyRound,
@@ -429,6 +430,11 @@ function Pricing() {
             <PlanCard key={p.name} plan={p} />
           ))}
         </div>
+
+        <div className="mt-8 max-w-4xl mx-auto">
+          <PlatformNotice />
+        </div>
+
         <p className="mt-8 text-center text-xs text-muted-foreground">
           * 优惠价为限时活动价，恢复原价后可能调整。所有月费方案到期后自动停止 EA 授权。
         </p>
