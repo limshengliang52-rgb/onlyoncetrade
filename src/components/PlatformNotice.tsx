@@ -1,6 +1,50 @@
-import { Info } from "lucide-react";
+import { Info, AlertTriangle } from "lucide-react";
 
-export function PlatformNotice() {
+type PlatformNoticeProps = {
+  variant?: "default" | "compact" | "banner";
+};
+
+export function PlatformNotice({ variant = "default" }: PlatformNoticeProps) {
+  if (variant === "banner") {
+    return (
+      <div className="rounded-xl border border-gold/40 bg-gold/10 p-4 shadow-[0_0_20px_-8px_rgba(212,163,66,0.35)]">
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gold/20 text-gold">
+            <AlertTriangle className="h-4 w-4" />
+          </span>
+          <div className="min-w-0">
+            <h4 className="text-sm font-semibold text-foreground">平台使用提醒</h4>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">
+              <span className="font-semibold text-foreground">OnlyOnce EA</span> 策略参数主要基于{" "}
+              <span className="font-semibold text-gold">Vantage</span> 平台环境优化，强烈建议使用{" "}
+              <span className="font-semibold text-gold">Vantage MT5 账户</span> 运行本 EA。
+            </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+              使用其他平台可能因点差、滑点、服务器时间差异导致回测与实盘结果不同。
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className="rounded-lg border border-gold/35 bg-gold/[0.08] p-3">
+        <div className="flex items-center gap-2">
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-gold/15 text-gold">
+            <AlertTriangle className="h-3.5 w-3.5" />
+          </span>
+          <p className="text-xs leading-snug text-foreground/90">
+            <span className="font-semibold text-foreground">注意事项：</span>
+            OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，强烈建议使用{" "}
+            <span className="font-semibold text-gold">Vantage MT5 账户</span>。
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-border/80 bg-surface/60 p-5 md:p-6">
       <div className="flex items-start gap-3">
@@ -24,3 +68,4 @@ export function PlatformNotice() {
     </div>
   );
 }
+
