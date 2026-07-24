@@ -495,10 +495,14 @@ function PlanCard({ plan }: { plan: Plan }) {
         ))}
       </ul>
 
+      <div className="mt-6">
+        <PlatformNotice variant="compact" />
+      </div>
+
       <a
         href={`/checkout/${plan.key}`}
         className={
-          "mt-8 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
+          "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
             ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
@@ -507,6 +511,7 @@ function PlanCard({ plan }: { plan: Plan }) {
         {plan.cta} <ArrowRight className="h-4 w-4" />
       </a>
     </div>
+
   );
 }
 
