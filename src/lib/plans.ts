@@ -28,7 +28,7 @@ export const PLAN_CATALOG: Record<
     amountUSD: 79,
     originalUSD: 99,
     tagline: "适合同时跑两个品种",
-    features: ["1 个 MT5 UID 授权", "BTC 与黄金 同时开启", "优先参数检查", "30 天权限，到期自动停止"],
+    features: ["1 个 MT5 UID 授权", "BTC 与黄金 同时开启", "黄金与 BTC 同时开启", "30 天权限，到期自动停止"],
   },
 };
 
