@@ -194,94 +194,20 @@ function Hero() {
 
 function Strategy() {
   return (
-    <section id="strategy" className="relative border-y border-border/50 bg-surface/40 py-24">
-      <div className="mx-auto max-w-6xl px-5">
-        <SectionHeader
-          eyebrow="Strategy"
-          title={<>SMC + MACD <span className="gold-text">策略核心</span></>}
-          sub="以机构资金流向定位高概率区域，以 MACD 动能确认入场方向，减少假突破与逆势交易"
-          icon={<Target className="h-4 w-4" />}
-        />
-
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <div className="card-lux rounded-2xl p-7 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/10 text-gold ring-1 ring-inset ring-gold/20">
-                <Target className="h-5 w-5" />
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold">SMC · Smart Money Concepts</h3>
-                <p className="text-xs text-muted-foreground">机构资金概念</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              追踪大资金留下的“脚印”，在关键供需区域寻找高概率反转或延续点。EA 以此判断市场结构中的优质入场位，而非盲目追涨杀跌。
-            </p>
-            <ul className="mt-5 space-y-3">
-              {[
-                "Order Block（OB）：识别机构曾大量建仓/平仓的价位块",
-                "Fair Value Gap（FVG）：价格快速离开后留下的失衡缺口，常被回补",
-                "Liquidity Sweep：扫掉散户止损/高低点流动性后反向运行",
-                "Break of Structure（BOS）：结构破坏确认趋势转换或延续",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
-                  <span className="text-foreground/90">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="card-lux rounded-2xl p-7 md:p-8">
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/10 text-gold ring-1 ring-inset ring-gold/20">
-                <Zap className="h-5 w-5" />
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold">MACD 动能确认</h3>
-                <p className="text-xs text-muted-foreground">Moving Average Convergence Divergence</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              MACD 用于过滤 SMC 信号中的噪音，确保方向与大周期动能一致，避免在错误方向加仓或追涨杀跌。
-            </p>
-            <ul className="mt-5 space-y-3">
-              {[
-                "零轴上方只偏多头，零轴下方只偏空头",
-                "MACD 金叉/死叉配合价格结构突破才考虑入场",
-                "柱状体放量代表动能在增强，缩量代表动能衰减",
-                "多周期共振：大周期定方向，小周期找入场",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
-                  <span className="text-foreground/90">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-6 card-lux rounded-2xl p-7 md:p-8">
-          <h3 className="font-display text-lg font-semibold">策略执行流程</h3>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[
-              { step: "1", title: "定位关键区域", desc: "通过 OB / FVG / 流动性池找出可能反转或延续的价格区" },
-              { step: "2", title: "MACD 过滤方向", desc: "确认当前大周期动能方向，避免逆势信号" },
-              { step: "3", title: "EA 自动执行", desc: "满足条件后自动进场、设止损止盈，并启用每日亏损保护" },
-            ].map((s) => (
-              <div key={s.step} className="rounded-xl border border-border/60 bg-background/40 p-5">
-                <div className="font-display text-2xl font-bold text-gold/45">{s.step}</div>
-                <h4 className="mt-2 text-sm font-semibold">{s.title}</h4>
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground">
-          该策略不是收益保证，SMC 与 MACD 在不同市场环境下的表现会有差异。历史回测用于展示策略逻辑，不代表未来结果。
-          <br className="hidden sm:block" />
-          <span className="font-sans">This strategy is not a guarantee of profit. Past backtests illustrate logic, not future performance.</span>
+    <section id="strategy" className="relative border-t border-border/50 bg-surface/40 py-16">
+      <div className="mx-auto max-w-4xl px-5 text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+          <Target className="h-3 w-3" /> Strategy
+        </span>
+        <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">
+          SMC + MACD <span className="gold-text">策略核心</span>
+        </h2>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          以机构资金流向（Order Block、FVG、Liquidity Sweep、BOS）定位关键区域，再用 MACD 动能确认方向，过滤假突破与逆势信号后由 EA 自动执行进场、止损、止盈与每日亏损保护。
+        </p>
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          历史回测仅展示策略逻辑，不代表未来收益保证。
+          <span className="font-sans">Past backtests illustrate logic, not future performance.</span>
         </p>
       </div>
     </section>
