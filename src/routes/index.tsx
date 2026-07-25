@@ -17,6 +17,7 @@ import {
   Wallet,
   MessageCircle,
   LineChart,
+  TrendingUp,
   Sparkles,
 } from "lucide-react";
 
