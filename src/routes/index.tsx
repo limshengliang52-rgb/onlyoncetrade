@@ -149,9 +149,10 @@ function Hero() {
             <br className="hidden sm:block" />
             <span className="gold-text">让 EA 按策略自动执行黄金与 BTC 交易</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。到期后授权会自动停止。
-          </p>
+          <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
+            <p>OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。</p>
+            <p className="mt-2">到期后授权会自动停止。</p>
+          </div>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
             <span>已有 <span className="font-semibold text-foreground">{memberCount}</span> 位会员付款开通 EA 权限</span>
