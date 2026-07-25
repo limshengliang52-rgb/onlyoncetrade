@@ -15,8 +15,7 @@ export function PlatformNotice({ variant = "default" }: PlatformNoticeProps) {
           <div className="min-w-0">
             <h4 className="text-sm font-semibold text-foreground">平台使用提醒</h4>
             <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">
-              <span className="font-semibold text-foreground">OnlyOnce EA</span> 策略参数主要基于{" "}
-              <span className="font-semibold text-gold">Vantage</span> 平台环境优化，强烈建议使用{" "}
+              OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，强烈建议使用{" "}
               <span className="font-semibold text-gold">Vantage MT5 账户</span> 运行本 EA。
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
