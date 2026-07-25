@@ -15,7 +15,7 @@ export function PlatformNotice({ variant = "default" }: PlatformNoticeProps) {
           <div className="min-w-0">
             <h4 className="text-sm font-semibold text-foreground">平台使用提醒</h4>
             <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">
-              OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，强烈建议使用{" "}
+              OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，建议优先使用{" "}
               <span className="font-semibold text-gold">Vantage MT5 账户</span> 运行本 EA。
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
@@ -36,7 +36,7 @@ export function PlatformNotice({ variant = "default" }: PlatformNoticeProps) {
           </span>
           <p className="text-xs leading-snug text-foreground/90">
             <span className="font-semibold text-foreground">注意事项：</span>
-            OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，强烈建议使用{" "}
+            OnlyOnce EA 策略基于 <span className="font-semibold text-gold">Vantage</span> 平台优化，建议优先使用{" "}
             <span className="font-semibold text-gold">Vantage MT5 账户</span>。
           </p>
         </div>
@@ -54,7 +54,7 @@ export function PlatformNotice({ variant = "default" }: PlatformNoticeProps) {
             <h4 className="text-sm font-semibold text-foreground">平台使用提醒</h4>
             <div className="mt-2 space-y-2 text-sm leading-relaxed text-muted-foreground">
               <p>
-                OnlyOnce EA 策略基于 <span className="text-foreground">Vantage</span> 平台优化，强烈建议使用{" "}
+                OnlyOnce EA 策略基于 <span className="text-foreground">Vantage</span> 平台优化，建议优先使用{" "}
                 <span className="text-foreground">Vantage MT5 账户</span> 运行本 EA。
               </p>
               <p>
