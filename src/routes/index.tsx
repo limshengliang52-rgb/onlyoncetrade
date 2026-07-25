@@ -16,6 +16,7 @@ import {
   AlertTriangle,
   Wallet,
   MessageCircle,
+  LineChart,
   Sparkles,
 } from "lucide-react";
 
