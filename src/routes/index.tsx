@@ -96,6 +96,7 @@ function Nav() {
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
+          <a href="#strategy" className="transition hover:text-foreground">策略</a>
           <a href="#how" className="transition hover:text-foreground">开通流程</a>
           <a href="#features" className="transition hover:text-foreground">功能</a>
           <a href="#pricing" className="transition hover:text-foreground">订阅方案</a>
