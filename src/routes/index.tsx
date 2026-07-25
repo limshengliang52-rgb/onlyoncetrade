@@ -55,6 +55,7 @@ function Landing() {
       <HowItWorks />
       <Features />
       <Pricing />
+      <Backtest />
       <MinCapital />
       <Risk />
       <CTA />
