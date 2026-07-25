@@ -20,7 +20,6 @@ import {
   TrendingUp,
   Sparkles,
   Target,
-  Zap,
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
