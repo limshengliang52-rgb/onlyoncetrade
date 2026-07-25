@@ -54,7 +54,6 @@ function Landing() {
     <main className="min-h-screen bg-background text-foreground selection:bg-gold/30 selection:text-foreground">
       <Nav />
       <Hero />
-      <Strategy />
       <HowItWorks />
       <Features />
       <Pricing />
@@ -62,6 +61,7 @@ function Landing() {
       <MinCapital />
       <Risk />
       <CTA />
+      <Strategy />
       <Footer />
       <FloatingWhatsApp />
     </main>
