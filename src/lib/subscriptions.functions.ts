@@ -325,3 +325,21 @@ export const adminSetSubscriptionStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const adminUpdateSubscriptionUid = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; mt5_uid: string }) => {
+    return z
+      .object({ id: z.string().uuid(), mt5_uid: z.string().regex(mt5UidRe, "MT5 UID 需 3-32 位字母数字") })
+      .parse(d);
+  })
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({ mt5_uid: data.mt5_uid })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
