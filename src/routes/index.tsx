@@ -146,13 +146,12 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            AI全自动交易 <span className="gold-text">EA 权限</span>
+            AI 全自动交易系统
             <br className="hidden sm:block" />
-            让系统按策略自动执行交易
+            <span className="gold-text">黄金 / BTC 策略自动执行</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            OnlyOnce EA Trade 采用 <span className="text-foreground">UID 白名单授权</span> 模式，会员开通后把 EA 挂在自己的 MT5 账户，
-            系统根据策略信号、风险比例与每日亏损保护自动执行 —— 不是一次性卖 EA 文件，到期自动停止授权。
+            OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。到期后授权会自动停止。
           </p>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
