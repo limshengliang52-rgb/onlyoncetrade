@@ -199,14 +199,13 @@ function Strategy() {
           <Target className="h-3 w-3" /> Strategy
         </span>
         <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">
-          SMC + MACD <span className="gold-text">策略核心</span>
+          <span className="gold-text">进场逻辑</span> 说明
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          以机构资金流向（Order Block、FVG、Liquidity Sweep、BOS）定位关键区域，再用 MACD 动能确认方向，过滤假突破与逆势信号后由 EA 自动执行进场、止损、止盈与每日亏损保护。
+          本策略主要根据市场趋势、关键价格结构和确认信号来判断进场机会。系统会先识别当前方向，再等待价格回到重要支撑/阻力、均线或结构区域附近。当趋势方向、价格位置与确认条件一致时，才会执行进场；若市场震荡过大、方向不清晰或风险条件不符合，则会过滤交易，减少不必要的开仓。
         </p>
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          历史回测仅展示策略逻辑，不代表未来收益保证。
-          <span className="font-sans">Past backtests illustrate logic, not future performance.</span>
+          这是规则化的执行逻辑，不代表未来盈利保证。任何 EA 都存在亏损风险，请确认自身风险承受能力后再开通。
         </p>
       </div>
     </section>
