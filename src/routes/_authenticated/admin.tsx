@@ -165,7 +165,23 @@ function AdminPage() {
                         <td className="px-4 py-3">
                           <div className="text-xs">{s.profile?.email ?? s.customer_email ?? s.user_id}</div>
                         </td>
-                        <td className="px-4 py-3 font-mono text-xs">{s.mt5_uid}</td>
+                        <td className="px-4 py-3 font-mono text-xs">
+                          <div className="flex items-center gap-2">
+                            <span>{s.mt5_uid}</span>
+                            <button
+                              onClick={() => {
+                                const raw = prompt("输入新的 MT5 UID (3-32 位字母数字)", s.mt5_uid);
+                                if (!raw) return;
+                                const next = raw.trim();
+                                if (next === s.mt5_uid) return;
+                                updateUid.mutate({ id: s.id, mt5_uid: next });
+                              }}
+                              className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground hover:text-foreground"
+                            >
+                              改
+                            </button>
+                          </div>
+                        </td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
                         <td className="px-4 py-3 font-mono text-[11px] uppercase">
                           {Array.isArray(s.products) && s.products.length ? s.products.join(" + ") : "-"}
