@@ -146,7 +146,7 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            付月费开通 <span className="gold-text">EA 权限</span>
+            AI全自动交易 <span className="gold-text">EA 权限</span>
             <br className="hidden sm:block" />
             让系统按策略自动执行交易
           </h1>
