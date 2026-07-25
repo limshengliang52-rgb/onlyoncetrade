@@ -174,13 +174,13 @@ function Hero() {
               <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
             </a>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border/60 pt-8 text-left sm:gap-8">
+          <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border/60 pt-8 text-center sm:gap-8">
             {[
               { k: "UID", v: "白名单授权" },
               { k: "月费制", v: "到期自动停止" },
               { k: "风控", v: "每日亏损保护" },
             ].map((s) => (
-              <div key={s.k} className="text-center sm:text-left">
+              <div key={s.k} className="text-center">
                 <div className="font-display text-xl font-bold gold-text md:text-2xl">{s.k}</div>
                 <div className="mt-1 text-xs text-muted-foreground md:text-sm">{s.v}</div>
               </div>
