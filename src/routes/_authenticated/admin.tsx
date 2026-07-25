@@ -6,6 +6,7 @@ import {
   adminListPayments,
   adminListSubscriptions,
   adminSetSubscriptionStatus,
+  adminUpdateSubscriptionUid,
   adminUpsertSubscription,
 } from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
