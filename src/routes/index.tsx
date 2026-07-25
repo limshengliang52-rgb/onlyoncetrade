@@ -16,9 +16,7 @@ import {
   AlertTriangle,
   Wallet,
   MessageCircle,
-  LineChart,
   Sparkles,
-  TrendingUp,
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
