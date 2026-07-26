@@ -643,13 +643,12 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              一键开通你的
+              咨询开通
               <br className="hidden sm:block" />
               <span className="gold-text"> EA 月费权限</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              选择方案 → 填写 MT5 UID → Stripe 付款成功后系统自动开通授权与解锁下载，全程无需人工。
-              安装遇到问题可 WhatsApp 私信客服协助。
+              线上付款入口暂时维护中。请通过官方 WhatsApp 咨询套餐、MT5 UID 授权与开通方式，客服会协助后续流程。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
