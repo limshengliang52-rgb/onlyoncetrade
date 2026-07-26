@@ -49,7 +49,7 @@ function RefundPage() {
       <h2>4. 申请流程</h2>
       <p>
         如认为符合退款条件，请在付款后 7 天内通过{" "}
-        <a href="https://wa.me/60136330303" target="_blank" rel="noreferrer">WhatsApp 客服</a>
+        <a href="https://wa.me/60136330303" target="_blank" rel="noopener noreferrer">WhatsApp 客服</a>
         {" "}提交：付款截图、订单号、MT5 UID 与详细原因。审核通过后款项将原路退回，处理周期通常为 5–14 个工作日（视银行 / Stripe 处理时间而定）。
       </p>
     </LegalLayout>

@@ -378,7 +378,7 @@ function SuccessBlock({
               <a
                 href={waUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition hover:border-gold/40"
               >
                 <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
