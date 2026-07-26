@@ -682,8 +682,11 @@ function Footer() {
             <a href="/privacy-policy" className="transition hover:text-foreground">隐私政策</a>
           </nav>
         </div>
+        <p className="text-center leading-relaxed">
+          本服务仅提供 EA 工具授权与技术说明，不构成任何投资建议或收益承诺。交易存在亏损风险，请自行评估后使用。
+        </p>
         <p className="text-center">
-          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务 · 交易涉及风险，请谨慎参与
+          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务
         </p>
       </div>
     </footer>
