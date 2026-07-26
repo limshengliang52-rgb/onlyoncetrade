@@ -187,6 +187,10 @@ function Hero() {
               </div>
             ))}
           </div>
+          <div className="mt-8 rounded-xl border border-border/60 bg-surface/40 px-5 py-4 text-left text-xs leading-relaxed text-muted-foreground">
+            <div className="mb-1 font-semibold text-foreground">安全说明</div>
+            本站不收集 MT5 密码、交易账户密码、银行卡信息、交易所 API Key 或助记词。订阅与开通咨询请通过官方 WhatsApp 联系。
+          </div>
         </div>
       </div>
     </section>
