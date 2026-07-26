@@ -102,13 +102,12 @@ function Nav() {
           <a href="#risk" className="transition hover:text-foreground">风险说明</a>
         </nav>
         <div className="flex items-center gap-2">
-          <span
-            aria-disabled="true"
-            title="账户入口维护中"
-            className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground/60"
+          <a
+            href="/auth"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground transition hover:border-gold/40 hover:text-gold"
           >
-            账户入口维护中
-          </span>
+            登录 / 注册
+          </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -363,7 +362,7 @@ function Pricing() {
         <SectionHeader
           eyebrow="Pricing"
           title={<>选择你的 <span className="gold-text">EA 授权方案</span></>}
-          sub="限时优惠价，可随时通过 WhatsApp 咨询升级或续费"
+          sub="限时优惠价，Stripe 安全付款，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
@@ -443,9 +442,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
 
       <a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/checkout/${plan.key}`}
         className={
           "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
@@ -453,7 +450,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        <MessageCircle className="h-4 w-4" /> WhatsApp 咨询开通
+        立即开通 30 天
       </a>
     </div>
 
@@ -653,21 +650,27 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              咨询开通
+              立即开通
               <br className="hidden sm:block" />
               <span className="gold-text"> EA 月费权限</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              线上付款入口暂时维护中。请通过官方 WhatsApp 咨询套餐、MT5 UID 授权与开通方式，客服会协助后续流程。
+              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入白名单。如有疑问可 WhatsApp 私信客服。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#pricing"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
+              >
+                查看订阅方案 <ArrowRight className="h-4 w-4" />
+              </a>
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
               >
-                <MessageCircle className="h-5 w-5" /> WhatsApp 咨询开通
+                <MessageCircle className="h-5 w-5" /> WhatsApp 咨询
               </a>
             </div>
           </div>
