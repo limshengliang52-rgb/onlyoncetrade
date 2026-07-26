@@ -363,6 +363,9 @@ function Pricing() {
         <p className="mt-8 text-center text-xs text-muted-foreground">
           * 优惠价为限时活动价，恢复原价后可能调整。所有月费方案到期后自动停止 EA 授权。
         </p>
+        <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground/80">
+          本服务仅提供 EA 工具授权与技术说明，不构成投资建议，也不承诺任何收益。交易存在亏损风险，请自行评估后使用。
+        </p>
 
       </div>
     </section>
