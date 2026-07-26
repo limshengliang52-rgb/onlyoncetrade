@@ -652,10 +652,12 @@ function CTA() {
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href="#pricing"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
               >
-                查看订阅方案 <ArrowRight className="h-5 w-5" />
+                <MessageCircle className="h-5 w-5" /> WhatsApp 咨询开通
               </a>
               <a
                 href={WHATSAPP_URL}
