@@ -44,7 +44,7 @@ export function LegalLayout({
           <a
             href="https://wa.me/60136330303"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="text-gold underline"
           >
             WhatsApp

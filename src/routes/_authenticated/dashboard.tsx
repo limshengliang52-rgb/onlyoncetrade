@@ -314,7 +314,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
             disabled={loading}
             className="mt-3 w-full rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading ? "创建结账中..." : "立即付款开通 / 续费 30 天"}
+            {loading ? "创建结账中..." : "开通 / 续费 30 天"}
           </button>
         </div>
       ) : (

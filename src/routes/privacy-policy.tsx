@@ -60,7 +60,7 @@ function PrivacyPage() {
       <p>
         您可以随时联系我们要求查询、更新或删除您的账号信息。
         如需删除账号，请通过{" "}
-        <a href="https://wa.me/60136330303" target="_blank" rel="noreferrer">WhatsApp 客服</a>
+        <a href="https://wa.me/60136330303" target="_blank" rel="noopener noreferrer">WhatsApp 客服</a>
         {" "}提交申请。请注意，出于合规与财务记录的要求，某些付款相关记录会依法保留一段时间。
       </p>
 

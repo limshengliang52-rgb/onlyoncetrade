@@ -72,7 +72,7 @@ function FloatingWhatsApp() {
     <a
       href={WHATSAPP_URL}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label="WhatsApp 客服"
       className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 rounded-full bg-gold-gradient px-4 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-6px_var(--gold)] transition-transform hover:scale-105 active:scale-95"
     >
@@ -111,7 +111,7 @@ function Nav() {
           <a
             href={WHATSAPP_URL}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/10 md:inline-flex"
           >
             <MessageCircle className="h-4 w-4" /> WhatsApp
@@ -145,9 +145,9 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            AI 全自动交易系统
+            MT5 EA 自动执行工具
             <br className="hidden sm:block" />
-            <span className="gold-text">让 EA 按策略自动执行黄金与 BTC 交易</span>
+            <span className="gold-text">UID 白名单授权 · 黄金与 BTC 策略</span>
           </h1>
           <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
             <p>OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。</p>
@@ -168,7 +168,7 @@ function Hero() {
             <a
               href={WHATSAPP_URL}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-7 py-3.5 text-sm font-semibold text-foreground transition hover:border-gold/40 sm:w-auto"
             >
               <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
@@ -320,7 +320,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "默认风控参数",
     ],
-    cta: "立即开通",
+    cta: "开通订阅",
   },
   {
     key: "access",
@@ -336,7 +336,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "黄金与 BTC 同时开启",
     ],
-    cta: "立即开通",
+    cta: "开通订阅",
   },
 ];
 
@@ -362,6 +362,9 @@ function Pricing() {
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
           * 优惠价为限时活动价，恢复原价后可能调整。所有月费方案到期后自动停止 EA 授权。
+        </p>
+        <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground/80">
+          本服务仅提供 EA 工具授权与技术说明，不构成投资建议，也不承诺任何收益。交易存在亏损风险，请自行评估后使用。
         </p>
 
       </div>
@@ -651,7 +654,7 @@ function CTA() {
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
               >
                 <MessageCircle className="h-5 w-5" /> WhatsApp 私信客服
@@ -682,8 +685,11 @@ function Footer() {
             <a href="/privacy-policy" className="transition hover:text-foreground">隐私政策</a>
           </nav>
         </div>
+        <p className="text-center leading-relaxed">
+          本服务仅提供 EA 工具授权与技术说明，不构成任何投资建议或收益承诺。交易存在亏损风险，请自行评估后使用。
+        </p>
         <p className="text-center">
-          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务 · 交易涉及风险，请谨慎参与
+          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务
         </p>
       </div>
     </footer>
