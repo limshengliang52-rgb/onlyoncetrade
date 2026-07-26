@@ -145,9 +145,9 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            AI 全自动交易系统
+            MT5 EA 自动执行工具
             <br className="hidden sm:block" />
-            <span className="gold-text">让 EA 按策略自动执行黄金与 BTC 交易</span>
+            <span className="gold-text">UID 白名单授权 · 黄金与 BTC 策略</span>
           </h1>
           <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
             <p>OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。</p>
