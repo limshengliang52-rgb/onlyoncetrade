@@ -362,7 +362,7 @@ function Pricing() {
         <SectionHeader
           eyebrow="Pricing"
           title={<>选择你的 <span className="gold-text">EA 授权方案</span></>}
-          sub="限时优惠价，可随时通过 WhatsApp 咨询升级或续费"
+          sub="限时优惠价，Stripe 安全付款，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
