@@ -13,6 +13,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RiskDisclosureRouteImport } from './routes/risk-disclosure'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -43,6 +44,11 @@ const RefundPolicyRoute = RefundPolicyRouteImport.update({
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/risk-disclosure': typeof RiskDisclosureRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/contact'
     | '/privacy-policy'
     | '/refund-policy'
     | '/risk-disclosure'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/contact'
     | '/privacy-policy'
     | '/refund-policy'
     | '/risk-disclosure'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/admin-login'
     | '/auth'
+    | '/contact'
     | '/privacy-policy'
     | '/refund-policy'
     | '/risk-disclosure'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   RiskDisclosureRoute: typeof RiskDisclosureRoute
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   RiskDisclosureRoute: RiskDisclosureRoute,
