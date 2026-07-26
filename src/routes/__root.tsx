@@ -90,7 +90,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "OnlyOnce EA Trade · MT5 EA 工具授权服务" },
       { name: "twitter:description", content: "OnlyOnce EA Trade 提供 MT5 EA 工具授权、UID 开通说明与订阅管理。交易存在风险，本服务不构成投资建议。" },
       { name: "twitter:image", content: "https://onlyoncetrade.com/og-cover.jpg" },
-    
+      {
+        name: "google-site-verification",
+        content: "NX_wLirWeRyTi3ttTQTnOwfKQxQ3YUZF9AeWcFXjQvM",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
