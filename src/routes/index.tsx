@@ -188,8 +188,18 @@ function Hero() {
             ))}
           </div>
           <div className="mt-8 rounded-xl border border-border/60 bg-surface/40 px-5 py-4 text-left text-xs leading-relaxed text-muted-foreground">
-            <div className="mb-1 font-semibold text-foreground">安全说明</div>
-            本站不收集 MT5 密码、交易账户密码、银行卡信息、交易所 API Key 或助记词。订阅与开通咨询请通过官方 WhatsApp 联系。
+            <div className="mb-1 font-semibold text-foreground">安全说明 / Security Notice</div>
+            <p>
+              OnlyOnce EA Trade 是 MT5 EA 自动交易工具订阅服务。我们不会索取或收集 MT5 密码、
+              银行密码、助记词、银行卡号码或远程设备权限。付款由 Stripe 安全处理，
+              EA 授权只使用客户的 MT5 UID。
+            </p>
+            <p className="mt-2">
+              OnlyOnce EA Trade is a legitimate MT5 Expert Advisor subscription service.
+              We do not ask for or collect MT5 passwords, bank passwords, seed phrases,
+              card numbers, or remote device access. Payments are processed securely by
+              Stripe. EA authorization uses only the customer's MT5 UID.
+            </p>
           </div>
         </div>
       </div>
