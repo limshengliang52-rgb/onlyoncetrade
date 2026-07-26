@@ -169,7 +169,28 @@ function DashboardPage() {
           </div>
         </section>
 
-        <EADownloadSection query={downloadsQuery} />
+        <section className="mt-12">
+          <h2 className="font-display text-xl font-semibold">EA 文件获取</h2>
+          <div className="card-lux mt-4 rounded-2xl p-6 text-sm leading-relaxed text-muted-foreground">
+            <p className="text-foreground font-semibold mb-2">在线下载入口暂时维护中</p>
+            <p>
+              为了配合安全审核，EA 文件的在线下载入口暂时关闭。已开通的会员请通过官方 WhatsApp 联系客服，
+              客服会核对您的 MT5 UID 授权状态后提供 EA 安装说明。
+            </p>
+            <p className="mt-3 text-xs">
+              安全提醒：客服不会索取您的 MT5 密码、经纪商密码、银行卡信息或钱包助记词。
+            </p>
+            <a
+              href="https://wa.me/60136330303"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-5 py-2.5 text-xs font-semibold text-gold transition hover:bg-gold/10"
+            >
+              WhatsApp 联系客服
+            </a>
+          </div>
+        </section>
+        {false && <EADownloadSection query={downloadsQuery} />}
 
 
 

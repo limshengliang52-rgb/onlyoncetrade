@@ -102,12 +102,13 @@ function Nav() {
           <a href="#risk" className="transition hover:text-foreground">风险说明</a>
         </nav>
         <div className="flex items-center gap-2">
-          <a
-            href="/auth"
-            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground"
+          <span
+            aria-disabled="true"
+            title="账户入口维护中"
+            className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground/60"
           >
-            登录
-          </a>
+            账户入口维护中
+          </span>
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -185,6 +186,10 @@ function Hero() {
                 <div className="mt-1 text-xs text-muted-foreground md:text-sm">{s.v}</div>
               </div>
             ))}
+          </div>
+          <div className="mt-8 rounded-xl border border-border/60 bg-surface/40 px-5 py-4 text-left text-xs leading-relaxed text-muted-foreground">
+            <div className="mb-1 font-semibold text-foreground">安全说明</div>
+            本站不收集 MT5 密码、交易账户密码、银行卡信息、交易所 API Key 或助记词。订阅与开通咨询请通过官方 WhatsApp 联系。
           </div>
         </div>
       </div>
@@ -428,7 +433,9 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
 
       <a
-        href={`/checkout/${plan.key}`}
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         className={
           "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
@@ -436,7 +443,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        {plan.cta} <ArrowRight className="h-4 w-4" />
+        <MessageCircle className="h-4 w-4" /> WhatsApp 咨询开通
       </a>
     </div>
 
@@ -636,28 +643,21 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              一键开通你的
+              咨询开通
               <br className="hidden sm:block" />
               <span className="gold-text"> EA 月费权限</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              选择方案 → 填写 MT5 UID → Stripe 付款成功后系统自动开通授权与解锁下载，全程无需人工。
-              安装遇到问题可 WhatsApp 私信客服协助。
+              线上付款入口暂时维护中。请通过官方 WhatsApp 咨询套餐、MT5 UID 授权与开通方式，客服会协助后续流程。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a
-                href="#pricing"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
-              >
-                查看订阅方案 <ArrowRight className="h-5 w-5" />
-              </a>
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gold-gradient px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[0_15px_50px_-15px_var(--gold)] transition hover:brightness-110"
               >
-                <MessageCircle className="h-5 w-5" /> WhatsApp 私信客服
+                <MessageCircle className="h-5 w-5" /> WhatsApp 咨询开通
               </a>
             </div>
           </div>
