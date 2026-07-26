@@ -422,6 +422,21 @@ function EADownloadSection({
             <p className="mt-4 text-[11px] text-muted-foreground">
               下载链接为临时签名 URL，5 分钟内有效。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
             </p>
+            <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-4 text-[11px] leading-relaxed text-muted-foreground">
+              <p className="text-foreground">
+                This EA file is for MT5 Expert Advisors only. It does not collect
+                passwords, seed phrases, bank details, or personal device data.
+              </p>
+              <p className="mt-2">
+                We never ask for your MT5 password, broker password, bank password,
+                wallet seed phrase, or remote access to your device.
+              </p>
+              <p className="mt-2">
+                本 EA 文件仅用于 MT5 Expert Advisors，不会收集密码、助记词、银行信息或设备数据。
+                我们不会索取您的 MT5 密码、银行密码、钱包助记词或远程设备控制权限。
+              </p>
+            </div>
+
           </div>
         )}
       </div>
