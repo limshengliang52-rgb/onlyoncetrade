@@ -145,7 +145,7 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            MT5 EA 自动执行工具
+            MT5 EA 工具授权服务
             <br className="hidden sm:block" />
             <span className="gold-text">UID 白名单授权 · 黄金与 BTC 策略</span>
           </h1>
