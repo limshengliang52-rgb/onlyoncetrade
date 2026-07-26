@@ -87,7 +87,12 @@ export const deleteEALicense = createServerFn({ method: "POST" })
 export const extendEALicense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { id: string; days: number }) =>
-    z.object({ id: z.string().uuid(), days: z.number().int().min(1).max(3650) }).parse(d),
+    z
+      .object({
+        id: z.string().uuid(),
+        days: z.number().int().min(-3650).max(3650).refine((n) => n !== 0, "days 不能为 0"),
+      })
+      .parse(d),
   )
   .handler(async ({ data, context }) => {
     await requireAdmin(context);
@@ -103,13 +108,16 @@ export const extendEALicense = createServerFn({ method: "POST" })
         ? new Date(existing.expires_at as string)
         : new Date();
     const newExpires = new Date(base.getTime() + data.days * 86400_000);
+    const patch: Record<string, unknown> = { expires_at: newExpires.toISOString() };
+    if (data.days > 0) patch.status = "active";
     const { error } = await supabaseAdmin
       .from("ea_licenses")
-      .update({ expires_at: newExpires.toISOString(), status: "active" })
+      .update(patch)
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true, expires_at: newExpires.toISOString() };
   });
+
 
 export const setEALicenseStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
