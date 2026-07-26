@@ -313,6 +313,42 @@ function EALicensesPage() {
                           </button>
                           <button
                             onClick={() => {
+                              if (!confirm("确认扣除 30 天？")) return;
+                              extend.mutate({ id: r.id, days: -30 });
+                            }}
+                            className="rounded-md border border-orange-500/40 bg-orange-500/5 px-2 py-1 text-[10px] font-semibold text-orange-400 hover:bg-orange-500/10"
+                          >
+                            -30天
+                          </button>
+                          <button
+                            onClick={() => {
+                              const raw = prompt("自定义天数（正数=延期，负数=扣减）", "7");
+                              if (!raw) return;
+                              const n = parseInt(raw);
+                              if (!Number.isInteger(n) || n === 0) return alert("请输入非零整数");
+                              extend.mutate({ id: r.id, days: n });
+                            }}
+                            className="rounded-md border border-border bg-background/40 px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                          >
+                            自定义
+                          </button>
+                          {r.status === "active" ? (
+                            <button
+                              onClick={() => setStatus.mutate({ id: r.id, status: "suspended" })}
+                              className="rounded-md border border-red-500/40 bg-red-500/5 px-2 py-1 text-[10px] font-semibold text-red-400 hover:bg-red-500/10"
+                            >
+                              停用
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => setStatus.mutate({ id: r.id, status: "active" })}
+                              className="rounded-md border border-emerald-500/40 bg-emerald-500/5 px-2 py-1 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/10"
+                            >
+                              激活
+                            </button>
+                          )}
+                          <button
+                            onClick={() => {
                               setForm({
                                 member_name: r.member_name,
                                 email: r.email ?? "",
@@ -341,6 +377,7 @@ function EALicensesPage() {
                           </button>
                         </div>
                       </td>
+
                     </tr>
                   ))}
                 </tbody>
