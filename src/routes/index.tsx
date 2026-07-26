@@ -659,14 +659,6 @@ function CTA() {
               >
                 <MessageCircle className="h-5 w-5" /> WhatsApp 咨询开通
               </a>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-8 py-4 text-sm font-semibold text-foreground transition hover:border-gold/40"
-              >
-                <MessageCircle className="h-5 w-5" /> WhatsApp 私信客服
-              </a>
             </div>
           </div>
         </div>
