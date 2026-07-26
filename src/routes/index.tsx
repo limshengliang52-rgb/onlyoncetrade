@@ -442,9 +442,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
 
       <a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/checkout/${plan.key}`}
         className={
           "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
@@ -452,7 +450,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        <MessageCircle className="h-4 w-4" /> WhatsApp 咨询开通
+        立即开通 30 天
       </a>
     </div>
 
