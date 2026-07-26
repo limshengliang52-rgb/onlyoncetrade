@@ -172,13 +172,31 @@ function DashboardPage() {
         <section className="mt-12">
           <h2 className="font-display text-xl font-semibold">EA 文件获取</h2>
           <div className="card-lux mt-4 rounded-2xl p-6 text-sm leading-relaxed text-muted-foreground">
-            <p className="text-foreground font-semibold mb-2">在线下载入口暂时维护中</p>
+            <p className="text-foreground font-semibold mb-2">在线下载入口暂时维护中 / Downloads Temporarily Unavailable</p>
             <p>
               为了配合安全审核，EA 文件的在线下载入口暂时关闭。已开通的会员请通过官方 WhatsApp 联系客服，
               客服会核对您的 MT5 UID 授权状态后提供 EA 安装说明。
             </p>
+            <p className="mt-3">
+              To comply with an ongoing safety review, EA file downloads are temporarily disabled on this page.
+              Authorized subscribers can contact our official WhatsApp support to receive installation instructions
+              after MT5 UID verification.
+            </p>
             <p className="mt-3 text-xs">
-              安全提醒：客服不会索取您的 MT5 密码、经纪商密码、银行卡信息或钱包助记词。
+              安全提醒：客服<strong>不会</strong>索取您的 MT5 密码、经纪商密码、银行密码、
+              银行卡信息或钱包助记词。EA 授权仅使用您的 MT5 UID。
+            </p>
+            <p className="mt-2 text-xs">
+              Security notice: our support will <strong>never</strong> ask for your MT5 password, broker password,
+              bank password, card number, or wallet seed phrase. EA authorization uses only your MT5 UID.
+            </p>
+            <p className="mt-3 text-xs">
+              关于 EA 文件：<span className="font-sans">.ex5</span> 是 MetaTrader 5 Expert Advisor 文件，
+              仅在 MT5 平台内运行交易策略，不会收集密码、助记词、银行资料或个人文件。
+            </p>
+            <p className="mt-2 text-xs">
+              About the file: an <span className="font-sans">.ex5</span> file is an MT5 Expert Advisor. It runs only
+              inside MetaTrader 5 and does not collect passwords, seed phrases, banking data, or personal files.
             </p>
             <a
               href="https://wa.me/60136330303"
@@ -186,7 +204,7 @@ function DashboardPage() {
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-5 py-2.5 text-xs font-semibold text-gold transition hover:bg-gold/10"
             >
-              WhatsApp 联系客服
+              WhatsApp 联系客服 / Contact Support
             </a>
           </div>
         </section>
