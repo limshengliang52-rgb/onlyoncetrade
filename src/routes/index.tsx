@@ -142,27 +142,27 @@ function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-xs font-medium text-gold font-sans">
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-            MT5 EA · Monthly License
+            MT5 EA · 黄金与 BTC 策略
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            MT5 EA 工具授权服务
+            AI 自动化交易系统
             <br className="hidden sm:block" />
-            <span className="gold-text">UID 白名单授权 · 黄金与 BTC 策略</span>
+            <span className="gold-text">黄金与 BTC 策略自动执行</span>
           </h1>
           <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
-            <p>OnlyOnce EA Trade 采用 MT5 UID 白名单授权模式。会员开通后，把 EA 挂在自己的 MT5 账户，系统会根据策略信号、风险比例与每日亏损保护自动执行交易。</p>
-            <p className="mt-2">到期后授权会自动停止。</p>
+            <p>OnlyOnce 为黄金与比特币交易者提供 MT5 策略自动执行、UID 授权、风险控制与订阅管理服务。会员开通后，把 EA 挂在自己的 MT5 账户，系统按规则化信号运行，并设有每日亏损保护。</p>
+            <p className="mt-2 text-sm">交易存在风险，策略系统不保证盈利。请确认自身风险承受能力后再开通。</p>
           </div>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
-            <span>已有 <span className="font-semibold text-foreground">{memberCount}</span> 位会员付款开通 EA 权限</span>
+            <span>已有 <span className="font-semibold text-foreground">{memberCount}</span> 位会员开通 EA 权限</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href="#pricing"
               className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold-gradient px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_40px_-10px_var(--gold)] transition hover:brightness-110 sm:w-auto"
             >
-              查看订阅方案
+              立即开通
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
             </a>
             <a
@@ -171,7 +171,7 @@ function Hero() {
               rel="noopener noreferrer"
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-7 py-3.5 text-sm font-semibold text-foreground transition hover:border-gold/40 sm:w-auto"
             >
-              <MessageCircle className="h-4 w-4" /> WhatsApp 私信客服
+              <MessageCircle className="h-4 w-4" /> WhatsApp 咨询
             </a>
           </div>
           <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border/60 pt-8 text-center sm:gap-8">
