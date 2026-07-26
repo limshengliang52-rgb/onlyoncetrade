@@ -212,7 +212,7 @@ function CheckoutPage() {
                     />
                     <span>
                       我已阅读并理解{" "}
-                      <a href="/risk-disclosure" target="_blank" className="text-gold underline">风险声明</a>
+                      <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-gold underline">风险声明</a>
                       ，明白 EA 不保证盈利，交易亏损风险由我自行承担。
                     </span>
                   </label>
@@ -222,7 +222,7 @@ function CheckoutPage() {
                     disabled={loading || !riskAccepted}
                     className="mt-4 w-full rounded-full bg-gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {loading ? "正在创建结账..." : `付款 $${plan.amountUSD} 立即开通 30 天`}
+                    {loading ? "正在创建结账..." : `开通 30 天 · $${plan.amountUSD}`}
                   </button>
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
                     使用 Stripe 安全结账 · 支持 Visa / Mastercard
