@@ -145,7 +145,7 @@ function Hero() {
             MT5 EA · Monthly License
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            MT5 EA 自动执行工具
+            MT5 EA 工具授权服务
             <br className="hidden sm:block" />
             <span className="gold-text">UID 白名单授权 · 黄金与 BTC 策略</span>
           </h1>
@@ -320,7 +320,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "默认风控参数",
     ],
-    cta: "开通订阅",
+    cta: "查看开通方式",
   },
   {
     key: "access",
@@ -336,7 +336,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "黄金与 BTC 同时开启",
     ],
-    cta: "开通订阅",
+    cta: "查看开通方式",
   },
 ];
 
@@ -687,6 +687,9 @@ function Footer() {
         </div>
         <p className="text-center leading-relaxed">
           本服务仅提供 EA 工具授权与技术说明，不构成任何投资建议或收益承诺。交易存在亏损风险，请自行评估后使用。
+        </p>
+        <p className="text-center leading-relaxed">
+          OnlyOnce EA Trade 不是交易商、经纪商或投资顾问。本网站不收集交易账户密码，不承诺收益。
         </p>
         <p className="text-center">
           © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务
