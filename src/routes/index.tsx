@@ -320,7 +320,7 @@ const plans: Plan[] = [
       "建议 500 USD 起始资金",
       "默认风控参数",
     ],
-    cta: "立即开通",
+    cta: "开通订阅",
   },
   {
     key: "access",
