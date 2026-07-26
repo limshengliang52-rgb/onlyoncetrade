@@ -689,20 +689,26 @@ function Footer() {
             <span className="font-display font-semibold text-foreground">OnlyOnce EA Trade</span>
           </div>
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <a href="/risk-disclosure" className="transition hover:text-foreground">风险声明</a>
-            <a href="/terms" className="transition hover:text-foreground">服务条款</a>
-            <a href="/refund-policy" className="transition hover:text-foreground">退款政策</a>
-            <a href="/privacy-policy" className="transition hover:text-foreground">隐私政策</a>
+            <a href="/privacy-policy" className="transition hover:text-foreground">Privacy Policy</a>
+            <a href="/terms" className="transition hover:text-foreground">Terms of Service</a>
+            <a href="/refund-policy" className="transition hover:text-foreground">Refund Policy</a>
+            <a href="/risk-disclosure" className="transition hover:text-foreground">Risk Disclosure</a>
+            <a href="/contact" className="transition hover:text-foreground">Contact</a>
           </nav>
         </div>
         <p className="text-center leading-relaxed">
           本服务仅提供 EA 工具授权与技术说明，不构成任何投资建议或收益承诺。交易存在亏损风险，请自行评估后使用。
         </p>
         <p className="text-center leading-relaxed">
-          OnlyOnce EA Trade 不是交易商、经纪商或投资顾问。本网站不收集交易账户密码，不承诺收益。
+          OnlyOnce EA is a trading automation tool. Past performance and backtest results do not guarantee future profits.
+          Trading involves risk and users are responsible for their own trading decisions.
+        </p>
+        <p className="text-center leading-relaxed">
+          OnlyOnce EA Trade 不是交易商、经纪商或投资顾问。本网站不收集 MT5 密码、银行密码、助记词或银行卡信息。
+          We never ask for MT5 passwords, bank credentials, seed phrases, or remote device access.
         </p>
         <p className="text-center">
-          © {new Date().getFullYear()} OnlyOnce EA Trade · MT5 EA 月费授权服务
+          © {new Date().getFullYear()} OnlyOnce EA Trade · Privacy Policy | Terms of Service | Refund Policy | Risk Disclosure | Contact
         </p>
       </div>
     </footer>
