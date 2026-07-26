@@ -102,13 +102,12 @@ function Nav() {
           <a href="#risk" className="transition hover:text-foreground">风险说明</a>
         </nav>
         <div className="flex items-center gap-2">
-          <span
-            aria-disabled="true"
-            title="账户入口维护中"
-            className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground/60"
+          <a
+            href="/auth"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground transition hover:border-gold/40 hover:text-gold"
           >
-            账户入口维护中
-          </span>
+            登录 / 注册
+          </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
