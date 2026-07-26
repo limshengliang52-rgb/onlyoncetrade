@@ -108,8 +108,11 @@ export const extendEALicense = createServerFn({ method: "POST" })
         ? new Date(existing.expires_at as string)
         : new Date();
     const newExpires = new Date(base.getTime() + data.days * 86400_000);
-    const patch: Record<string, unknown> = { expires_at: newExpires.toISOString() };
-    if (data.days > 0) patch.status = "active";
+    const patch = (
+      data.days > 0
+        ? { expires_at: newExpires.toISOString(), status: "active" as const }
+        : { expires_at: newExpires.toISOString() }
+    );
     const { error } = await supabaseAdmin
       .from("ea_licenses")
       .update(patch)
