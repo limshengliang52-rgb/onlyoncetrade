@@ -595,6 +595,26 @@ function Risk() {
             </div>
           ))}
         </div>
+
+        <div className="mt-10 rounded-2xl border border-border/60 bg-surface/40 p-6 text-sm leading-relaxed text-muted-foreground">
+          <p className="text-foreground">
+            OnlyOnce EA is a trading automation tool for MetaTrader 5 (MT5).
+            Past performance does not guarantee future results. Trading in financial
+            markets involves substantial risk and is not suitable for every investor.
+          </p>
+          <p className="mt-3">
+            <span className="text-foreground font-medium">Your security matters.</span>{" "}
+            We will never ask for your MT5 password, broker login password, bank
+            password, wallet seed phrase, or remote access to your device. Our EA
+            files run only inside MT5 and do not collect passwords, seed phrases,
+            banking details, or personal device data.
+          </p>
+          <p className="mt-3 text-xs">
+            OnlyOnce EA 交易自动化工具仅用于 MetaTrader 5。历史表现不代表未来收益。
+            我们不会索取您的 MT5 密码、经纪商密码、银行密码、钱包助记词或远程设备控制权限。
+          </p>
+        </div>
+
       </div>
     </section>
   );
