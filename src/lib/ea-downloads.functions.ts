@@ -1,7 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-type FileKey = "xau" | "btc" | "guide_cn" | "guide_en";
+type FileKey =
+  | "xau_windows"
+  | "xau_mac"
+  | "btc_windows"
+  | "btc_mac"
+  | "guide_cn"
+  | "guide_en"
+  | "guide_mac";
 
 export type EADownloadFile = {
   key: FileKey;
@@ -44,25 +51,48 @@ function pickLatest(
 function matcherFor(key: FileKey): (name: string) => boolean {
   const lower = (s: string) => s.toLowerCase();
   switch (key) {
-    case "xau":
+    case "xau_windows":
       return (n) => {
         const l = lower(n);
         return l.endsWith(".ex5") && l.includes("xauusd");
       };
-    case "btc":
+    case "xau_mac":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".ex5") && l.includes("btc");
+        return l.endsWith(".zip") && l.includes("xau") && l.includes("mac");
+      };
+    case "btc_windows":
+      return (n) => {
+        const l = lower(n);
+        return l.endsWith(".zip") && l.includes("btc") && l.includes("windows");
+      };
+    case "btc_mac":
+      return (n) => {
+        const l = lower(n);
+        return l.endsWith(".zip") && l.includes("btc") && l.includes("mac");
       };
     case "guide_cn":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".pdf") && (l.includes("guide_cn") || l.includes("install_guide_cn"));
+        return (
+          l.endsWith(".pdf") &&
+          !l.includes("mac") &&
+          (l.includes("guide_cn") || l.includes("install_guide_cn"))
+        );
       };
     case "guide_en":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".pdf") && (l.includes("guide_en") || l.includes("install_guide_en"));
+        return (
+          l.endsWith(".pdf") &&
+          !l.includes("mac") &&
+          (l.includes("guide_en") || l.includes("install_guide_en"))
+        );
+      };
+    case "guide_mac":
+      return (n) => {
+        const l = lower(n);
+        return l.endsWith(".pdf") && l.includes("mac");
       };
   }
 }
@@ -95,7 +125,6 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // List all files in the bucket root; sort newest first as a hint.
     const { data: listing, error: listErr } = await supabaseAdmin.storage
       .from("ea-files")
       .list("", { limit: 1000, sortBy: { column: "updated_at", order: "desc" } });
@@ -103,10 +132,17 @@ export const getEADownloads = createServerFn({ method: "GET" })
     const objects: StorageObject[] = (listing ?? []).filter((o) => o.name);
 
     const wanted: { key: FileKey; label: string }[] = [];
-    if (products.includes("xau")) wanted.push({ key: "xau", label: "下载 XAUUSD EA" });
-    if (products.includes("btc")) wanted.push({ key: "btc", label: "下载 BTC EA" });
-    wanted.push({ key: "guide_cn", label: "下载安装说明 (中文)" });
-    wanted.push({ key: "guide_en", label: "Download Guide (English)" });
+    if (products.includes("xau")) {
+      wanted.push({ key: "xau_windows", label: "XAU Windows EA (.ex5)" });
+      wanted.push({ key: "xau_mac", label: "XAU MacBook 安装包" });
+    }
+    if (products.includes("btc")) {
+      wanted.push({ key: "btc_windows", label: "BTC Windows 安装包" });
+      wanted.push({ key: "btc_mac", label: "BTC MacBook 安装包" });
+    }
+    wanted.push({ key: "guide_cn", label: "Windows 安装说明 (中文 PDF)" });
+    wanted.push({ key: "guide_en", label: "Windows Install Guide (English PDF)" });
+    wanted.push({ key: "guide_mac", label: "Mac 安装教学 PDF (中英)" });
 
     const files = await Promise.all(
       wanted.map(async (f): Promise<EADownloadFile> => {
@@ -133,4 +169,3 @@ export const getEADownloads = createServerFn({ method: "GET" })
       files,
     };
   });
-
