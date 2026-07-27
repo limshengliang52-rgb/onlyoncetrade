@@ -26,7 +26,23 @@ function respond(body: unknown, status = 200) {
   });
 }
 
-const ID_RE = /^[A-Za-z0-9_-]{3,64}$/;
+const ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+
+function pickParam(url: URL, ...keys: string[]): string {
+  for (const k of keys) {
+    const v = url.searchParams.get(k);
+    if (v && v.trim()) return v.trim();
+  }
+  return "";
+}
+
+function normalizeProduct(raw: string): { product: string; key: string } {
+  const p = raw.toLowerCase();
+  if (!p) return { product: "", key: "" };
+  if (p.includes("btc")) return { product: raw, key: "btc" };
+  if (p.includes("xau") || p.includes("gold")) return { product: raw, key: "xau" };
+  return { product: raw, key: p };
+}
 
 export const Route = createFileRoute("/api/public/ea-license/check")({
   server: {
@@ -34,65 +50,76 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       GET: async ({ request }) => {
         const url = new URL(request.url);
-        const account_id = url.searchParams.get("account_id")?.trim() ?? "";
-        const uid = url.searchParams.get("uid")?.trim() ?? "";
-        const product = url.searchParams.get("product")?.trim() ?? "";
-        const version = url.searchParams.get("version")?.trim() ?? "";
-        const signature = url.searchParams.get("signature")?.trim() ?? "";
+        const account_id = pickParam(url, "mt5_account_id", "account_id", "account", "mt5_uid", "uid");
+        const uid = pickParam(url, "uid", "mt5_uid");
+        const productRaw = pickParam(url, "product", "symbol", "ea") || "xauusd";
+        const { product, key: productKey } = normalizeProduct(productRaw);
+        const signature = pickParam(url, "signature");
 
+        // Signature is optional (enhancement only). Reject only if provided AND wrong.
         const expectedKey = process.env.EA_LICENSE_API_KEY;
-        if (!expectedKey || signature !== expectedKey) {
-          return respond({ authorized: false, reason: "invalid_signature" }, 401);
+        if (signature && expectedKey && signature !== expectedKey) {
+          return respond({ authorized: false, reason: "invalid_signature" });
         }
-        if (!ID_RE.test(account_id) || !ID_RE.test(product)) {
-          return respond({ authorized: false, reason: "invalid_params" }, 400);
+
+        if (!account_id || !ID_RE.test(account_id)) {
+          return respond({ authorized: false, reason: "invalid_params" });
         }
 
         const admin = getAdmin();
         const nowIso = new Date().toISOString();
 
-        // Lazy-expire ea_licenses
+        // Lazy-expire ea_licenses matching this account+product
         await admin
           .from("ea_licenses")
           .update({ status: "expired" })
           .eq("mt5_account_id", account_id)
-          .eq("product", product)
           .eq("status", "active")
           .lt("expires_at", nowIso);
 
-        const { data, error } = await admin
-          .from("ea_licenses")
-          .select("status, expires_at, uid, member_name")
-          .eq("mt5_account_id", account_id)
-          .eq("product", product)
-          .maybeSingle();
-
-        if (error) {
-          console.error("ea-license check error", error);
-          return respond({ authorized: false, reason: "server_error" }, 500);
+        // Try ea_licenses: exact product match first, then any product for this account
+        let licenseRow: any = null;
+        {
+          const { data } = await admin
+            .from("ea_licenses")
+            .select("status, expires_at, uid, product")
+            .eq("mt5_account_id", account_id)
+            .eq("product", product)
+            .maybeSingle();
+          licenseRow = data;
+        }
+        if (!licenseRow && product) {
+          const { data } = await admin
+            .from("ea_licenses")
+            .select("status, expires_at, uid, product")
+            .eq("mt5_account_id", account_id)
+            .ilike("product", `%${productKey}%`)
+            .order("expires_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+          licenseRow = data;
         }
 
-        if (data) {
-          if (data.status === "suspended") {
+        if (licenseRow) {
+          if (licenseRow.status === "suspended") {
             return respond({ authorized: false, reason: "suspended" });
           }
-          if (data.status !== "active" || new Date(data.expires_at) < new Date()) {
-            return respond({ authorized: false, reason: "expired", expires_at: data.expires_at });
+          if (licenseRow.status !== "active" || new Date(licenseRow.expires_at) < new Date()) {
+            return respond({ authorized: false, reason: "expired", expires_at: licenseRow.expires_at });
           }
-          if (uid && data.uid && uid !== data.uid) {
+          if (uid && licenseRow.uid && uid !== licenseRow.uid) {
             return respond({ authorized: false, reason: "uid_mismatch" });
           }
-          void version;
-          return respond({ authorized: true, status: "active", expires_at: data.expires_at });
+          return respond({
+            authorized: true,
+            status: "active",
+            expires_at: licenseRow.expires_at,
+            product: licenseRow.product,
+            uid: licenseRow.uid ?? uid ?? null,
+          });
         }
 
         // Fallback: subscriptions by MT5 UID (real paid customers)
-        const productKey = product.toLowerCase().includes("btc")
-          ? "btc"
-          : product.toLowerCase().includes("xau") || product.toLowerCase().includes("gold")
-            ? "xau"
-            : product.toLowerCase();
-
         await admin
           .from("subscriptions")
           .update({ status: "expired" })
@@ -124,12 +151,16 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
             : sub.plan === "access"
               ? ["xau", "btc"]
               : ["xau"];
-        if (!allowed.includes(productKey)) {
+        if (productKey && !allowed.includes(productKey)) {
           return respond({ authorized: false, reason: "product_not_allowed" });
         }
-        void uid;
-        void version;
-        return respond({ authorized: true, status: "active", expires_at: sub.expires_at });
+        return respond({
+          authorized: true,
+          status: "active",
+          expires_at: sub.expires_at,
+          product: productRaw,
+          uid: account_id,
+        });
       },
     },
   },
