@@ -393,7 +393,8 @@ function EADownloadSection({
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.files.map((f) => {
-                const isGuide = f.key === "guide_cn" || f.key === "guide_en";
+                const isGuide =
+                  f.key === "guide_cn" || f.key === "guide_en" || f.key === "guide_mac";
                 const Icon = isGuide ? FileText : Download;
                 const disabled = !f.url || f.missing;
                 return (
