@@ -498,10 +498,10 @@ function Backtest() {
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">Net Profit · Jan–Jul 2026</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
               <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.6</span>
-                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">%</span>
+                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.56</span>
+                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+832 USD)</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
                 起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+832.80 USD</span>
@@ -524,7 +524,7 @@ function Backtest() {
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">每月明细</h3>
+              <h3 className="font-display text-lg font-semibold">Monthly Return</h3>
               <span className="text-[11px] font-sans text-muted-foreground">2026</span>
             </div>
             <div className="mt-6 overflow-hidden rounded-xl border border-border/60">
@@ -532,22 +532,28 @@ function Backtest() {
                 <thead>
                   <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                     <th className="px-3 py-3 text-left font-sans">Month</th>
-                    <th className="px-3 py-3 text-right font-sans">Profit</th>
-                    <th className="px-3 py-3 text-right font-sans">PF</th>
-                    <th className="px-3 py-3 text-right font-sans">Win</th>
-                    <th className="px-3 py-3 text-right font-sans">Trades</th>
+                    <th className="px-3 py-3 text-right font-sans">Return</th>
+                    <th className="px-3 py-3 text-right font-sans">Win Rate</th>
+                    <th className="px-3 py-3 text-right font-sans">Profit Factor</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {BACKTEST_MONTHS.map((row, i) => (
-                    <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
-                      <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
-                      <td className="px-3 py-2.5 text-right font-sans font-semibold text-gold">+{row.profit.toFixed(2)}</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-muted-foreground">{row.trades}</td>
-                    </tr>
-                  ))}
+                  {BACKTEST_MONTHS.map((row, i) => {
+                    const positive = row.profit >= 0;
+                    const color = positive ? "text-emerald-400" : "text-red-400";
+                    const sign = positive ? "+" : "";
+                    return (
+                      <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
+                        <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
+                        <td className={`px-3 py-2.5 text-right font-sans font-semibold ${color}`}>
+                          {sign}{row.pct.toFixed(2)}%
+                          <span className="ml-1 text-xs text-muted-foreground">({sign}{Math.round(row.profit)} USD)</span>
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
+                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
