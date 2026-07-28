@@ -145,10 +145,14 @@ function Hero() {
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
             MT5 EA · 黄金与 BTC 策略
           </span>
-          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            AI 自动化交易系统
-            <br className="hidden sm:block" />
-            <span className="gold-text">黄金与 BTC 策略自动执行</span>
+          <h1
+            className="mt-6 font-display text-[30px] font-bold tracking-tight sm:text-5xl md:text-6xl"
+            style={{ wordBreak: "keep-all", overflowWrap: "normal", textWrap: "balance", lineHeight: 1.12 }}
+          >
+            <span className="block">AI 自动化交易系统</span>
+            <span className="mt-1 block text-[22px] gold-text sm:text-4xl md:text-5xl">
+              黄金与 BTC 策略自动执行
+            </span>
           </h1>
           <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
             <p>OnlyOnce 为黄金与比特币交易者提供 MT5 策略自动执行、UID 授权、风险控制与订阅管理服务。会员开通后，把 EA 挂在自己的 MT5 账户，系统按规则化信号运行，并设有每日亏损保护。</p>
