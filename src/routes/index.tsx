@@ -584,18 +584,18 @@ const BTC_MONTHS_RAW = [
 
 function BtcBacktest() {
   const stats = [
-    { label: "Profit Factor", value: "2.16", unit: "" },
-    { label: "Win Rate", value: "53.33", unit: "%" },
-    { label: "Total Trades", value: "60", unit: "" },
-    { label: "Balance Drawdown", value: "18.43", unit: "%" },
+    { label: "盈利因子", value: "2.16", unit: "" },
+    { label: "胜率", value: "53.33", unit: "%" },
+    { label: "总交易次数", value: "60", unit: "" },
+    { label: "余额最大回撤", value: "18.43", unit: "%" },
   ];
   return (
     <section id="btc-backtest" className="relative border-b border-border/50 bg-surface/40 py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
-          eyebrow="Backtest Report"
+          eyebrow="回测报告"
           title={<>OnlyOnce <span className="font-sans">BTCUSD</span> EA <span className="gold-text">回测战绩</span></>}
-          sub="OnlyOnce BTC EA historical performance based on MT5 backtest data. 历史回测不代表未来收益。"
+          sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
