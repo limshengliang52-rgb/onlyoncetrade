@@ -63,6 +63,15 @@ function AdminPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
     onError: (e: any) => alert(e?.message ?? "更新失败"),
   });
+  const updateProducts = useMutation({
+    mutationFn: (v: { id: string; products: string[] }) =>
+      adminUpdateSubscriptionProducts({ data: v }),
+    onSuccess: () => {
+      toast.success("授权产品已更新");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "更新失败"),
+  });
 
   if (authorized === null) {
     return <div className="p-10 text-center text-sm text-muted-foreground">加载中...</div>;
