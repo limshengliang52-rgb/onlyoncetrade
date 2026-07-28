@@ -16,7 +16,7 @@ import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 import { PlatformNotice } from "@/components/PlatformNotice";
 
-import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, FileText, AlertTriangle } from "lucide-react";
+import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, AlertTriangle } from "lucide-react";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -392,33 +392,33 @@ function EADownloadSection({
             </div>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-              {data.files.map((f) => {
-                const isGuide =
-                  f.key === "guide_cn" || f.key === "guide_en" || f.key === "guide_mac";
-                const Icon = isGuide ? FileText : Download;
-                const disabled = !f.url || f.missing;
-                return (
-                  <a
-                    key={f.key}
-                    href={f.url ?? "#"}
-                    onClick={(e) => {
-                      if (disabled) e.preventDefault();
-                    }}
-                    className={
-                      "inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition " +
-                      (disabled
-                        ? "cursor-not-allowed border-border/60 bg-muted/30 text-muted-foreground"
-                        : isGuide
-                          ? "border-border/60 bg-background/60 text-foreground hover:border-gold/60"
+              {data.files
+                .filter(
+                  (f) =>
+                    f.key !== "guide_cn" && f.key !== "guide_en" && f.key !== "guide_mac",
+                )
+                .map((f) => {
+                  const disabled = !f.url || f.missing;
+                  return (
+                    <a
+                      key={f.key}
+                      href={f.url ?? "#"}
+                      onClick={(e) => {
+                        if (disabled) e.preventDefault();
+                      }}
+                      className={
+                        "inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition " +
+                        (disabled
+                          ? "cursor-not-allowed border-border/60 bg-muted/30 text-muted-foreground"
                           : "border-transparent bg-gold-gradient text-primary-foreground hover:brightness-110")
-                    }
-                  >
-                    <Icon className="h-4 w-4" />
-                    {f.label}
-                    {disabled && <span className="text-[10px]">（待上传）</span>}
-                  </a>
-                );
-              })}
+                      }
+                    >
+                      <Download className="h-4 w-4" />
+                      {f.label}
+                      {disabled && <span className="text-[10px]">（待上传）</span>}
+                    </a>
+                  );
+                })}
             </div>
             <p className="mt-4 text-[11px] text-muted-foreground">
               下载链接为临时签名 URL，5 分钟内有效。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
