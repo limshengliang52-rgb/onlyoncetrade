@@ -319,34 +319,33 @@ type Plan = {
   highlight?: boolean;
 };
 
+const PLAN_FEATURES = [
+  "XAUUSD 黄金策略",
+  "BTCUSD 比特币策略",
+  "1 个 MT5 UID 授权绑定",
+  "到期自动停止授权",
+  "会员后台下载两个 EA",
+  "支持 Windows / Mac 一键安装 EA 文件",
+];
+
 const plans: Plan[] = [
   {
     key: "access",
-    name: "OnlyOnce Dual Strategy Access",
-    tagline: "月费方案 · 同时开启黄金 + BTC 两个策略",
+    name: "OnlyOnce Pro",
+    tagline: "",
     price: "$79",
     priceNote: "/ 月",
-    features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
-      "1 个 MT5 UID 授权绑定",
-      "30 天权限，到期自动停止授权",
-      "会员后台可下载两个 EA 策略文件",
-    ],
+    features: PLAN_FEATURES,
     cta: "开通月费方案",
   },
   {
     key: "basic",
-    name: "OnlyOnce Dual Strategy 3-Month Access",
-    tagline: "3 个月方案 · 一次开通，比月付更划算",
+    name: "OnlyOnce Plus",
+    tagline: "",
     price: "$199",
     priceNote: "/ 3 个月",
     highlight: true,
-    features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
-      "1 个 MT5 UID 授权绑定",
-      "90 天权限，到期自动停止授权",
-      "会员后台可下载两个 EA 策略文件",
-    ],
+    features: PLAN_FEATURES,
     cta: "开通 3 个月方案",
   },
 ];
@@ -413,11 +412,13 @@ function PlanCard({ plan }: { plan: Plan }) {
         </span>
       )}
       <div>
-        <h3 className="font-display text-2xl font-bold">{plan.name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+        <h3 className="font-display text-2xl font-bold whitespace-nowrap">{plan.name}</h3>
+        {plan.tagline && (
+          <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+        )}
       </div>
 
-      <div className="mt-6 flex items-end gap-3">
+      <div className="mt-4 flex items-end gap-3">
         <span className="font-display text-4xl font-bold gold-text">{plan.price}</span>
         {plan.priceNote && (
           <span className="pb-1.5 text-sm text-muted-foreground">{plan.priceNote}</span>
@@ -456,7 +457,8 @@ function PlanCard({ plan }: { plan: Plan }) {
   );
 }
 
-const BACKTEST_MONTHS = [
+const BACKTEST_START_BALANCE = 500;
+const BACKTEST_MONTHS_RAW = [
   { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
   { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
   { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
@@ -465,6 +467,15 @@ const BACKTEST_MONTHS = [
   { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
   { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
 ];
+const BACKTEST_MONTHS = (() => {
+  let balance = BACKTEST_START_BALANCE;
+  return BACKTEST_MONTHS_RAW.map((row) => {
+    const pct = (row.profit / balance) * 100;
+    const opening = balance;
+    balance += row.profit;
+    return { ...row, pct, opening };
+  });
+})();
 
 function Backtest() {
   const stats = [
@@ -487,10 +498,10 @@ function Backtest() {
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">Net Profit · Jan–Jul 2026</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
               <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.6</span>
-                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">%</span>
+                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.56</span>
+                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+832 USD)</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
                 起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+832.80 USD</span>
@@ -513,7 +524,7 @@ function Backtest() {
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">每月明细</h3>
+              <h3 className="font-display text-lg font-semibold">Monthly Return</h3>
               <span className="text-[11px] font-sans text-muted-foreground">2026</span>
             </div>
             <div className="mt-6 overflow-hidden rounded-xl border border-border/60">
@@ -521,22 +532,28 @@ function Backtest() {
                 <thead>
                   <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                     <th className="px-3 py-3 text-left font-sans">Month</th>
-                    <th className="px-3 py-3 text-right font-sans">Profit</th>
-                    <th className="px-3 py-3 text-right font-sans">PF</th>
-                    <th className="px-3 py-3 text-right font-sans">Win</th>
-                    <th className="px-3 py-3 text-right font-sans">Trades</th>
+                    <th className="px-3 py-3 text-right font-sans">Return</th>
+                    <th className="px-3 py-3 text-right font-sans">Win Rate</th>
+                    <th className="px-3 py-3 text-right font-sans">Profit Factor</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {BACKTEST_MONTHS.map((row, i) => (
-                    <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
-                      <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
-                      <td className="px-3 py-2.5 text-right font-sans font-semibold text-gold">+{row.profit.toFixed(2)}</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
-                      <td className="px-3 py-2.5 text-right font-sans text-muted-foreground">{row.trades}</td>
-                    </tr>
-                  ))}
+                  {BACKTEST_MONTHS.map((row, i) => {
+                    const positive = row.profit >= 0;
+                    const color = positive ? "text-emerald-400" : "text-red-400";
+                    const sign = positive ? "+" : "";
+                    return (
+                      <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
+                        <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
+                        <td className={`px-3 py-2.5 text-right font-sans font-semibold ${color}`}>
+                          {sign}{row.pct.toFixed(2)}%
+                          <span className="ml-1 text-xs text-muted-foreground">({sign}{Math.round(row.profit)} USD)</span>
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
+                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
