@@ -412,11 +412,13 @@ function PlanCard({ plan }: { plan: Plan }) {
         </span>
       )}
       <div>
-        <h3 className="font-display text-2xl font-bold">{plan.name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+        <h3 className="font-display text-2xl font-bold whitespace-nowrap">{plan.name}</h3>
+        {plan.tagline && (
+          <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+        )}
       </div>
 
-      <div className="mt-6 flex items-end gap-3">
+      <div className="mt-4 flex items-end gap-3">
         <span className="font-display text-4xl font-bold gold-text">{plan.price}</span>
         {plan.priceNote && (
           <span className="pb-1.5 text-sm text-muted-foreground">{plan.priceNote}</span>
