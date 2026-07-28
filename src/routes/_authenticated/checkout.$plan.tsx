@@ -97,7 +97,7 @@ function CheckoutPage() {
           plan: plan.key,
           mt5Uid,
           email,
-          returnUrl: `${window.location.origin}/checkout/${plan.key}?checkout=success&uid=${encodeURIComponent(mt5Uid)}&session_id={CHECKOUT_SESSION_ID}`,
+          returnUrl: `${window.location.origin}/checkout/${plan.slug}?checkout=success&uid=${encodeURIComponent(mt5Uid)}&session_id={CHECKOUT_SESSION_ID}`,
           environment: getStripeEnvironment(),
         },
       });

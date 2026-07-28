@@ -309,7 +309,7 @@ function Features() {
 }
 
 type Plan = {
-  key: "basic" | "access";
+  slug: "pro" | "plus";
   name: string;
   tagline: string;
   price: string;
@@ -330,7 +330,7 @@ const PLAN_FEATURES = [
 
 const plans: Plan[] = [
   {
-    key: "access",
+    slug: "plus",
     name: "OnlyOnce Plus",
     tagline: "",
     price: "$79",
@@ -339,7 +339,7 @@ const plans: Plan[] = [
     cta: "开通月费方案",
   },
   {
-    key: "basic",
+    slug: "pro",
     name: "OnlyOnce Pro",
     tagline: "",
     price: "$199",
@@ -442,7 +442,7 @@ function PlanCard({ plan }: { plan: Plan }) {
       </div>
 
       <a
-        href={`/checkout/${plan.key}`}
+        href={`/checkout/${plan.slug}`}
         className={
           "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
           (plan.highlight
