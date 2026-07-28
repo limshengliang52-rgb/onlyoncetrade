@@ -10,7 +10,8 @@ import {
   createEACheckoutSession,
   verifyEACheckoutSession,
 } from "@/lib/subscriptions.functions";
-import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
+import { PLAN_CATALOG, PLAN_SLUG_TO_KEY, slugFromParam, type PlanKey } from "@/lib/plans";
+import { redirect } from "@tanstack/react-router";
 
 import {
   Sparkles,
@@ -29,6 +30,13 @@ export const Route = createFileRoute("/_authenticated/checkout/$plan")({
     uid: typeof s.uid === "string" ? s.uid : undefined,
     session_id: typeof s.session_id === "string" ? s.session_id : undefined,
   }),
+  beforeLoad: ({ params }) => {
+    // Only new "pro" / "plus" slugs are valid. Old links like /checkout/basic
+    // or /checkout/access (old $25 plan) redirect to the current pricing page.
+    if (!slugFromParam(params.plan)) {
+      throw redirect({ to: "/", hash: "pricing" });
+    }
+  },
   component: CheckoutPage,
 });
 
@@ -38,8 +46,9 @@ function CheckoutPage() {
   const navigate = useNavigate();
 
   const plan = useMemo(() => {
-    if (planParam === "basic" || planParam === "access") return PLAN_CATALOG[planParam as PlanKey];
-    return null;
+    const slug = slugFromParam(planParam);
+    if (!slug) return null;
+    return PLAN_CATALOG[PLAN_SLUG_TO_KEY[slug]];
   }, [planParam]);
 
   const [mt5Uid, setMt5Uid] = useState(search.uid ?? "");
