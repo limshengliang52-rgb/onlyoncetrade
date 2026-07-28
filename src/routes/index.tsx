@@ -423,18 +423,6 @@ function PlanCard({ plan }: { plan: Plan }) {
           <span className="pb-1.5 text-sm text-muted-foreground">{plan.priceNote}</span>
         )}
       </div>
-      {plan.original && (
-        <div className="mt-2 flex items-center gap-2">
-          <span className="price-strike font-display text-2xl font-bold">
-            {plan.original}
-            <span className="price-strike-line" />
-          </span>
-          <span className="rounded-md border border-gold/30 bg-gold/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
-            限时优惠
-          </span>
-        </div>
-      )}
-
       <div className="my-7 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       <ul className="flex-1 space-y-3">
@@ -461,7 +449,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
         }
       >
-        立即开通 30 天
+        {plan.cta}
       </a>
     </div>
 
