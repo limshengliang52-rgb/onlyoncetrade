@@ -584,18 +584,18 @@ const BTC_MONTHS_RAW = [
 
 function BtcBacktest() {
   const stats = [
-    { label: "Profit Factor", value: "2.16", unit: "" },
-    { label: "Win Rate", value: "53.33", unit: "%" },
-    { label: "Total Trades", value: "60", unit: "" },
-    { label: "Balance Drawdown", value: "18.43", unit: "%" },
+    { label: "盈利因子", value: "2.16", unit: "" },
+    { label: "胜率", value: "53.33", unit: "%" },
+    { label: "总交易次数", value: "60", unit: "" },
+    { label: "余额最大回撤", value: "18.43", unit: "%" },
   ];
   return (
     <section id="btc-backtest" className="relative border-b border-border/50 bg-surface/40 py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
-          eyebrow="Backtest Report"
+          eyebrow="回测报告"
           title={<>OnlyOnce <span className="font-sans">BTCUSD</span> EA <span className="gold-text">回测战绩</span></>}
-          sub="OnlyOnce BTC EA historical performance based on MT5 backtest data. 历史回测不代表未来收益。"
+          sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
@@ -603,16 +603,16 @@ function BtcBacktest() {
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 年初至今收益 · 1–7 月</span>
               <div className="mt-4 flex items-end gap-3">
                 <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+176.21</span>
                 <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+881.04 USD)</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                Initial Balance <span className="text-foreground font-sans">500 USD</span> · Final Balance <span className="text-foreground font-sans">1,381.04 USD</span>
+                初始资金 <span className="text-foreground font-sans">500 USD</span> · 最终余额 <span className="text-foreground font-sans">1,381.04 USD</span>
               </p>
               <p className="mt-1 text-xs text-muted-foreground/80 font-sans">
-                Period: 2026 Jan–Jul · Symbol: BTCUSD · Strategy: OnlyOnce BTC EA
+                回测区间：2026 Jan–Jul · 交易品种：BTCUSD · 策略名称：OnlyOnce BTC EA
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -632,18 +632,18 @@ function BtcBacktest() {
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">Monthly Return</h3>
+              <h3 className="font-display text-lg font-semibold">每月回测表现</h3>
               <span className="text-[11px] font-sans text-muted-foreground">2026 · BTCUSD</span>
             </div>
             <div className="mt-6 overflow-x-auto rounded-xl border border-border/60">
               <table className="w-full min-w-[560px] text-sm">
                 <thead>
                   <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    <th className="px-3 py-3 text-left font-sans">Month</th>
-                    <th className="px-3 py-3 text-right font-sans">Return</th>
-                    <th className="px-3 py-3 text-right font-sans">Win Rate</th>
-                    <th className="px-3 py-3 text-right font-sans">Profit Factor</th>
-                    <th className="px-3 py-3 text-right font-sans">Trades</th>
+                    <th className="px-3 py-3 text-left font-sans">月份</th>
+                    <th className="px-3 py-3 text-right font-sans">收益</th>
+                    <th className="px-3 py-3 text-right font-sans">胜率</th>
+                    <th className="px-3 py-3 text-right font-sans">盈利因子</th>
+                    <th className="px-3 py-3 text-right font-sans">交易次数</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -671,9 +671,7 @@ function BtcBacktest() {
         </div>
 
         <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground font-sans">
-          Backtest results are based on historical MT5 data and do not guarantee future performance.
-          <br className="hidden sm:block" />
-          Trading involves risk and users should manage their capital responsibly.
+          回测数据基于历史 MT5 数据，不代表未来保证收益。交易存在风险，请根据自身资金情况谨慎使用。
         </p>
       </div>
     </section>
