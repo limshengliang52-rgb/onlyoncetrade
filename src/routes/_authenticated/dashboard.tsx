@@ -105,7 +105,7 @@ function DashboardPage() {
         </p>
 
         <section className="mt-10">
-          <h2 className="font-display text-xl font-semibold">开通 / 续费</h2>
+          <h2 className="font-display text-xl font-semibold">开通 / 续费 AI 全自动交易策略授权</h2>
           <div className="mt-4 grid gap-5 md:grid-cols-2">
             {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
               <PurchaseCard key={plan.key} plan={plan} />
@@ -289,7 +289,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
         </div>
         <div className="text-right">
           <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">/ 月</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{plan.durationLabel}</div>
         </div>
       </div>
 
@@ -314,7 +314,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
             disabled={loading}
             className="mt-3 w-full rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading ? "创建结账中..." : "开通 / 续费 30 天"}
+            {loading ? "创建结账中..." : `开通 / 续费 ${plan.durationDays} 天`}
           </button>
         </div>
       ) : (
@@ -415,12 +415,17 @@ function EADownloadSection({
                     >
                       <Download className="h-4 w-4" />
                       {f.label}
-                      {disabled && <span className="text-[10px]">（待上传）</span>}
                     </a>
                   );
                 })}
             </div>
-            <p className="mt-4 text-[11px] text-muted-foreground">
+            <div className="mt-4 rounded-lg border border-gold/25 bg-gold/5 p-3 text-[11px] leading-relaxed text-muted-foreground">
+              <p>
+                <span className="text-foreground font-semibold">资金建议：</span>
+                同时运行 XAUUSD 与 BTCUSD 两个策略，建议账户资金至少 1,000 USD。资金过小可能导致回撤压力变大，交易风险由用户自行承担。
+              </p>
+            </div>
+            <p className="mt-3 text-[11px] text-muted-foreground">
               下载链接为临时签名 URL，5 分钟内有效。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
             </p>
             <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-4 text-[11px] leading-relaxed text-muted-foreground">

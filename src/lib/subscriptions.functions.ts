@@ -242,9 +242,7 @@ export const adminUpsertSubscription = createServerFn({ method: "POST" })
     const products =
       data.products && data.products.length
         ? Array.from(new Set(data.products))
-        : data.plan === "access"
-          ? ["xau", "btc"]
-          : ["xau"];
+        : ["xau", "btc"];
     let subId = data.id;
     let userId: string | null = null;
 

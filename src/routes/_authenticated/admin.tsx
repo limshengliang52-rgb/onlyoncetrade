@@ -393,9 +393,9 @@ function ManualForm({
   const [id, setId] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [mt5, setMt5] = useState("");
-  const [plan, setPlan] = useState<PlanKey>("basic");
+  const [plan, setPlan] = useState<PlanKey>("access");
   const [days, setDays] = useState(30);
-  const [products, setProducts] = useState<string[]>(["xau"]);
+  const [products, setProducts] = useState<string[]>(["xau", "btc"]);
 
   function toggle(p: string) {
     setProducts((prev) =>
@@ -442,7 +442,8 @@ function ManualForm({
         onChange={(e) => {
           const p = e.target.value as PlanKey;
           setPlan(p);
-          setProducts(p === "access" ? ["xau", "btc"] : ["xau"]);
+          setProducts(["xau", "btc"]);
+          setDays(p === "basic" ? 90 : 30);
         }}
         className="rounded-lg border border-border bg-background/60 px-3 py-2 text-xs md:col-span-2"
       >

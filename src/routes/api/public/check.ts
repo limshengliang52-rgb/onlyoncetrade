@@ -29,10 +29,9 @@ function respond(body: unknown, status = 200) {
 const UID_RE = /^[A-Za-z0-9_-]{3,32}$/;
 const PRODUCT_RE = /^[A-Za-z0-9_-]{2,32}$/;
 
-// Map plan -> allowed products (fallback when subscriptions.products is empty)
-function planProducts(plan: string): string[] {
-  if (plan === "access" || plan === "pro") return ["xau", "btc"];
-  return ["xau"];
+// Both plans include XAU + BTC. Kept as a fallback for legacy rows.
+function planProducts(_plan: string): string[] {
+  return ["xau", "btc"];
 }
 
 // Normalize the requested product to internal keys (xau/btc)
