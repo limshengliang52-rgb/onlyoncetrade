@@ -239,7 +239,7 @@ function HowItWorks() {
       n: "02",
       icon: CalendarClock,
       title: "开通 EA 权限",
-      desc: "系统按月授权，到期自动停止权限。可选择黄金、BTC 或指定策略版本。",
+      desc: "月费或 3 个月方案，到期自动停止授权。默认同时开启 XAUUSD 与 BTCUSD 两个策略。",
     },
     {
       n: "03",
@@ -281,7 +281,7 @@ function Features() {
     { icon: CalendarClock, title: "月费订阅权限", desc: "按月计费，到期未续费自动停止授权，无绑定长期合约。" },
     { icon: RefreshCw, title: "EA 策略版本更新", desc: "策略迭代时统一推送新版本，会员始终使用最新参数。" },
     { icon: ShieldCheck, title: "每日亏损保护", desc: "内建 Daily Loss Guard，触发阈值自动停止当日交易。" },
-    { icon: Coins, title: "黄金 / BTC 模式", desc: "可选 XAUUSD 或 BTCUSD 策略版本，或同时开启。" },
+    { icon: Coins, title: "黄金 + BTC 双策略", desc: "所有方案默认同时开启 XAUUSD 与 BTCUSD 两个策略。" },
     { icon: FlaskConical, title: "实盘前测试验证", desc: "建议先用小资金账户挂载 EA，确认表现与风险后再逐步放大。" },
   ];
   return (
@@ -649,12 +649,12 @@ function CTA() {
               Get Started
             </span>
             <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              立即开通
+              开通
               <br className="hidden sm:block" />
-              <span className="gold-text"> EA 月费权限</span>
+              <span className="gold-text"> AI 全自动交易策略授权</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入白名单。如有疑问可 WhatsApp 私信客服。
+              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。到期自动停止授权，可随时续费。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
