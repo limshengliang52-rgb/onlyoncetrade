@@ -319,34 +319,33 @@ type Plan = {
   highlight?: boolean;
 };
 
+const PLAN_FEATURES = [
+  "XAUUSD 黄金策略",
+  "BTCUSD 比特币策略",
+  "1 个 MT5 UID 授权绑定",
+  "到期自动停止授权",
+  "会员后台下载两个 EA",
+  "支持 Windows / Mac 一键安装 EA 文件",
+];
+
 const plans: Plan[] = [
   {
     key: "access",
-    name: "OnlyOnce Dual Strategy Access",
-    tagline: "月费方案 · 同时开启黄金 + BTC 两个策略",
+    name: "OnlyOnce Pro",
+    tagline: "",
     price: "$79",
     priceNote: "/ 月",
-    features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
-      "1 个 MT5 UID 授权绑定",
-      "30 天权限，到期自动停止授权",
-      "会员后台可下载两个 EA 策略文件",
-    ],
+    features: PLAN_FEATURES,
     cta: "开通月费方案",
   },
   {
     key: "basic",
-    name: "OnlyOnce Dual Strategy 3-Month Access",
-    tagline: "3 个月方案 · 一次开通，比月付更划算",
+    name: "OnlyOnce Plus",
+    tagline: "",
     price: "$199",
     priceNote: "/ 3 个月",
     highlight: true,
-    features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
-      "1 个 MT5 UID 授权绑定",
-      "90 天权限，到期自动停止授权",
-      "会员后台可下载两个 EA 策略文件",
-    ],
+    features: PLAN_FEATURES,
     cta: "开通 3 个月方案",
   },
 ];
