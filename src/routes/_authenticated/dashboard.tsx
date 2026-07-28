@@ -289,7 +289,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
         </div>
         <div className="text-right">
           <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">/ 月</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{plan.durationLabel}</div>
         </div>
       </div>
 
@@ -314,7 +314,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
             disabled={loading}
             className="mt-3 w-full rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading ? "创建结账中..." : "开通 / 续费 30 天"}
+            {loading ? "创建结账中..." : `开通 / 续费 ${plan.durationDays} 天`}
           </button>
         </div>
       ) : (

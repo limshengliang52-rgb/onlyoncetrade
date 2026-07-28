@@ -149,12 +149,7 @@ function CheckoutPage() {
 
               <div className="mt-6 flex items-end gap-3">
                 <span className="font-display text-4xl font-bold gold-text">${plan.amountUSD}</span>
-                <span className="pb-1.5 text-sm text-muted-foreground">/ 30 天</span>
-                {plan.originalUSD && (
-                  <span className="pb-1.5 text-sm text-muted-foreground line-through">
-                    ${plan.originalUSD}
-                  </span>
-                )}
+                <span className="pb-1.5 text-sm text-muted-foreground">{plan.durationLabel}</span>
               </div>
 
               <ul className="mt-6 space-y-2.5 text-sm">
@@ -170,11 +165,19 @@ function CheckoutPage() {
 
               <div className="mt-7 rounded-xl border border-border/60 bg-background/40 p-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2 text-foreground">
-                  <ShieldCheck className="h-4 w-4 text-gold" /> 付款成功后自动开通
+                  <ShieldCheck className="h-4 w-4 text-gold" /> 付款成功后自动开通授权
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  系统将把你的 <span className="font-sans">MT5</span> UID 加入白名单，
-                  30 天到期后自动停止授权，可随时续费。
+                  系统会把你的 <span className="font-sans">MT5</span> UID 加入白名单，
+                  {plan.durationDays} 天到期后自动停止授权，可随时续费。
+                </p>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-gold/25 bg-gold/5 p-4 text-[11px] leading-relaxed text-muted-foreground">
+                <p className="text-foreground font-semibold">资金建议</p>
+                <p className="mt-1">
+                  同时运行 XAUUSD 与 BTCUSD 两个策略，建议账户资金至少
+                  <span className="text-foreground"> 1,000 USD</span>，资金过小会放大回撤压力。交易风险由用户自行承担。
                 </p>
               </div>
             </section>
@@ -222,7 +225,7 @@ function CheckoutPage() {
                     disabled={loading || !riskAccepted}
                     className="mt-4 w-full rounded-full bg-gold-gradient px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {loading ? "正在创建结账..." : `付款 $${plan.amountUSD} 立即开通 30 天`}
+                    {loading ? "正在创建结账..." : `付款 $${plan.amountUSD} 开通 ${plan.durationDays} 天授权`}
                   </button>
                   <p className="mt-3 text-center text-[11px] text-muted-foreground">
                     使用 Stripe 安全结账 · 支持 Visa / Mastercard
@@ -355,8 +358,8 @@ function SuccessBlock({
             </div>
             <h1 className="mt-5 font-display text-3xl font-bold">付款已确认</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {plan.name} 已开通 30 天。UID{" "}
-              <span className="font-mono text-foreground">{mt5Uid}</span> 已进入白名单。
+              {plan.name} 已开通 {plan.durationDays} 天授权。UID{" "}
+              <span className="font-mono text-foreground">{mt5Uid}</span> 已进入 XAUUSD + BTCUSD 白名单。
               {state.amount != null && state.currency && (
                 <>
                   {" "}
