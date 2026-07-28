@@ -62,13 +62,14 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     .maybeSingle();
 
   const now = new Date();
+  const durationMs = planDurationDays(plan) * DAY_MS;
   let subId: string;
   if (activeSub) {
     const base =
       activeSub.expires_at && new Date(activeSub.expires_at as string) > now
         ? new Date(activeSub.expires_at as string)
         : now;
-    const newExpires = new Date(base.getTime() + MONTH_MS);
+    const newExpires = new Date(base.getTime() + durationMs);
     const { error } = await admin
       .from("subscriptions")
       .update({
@@ -94,7 +95,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         plan,
         status: "active",
         started_at: now.toISOString(),
-        expires_at: new Date(now.getTime() + MONTH_MS).toISOString(),
+        expires_at: new Date(now.getTime() + durationMs).toISOString(),
         products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
