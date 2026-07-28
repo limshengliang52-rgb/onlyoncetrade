@@ -671,9 +671,7 @@ function BtcBacktest() {
         </div>
 
         <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground font-sans">
-          Backtest results are based on historical MT5 data and do not guarantee future performance.
-          <br className="hidden sm:block" />
-          Trading involves risk and users should manage their capital responsibly.
+          回测数据基于历史 MT5 数据，不代表未来保证收益。交易存在风险，请根据自身资金情况谨慎使用。
         </p>
       </div>
     </section>
