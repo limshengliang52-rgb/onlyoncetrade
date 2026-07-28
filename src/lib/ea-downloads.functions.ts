@@ -116,12 +116,12 @@ export const getEADownloads = createServerFn({ method: "GET" })
       return { authorized: false, reason: "no_subscription", files: [] };
     }
 
+    // All current plans include both strategies. Preserve legacy rows that
+    // explicitly stored a single product.
     const products: string[] =
       Array.isArray(sub.products) && sub.products.length
         ? (sub.products as string[])
-        : sub.plan === "access"
-          ? ["xau", "btc"]
-          : ["xau"];
+        : ["xau", "btc"];
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
