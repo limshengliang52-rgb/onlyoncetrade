@@ -313,7 +313,6 @@ type Plan = {
   name: string;
   tagline: string;
   price: string;
-  original?: string;
   priceNote?: string;
   features: string[];
   cta: string;
@@ -322,35 +321,33 @@ type Plan = {
 
 const plans: Plan[] = [
   {
-    key: "basic",
-    name: "Basic Access",
-    tagline: "适合先测试一个品种",
-    price: "$25",
-    original: "$49",
-    priceNote: "/ 30 天",
+    key: "access",
+    name: "OnlyOnce Dual Strategy Access",
+    tagline: "月费方案 · 同时开启黄金 + BTC 两个策略",
+    price: "$79",
+    priceNote: "/ 月",
     features: [
-      "1 个 MT5 UID 授权",
-      "BTC 或黄金 二选一",
-      "建议 500 USD 起始资金",
-      "默认风控参数",
+      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
+      "1 个 MT5 UID 授权绑定",
+      "30 天权限，到期自动停止授权",
+      "会员后台可下载两个 EA 策略文件",
     ],
-    cta: "查看开通方式",
+    cta: "开通月费方案",
   },
   {
-    key: "access",
-    name: "Pro Access",
-    tagline: "适合同时跑两个品种",
-    price: "$79",
-    original: "$99",
-    priceNote: "/ 30 天",
+    key: "basic",
+    name: "OnlyOnce Dual Strategy 3-Month Access",
+    tagline: "3 个月方案 · 一次开通，比月付更划算",
+    price: "$199",
+    priceNote: "/ 3 个月",
     highlight: true,
     features: [
-      "1 个 MT5 UID 授权",
-      "BTC 与 黄金 同时开启",
-      "建议 500 USD 起始资金",
-      "优先协助安装与授权",
+      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
+      "1 个 MT5 UID 授权绑定",
+      "90 天权限，到期自动停止授权",
+      "会员后台可下载两个 EA 策略文件",
     ],
-    cta: "查看开通方式",
+    cta: "开通 3 个月方案",
   },
 ];
 
@@ -361,8 +358,8 @@ function Pricing() {
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
           eyebrow="Pricing"
-          title={<>选择你的 <span className="gold-text">EA 授权方案</span></>}
-          sub="限时优惠价，Stripe 安全付款，付款成功后自动加入 MT5 UID 白名单"
+          title={<>开通 <span className="gold-text">AI 全自动交易策略授权</span></>}
+          sub="每个方案都包含 XAUUSD 黄金 + BTCUSD 比特币两个策略，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
@@ -374,8 +371,22 @@ function Pricing() {
           <PlatformNotice variant="banner" />
         </div>
 
+        <div className="mt-6 max-w-4xl mx-auto rounded-2xl border border-gold/25 bg-gold/5 p-5 text-xs leading-relaxed text-muted-foreground">
+          <p className="text-foreground font-semibold">资金建议 / Recommended Capital</p>
+          <p className="mt-2">
+            如果同时运行 XAUUSD 与 BTCUSD 两个策略，建议账户资金准备至少
+            <span className="text-foreground font-semibold"> 1,000 USD</span>。
+            资金过小可能导致回撤压力变大，用户需自行承担交易风险。
+          </p>
+          <p className="mt-2">
+            If running both XAUUSD and BTCUSD strategies at the same time, we recommend preparing at least
+            <span className="text-foreground font-semibold"> 1,000 USD</span> account balance.
+            Smaller balances may experience higher drawdown pressure. Trading risk is borne by the user.
+          </p>
+        </div>
+
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          * 优惠价为限时活动价，恢复原价后可能调整。所有月费方案到期后自动停止 EA 授权。
+          * 所有方案均为 UID 授权制，不出售 EA 文件所有权。到期后授权自动停止。
         </p>
         <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground/80">
           本服务仅提供 EA 工具授权与技术说明，不构成投资建议，也不承诺任何收益。交易存在亏损风险，请自行评估后使用。
