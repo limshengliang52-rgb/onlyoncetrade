@@ -603,16 +603,16 @@ function BtcBacktest() {
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 年初至今收益 · 1–7 月</span>
               <div className="mt-4 flex items-end gap-3">
                 <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+176.21</span>
                 <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+881.04 USD)</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                Initial Balance <span className="text-foreground font-sans">500 USD</span> · Final Balance <span className="text-foreground font-sans">1,381.04 USD</span>
+                初始资金 <span className="text-foreground font-sans">500 USD</span> · 最终余额 <span className="text-foreground font-sans">1,381.04 USD</span>
               </p>
               <p className="mt-1 text-xs text-muted-foreground/80 font-sans">
-                Period: 2026 Jan–Jul · Symbol: BTCUSD · Strategy: OnlyOnce BTC EA
+                回测区间：2026 Jan–Jul · 交易品种：BTCUSD · 策略名称：OnlyOnce BTC EA
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
