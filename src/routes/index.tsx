@@ -632,18 +632,18 @@ function BtcBacktest() {
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">Monthly Return</h3>
+              <h3 className="font-display text-lg font-semibold">每月回测表现</h3>
               <span className="text-[11px] font-sans text-muted-foreground">2026 · BTCUSD</span>
             </div>
             <div className="mt-6 overflow-x-auto rounded-xl border border-border/60">
               <table className="w-full min-w-[560px] text-sm">
                 <thead>
                   <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    <th className="px-3 py-3 text-left font-sans">Month</th>
-                    <th className="px-3 py-3 text-right font-sans">Return</th>
-                    <th className="px-3 py-3 text-right font-sans">Win Rate</th>
-                    <th className="px-3 py-3 text-right font-sans">Profit Factor</th>
-                    <th className="px-3 py-3 text-right font-sans">Trades</th>
+                    <th className="px-3 py-3 text-left font-sans">月份</th>
+                    <th className="px-3 py-3 text-right font-sans">收益</th>
+                    <th className="px-3 py-3 text-right font-sans">胜率</th>
+                    <th className="px-3 py-3 text-right font-sans">盈利因子</th>
+                    <th className="px-3 py-3 text-right font-sans">交易次数</th>
                   </tr>
                 </thead>
                 <tbody>
