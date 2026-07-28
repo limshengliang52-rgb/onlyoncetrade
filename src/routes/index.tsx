@@ -31,9 +31,9 @@ export const Route = createFileRoute("/")({
   loader: async () => {
     try {
       const r = await getMemberCount();
-      return { memberCount: r?.count ?? 33 };
+      return { memberCount: r?.count ?? 40 };
     } catch {
-      return { memberCount: 33 };
+      return { memberCount: 40 };
     }
   },
   head: () => ({
