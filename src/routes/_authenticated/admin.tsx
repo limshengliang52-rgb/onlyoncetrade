@@ -502,3 +502,57 @@ function ManualForm({
     </form>
   );
 }
+
+function ProductsEditor({
+  initial,
+  saving,
+  onSave,
+}: {
+  initial: string[];
+  saving: boolean;
+  onSave: (products: string[]) => void;
+}) {
+  const [xau, setXau] = useState(initial.includes("xau"));
+  const [btc, setBtc] = useState(initial.includes("btc"));
+
+  const current: string[] = [
+    ...(xau ? ["xau"] : []),
+    ...(btc ? ["btc"] : []),
+  ];
+  const dirty =
+    current.length !== initial.length ||
+    current.some((p) => !initial.includes(p));
+  const invalid = current.length === 0;
+
+  return (
+    <div className="flex items-center gap-2">
+      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
+        <input
+          type="checkbox"
+          checked={xau}
+          onChange={(e) => setXau(e.target.checked)}
+          className="h-3 w-3 accent-gold"
+        />
+        XAU
+      </label>
+      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
+        <input
+          type="checkbox"
+          checked={btc}
+          onChange={(e) => setBtc(e.target.checked)}
+          className="h-3 w-3 accent-gold"
+        />
+        BTC
+      </label>
+      <button
+        type="button"
+        disabled={!dirty || invalid || saving}
+        onClick={() => onSave(current)}
+        className="rounded-md border border-gold/40 bg-gold/5 px-2 py-1 text-[10px] font-semibold text-gold hover:bg-gold/10 disabled:cursor-not-allowed disabled:opacity-40"
+        title={invalid ? "至少保留一个产品" : ""}
+      >
+        {saving ? "..." : "保存"}
+      </button>
+    </div>
+  );
+}
