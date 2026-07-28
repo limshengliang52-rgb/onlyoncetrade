@@ -194,9 +194,14 @@ function AdminPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
-                        <td className="px-4 py-3 font-mono text-[11px] uppercase">
-                          {Array.isArray(s.products) && s.products.length ? s.products.join(" + ") : "-"}
+                        <td className="px-4 py-3">
+                          <ProductsEditor
+                            initial={Array.isArray(s.products) ? (s.products as string[]) : []}
+                            saving={updateProducts.isPending && updateProducts.variables?.id === s.id}
+                            onSave={(products) => updateProducts.mutate({ id: s.id, products })}
+                          />
                         </td>
+
                         <td className="px-4 py-3">
                           <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
                             s.source === "stripe"
