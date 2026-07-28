@@ -590,22 +590,22 @@ function BtcBacktest() {
     { label: "Balance Drawdown", value: "18.43", unit: "%" },
   ];
   return (
-    <section id="btc-backtest" className="relative border-b border-border/50 bg-background py-24">
+    <section id="btc-backtest" className="relative border-b border-border/50 bg-surface/40 py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
           eyebrow="Backtest Report"
-          title={<><span className="font-sans">BTCUSD</span> Strategy <span className="text-sky-400">Backtest</span></>}
-          sub="OnlyOnce BTC EA historical performance based on MT5 backtest data."
+          title={<>OnlyOnce <span className="font-sans">BTCUSD</span> EA <span className="gold-text">回测战绩</span></>}
+          sub="OnlyOnce BTC EA historical performance based on MT5 backtest data. 历史回测不代表未来收益。"
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
         <div className="mt-12 card-lux relative overflow-hidden rounded-3xl p-8 md:p-12">
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" aria-hidden />
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
             <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-400">2026 YTD Return · Jan–Jul</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
               <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold text-sky-400 md:text-7xl leading-none">+176.21</span>
+                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+176.21</span>
                 <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+881.04 USD)</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
