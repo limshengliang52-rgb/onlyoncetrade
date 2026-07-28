@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
-import { planFromPriceId } from "@/lib/plans";
+import { planDurationDays, planProducts, type PlanKey } from "@/lib/plans";
 
 let _admin: SupabaseClient | null = null;
 function getAdmin(): SupabaseClient {
@@ -15,13 +15,10 @@ function getAdmin(): SupabaseClient {
   return _admin;
 }
 
-const MONTH_MS = 30 * 86400_000;
-
-function productsFor(plan: "basic" | "access"): string[] {
-  return plan === "access" ? ["xau", "btc"] : ["xau"];
-}
+const DAY_MS = 86400_000;
 
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
+  const productsFor = (p: PlanKey) => planProducts(p);
   const admin = getAdmin();
   const userId = session.metadata?.userId as string | undefined;
   const plan = (session.metadata?.plan as "basic" | "access" | undefined) ?? null;
