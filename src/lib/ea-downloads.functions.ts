@@ -54,7 +54,7 @@ function matcherFor(key: FileKey): (name: string) => boolean {
     case "xau_windows":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".ex5") && l.includes("xauusd");
+        return l.endsWith(".zip") && l.includes("xau") && l.includes("windows");
       };
     case "xau_mac":
       return (n) => {
@@ -133,7 +133,7 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const wanted: { key: FileKey; label: string }[] = [];
     if (products.includes("xau")) {
-      wanted.push({ key: "xau_windows", label: "XAU Windows EA (.ex5)" });
+      wanted.push({ key: "xau_windows", label: "XAU Windows 安装包" });
       wanted.push({ key: "xau_mac", label: "XAU MacBook 安装包" });
     }
     if (products.includes("btc")) {
