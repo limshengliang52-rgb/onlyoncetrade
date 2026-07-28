@@ -29,9 +29,10 @@ function respond(body: unknown, status = 200) {
 const UID_RE = /^[A-Za-z0-9_-]{3,32}$/;
 const PRODUCT_RE = /^[A-Za-z0-9_-]{2,32}$/;
 
-// Both plans include XAU + BTC. Kept as a fallback for legacy rows.
+// Legacy rows without an explicit products array are treated as XAU-only.
+// Admins must explicitly grant BTC (or the user renews via a new dual plan).
 function planProducts(_plan: string): string[] {
-  return ["xau", "btc"];
+  return ["xau"];
 }
 
 // Normalize the requested product to internal keys (xau/btc)
