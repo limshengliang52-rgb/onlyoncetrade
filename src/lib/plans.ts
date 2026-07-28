@@ -1,9 +1,27 @@
 export type PlanKey = "basic" | "access";
+export type PlanSlug = "pro" | "plus";
+
+// URL slug → internal plan key (DB enum). Old slugs like "basic" / "access"
+// are intentionally NOT accepted at /checkout/:slug — they redirect to pricing.
+export const PLAN_SLUG_TO_KEY: Record<PlanSlug, PlanKey> = {
+  pro: "basic", // $199 / 90 days (OnlyOnce Pro)
+  plus: "access", // $79 / 30 days (OnlyOnce Plus)
+};
+
+export const PLAN_KEY_TO_SLUG: Record<PlanKey, PlanSlug> = {
+  basic: "pro",
+  access: "plus",
+};
+
+export function slugFromParam(param: string): PlanSlug | null {
+  return param === "pro" || param === "plus" ? param : null;
+}
 
 export const PLAN_CATALOG: Record<
   PlanKey,
   {
     key: PlanKey;
+    slug: PlanSlug;
     name: string;
     priceId: string;
     amountUSD: number;
@@ -17,12 +35,13 @@ export const PLAN_CATALOG: Record<
 > = {
   access: {
     key: "access",
-    name: "OnlyOnce Dual Strategy Access",
+    slug: "plus",
+    name: "OnlyOnce Plus",
     priceId: "plan_access_30d_usd",
     amountUSD: 79,
     durationDays: 30,
     durationLabel: "/ 月",
-    tagline: "同时开启 XAUUSD 黄金 + BTCUSD 比特币策略",
+    tagline: "月费方案，XAUUSD 黄金 + BTCUSD 比特币双策略",
     products: ["xau", "btc"],
     features: [
       "XAUUSD 黄金策略 + BTCUSD 比特币策略",
@@ -33,7 +52,8 @@ export const PLAN_CATALOG: Record<
   },
   basic: {
     key: "basic",
-    name: "OnlyOnce Dual Strategy 3-Month Access",
+    slug: "pro",
+    name: "OnlyOnce Pro",
     priceId: "plan_dual_3m_199_usd",
     amountUSD: 199,
     durationDays: 90,
