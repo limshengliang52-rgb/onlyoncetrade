@@ -56,7 +56,7 @@ function Landing() {
       <HowItWorks />
       <Features />
       <Pricing />
-      <Backtest />
+      <XauBacktest />
       <BtcBacktest />
       <MinCapital />
       <Risk />
@@ -145,10 +145,14 @@ function Hero() {
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
             MT5 EA · 黄金与 BTC 策略
           </span>
-          <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            AI 自动化交易系统
-            <br className="hidden sm:block" />
-            <span className="gold-text">黄金与 BTC 策略自动执行</span>
+          <h1
+            className="mt-6 font-display text-[30px] font-bold tracking-tight sm:text-5xl md:text-6xl"
+            style={{ wordBreak: "keep-all", overflowWrap: "normal", textWrap: "balance", lineHeight: 1.12 }}
+          >
+            <span className="block">AI 自动化交易系统</span>
+            <span className="mt-1 block text-[22px] gold-text sm:text-4xl md:text-5xl">
+              黄金与 BTC 策略自动执行
+            </span>
           </h1>
           <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
             <p>OnlyOnce 为黄金与比特币交易者提供 MT5 策略自动执行、UID 授权、风险控制与订阅管理服务。会员开通后，把 EA 挂在自己的 MT5 账户，系统按规则化信号运行，并设有每日亏损保护。</p>
@@ -458,161 +462,62 @@ function PlanCard({ plan }: { plan: Plan }) {
   );
 }
 
-const BACKTEST_START_BALANCE = 500;
-const BACKTEST_MONTHS_RAW = [
-  { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
-  { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
-  { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
-  { m: "Apr", profit: 69.23, pf: 1.12, wr: 44.74, trades: 38 },
-  { m: "May", profit: 2.45, pf: 1.01, wr: 34.62, trades: 26 },
-  { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
-  { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
-];
-const BACKTEST_MONTHS = (() => {
-  let balance = BACKTEST_START_BALANCE;
-  return BACKTEST_MONTHS_RAW.map((row) => {
-    const pct = (row.profit / balance) * 100;
-    const opening = balance;
-    balance += row.profit;
-    return { ...row, pct, opening };
-  });
-})();
+type MonthlyRow = { m: string; profit: number; pct: number; pf: number; wr: number; trades?: number };
+type StatItem = { label: string; value: string; unit?: string };
 
-function Backtest() {
-  const stats = [
-    { label: "Starting Balance", value: "500", unit: "USD" },
-    { label: "Profit Factor", value: "1.26", unit: "" },
-    { label: "Win Rate", value: "38.33", unit: "%" },
-    { label: "Trades", value: "180", unit: "" },
-  ];
+function StrategyBacktestSection({
+  id,
+  eyebrow,
+  symbol,
+  strategyName,
+  headlinePct,
+  headlineUsd,
+  initialBalance,
+  finalBalance,
+  period,
+  stats,
+  months,
+  showTrades = false,
+  tableYearLabel,
+}: {
+  id: string;
+  eyebrow: string;
+  symbol: string;
+  strategyName: string;
+  headlinePct: string;
+  headlineUsd: string;
+  initialBalance: string;
+  finalBalance: string;
+  period: string;
+  stats: StatItem[];
+  months: MonthlyRow[];
+  showTrades?: boolean;
+  tableYearLabel: string;
+}) {
   return (
-    <section id="backtest" className="relative border-y border-border/50 bg-surface/40 py-24">
+    <section id={id} className="relative border-y border-border/50 bg-surface/40 py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
-          eyebrow="Backtest Report"
-          title={<>OnlyOnce <span className="font-sans">XAUUSD</span> EA <span className="gold-text">回测战绩</span></>}
+          eyebrow={eyebrow}
+          title={<>OnlyOnce <span className="font-sans">{symbol}</span> EA <span className="gold-text">回测战绩</span></>}
           sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
-        <div className="mt-12 card-lux relative overflow-hidden rounded-3xl p-8 md:p-12">
+        <div className="mt-10 card-lux relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-12">
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
           <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
-            <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 YTD Return · Jan–Jul</span>
-              <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+166.56</span>
-                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+832 USD)</span>
+            <div className="min-w-0">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">{tableYearLabel} 年初至今收益</span>
+              <div className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-1">
+                <span className="font-display text-5xl font-bold gold-text sm:text-6xl md:text-7xl leading-none">{headlinePct}</span>
+                <span className="pb-2 font-sans text-base text-muted-foreground sm:text-lg md:text-xl">% ({headlineUsd})</span>
               </div>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                起始资金 <span className="text-foreground font-sans">500 USD</span> · 7 个月累计净盈利 <span className="text-foreground">+832.80 USD</span>
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-2">
-              {stats.map((s) => (
-                <div key={s.label} className="rounded-xl border border-border/60 bg-background/40 p-4">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
-                  <div className="mt-2 font-display text-xl font-bold text-foreground">
-                    <span className="font-sans">{s.value}</span>
-                    {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <div className="card-lux rounded-2xl p-6 md:p-8">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold">Monthly Return</h3>
-              <span className="text-[11px] font-sans text-muted-foreground">2026</span>
-            </div>
-            <div className="mt-6 overflow-hidden rounded-xl border border-border/60">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    <th className="px-3 py-3 text-left font-sans">Month</th>
-                    <th className="px-3 py-3 text-right font-sans">Return</th>
-                    <th className="px-3 py-3 text-right font-sans">Win Rate</th>
-                    <th className="px-3 py-3 text-right font-sans">Profit Factor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {BACKTEST_MONTHS.map((row, i) => {
-                    const positive = row.profit >= 0;
-                    const color = positive ? "text-emerald-400" : "text-red-400";
-                    const sign = positive ? "+" : "";
-                    return (
-                      <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
-                        <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
-                        <td className={`px-3 py-2.5 text-right font-sans font-semibold ${color}`}>
-                          {sign}{row.pct.toFixed(2)}%
-                          <span className="ml-1 text-xs text-muted-foreground">({sign}{Math.round(row.profit)} USD)</span>
-                        </td>
-                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
-                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground">
-          回测数据来自 <span className="font-sans">MT5 Strategy Tester</span>，历史表现不代表未来收益保证。
-          <br className="hidden sm:block" />
-          <span className="font-sans">Backtest data from MT5 Strategy Tester. Past performance does not guarantee future results.</span>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-const BTC_START_BALANCE = 500;
-const BTC_MONTHS_RAW = [
-  { m: "Jan", profit: 54.39, pct: 10.88, pf: 1.96, wr: 57.14, trades: 7 },
-  { m: "Feb", profit: 10.0, pct: 1.8, pf: 1.55, wr: 50.0, trades: 2 },
-  { m: "Mar", profit: -26.25, pct: -4.65, pf: 0.7, wr: 28.57, trades: 7 },
-  { m: "Apr", profit: 147.72, pct: 27.45, pf: 3.79, wr: 66.67, trades: 9 },
-  { m: "May", profit: 199.93, pct: 29.15, pf: 4.06, wr: 71.43, trades: 7 },
-  { m: "Jun", profit: -76.67, pct: -8.66, pf: 0.61, wr: 22.22, trades: 9 },
-  { m: "Jul", profit: 571.94, pct: 70.69, pf: 3.05, wr: 63.16, trades: 19 },
-];
-
-function BtcBacktest() {
-  const stats = [
-    { label: "盈利因子", value: "2.16", unit: "" },
-    { label: "胜率", value: "53.33", unit: "%" },
-    { label: "总交易次数", value: "60", unit: "" },
-    { label: "余额最大回撤", value: "18.43", unit: "%" },
-  ];
-  return (
-    <section id="btc-backtest" className="relative border-b border-border/50 bg-surface/40 py-24">
-      <div className="mx-auto max-w-6xl px-5">
-        <SectionHeader
-          eyebrow="回测报告"
-          title={<>OnlyOnce <span className="font-sans">BTCUSD</span> EA <span className="gold-text">回测战绩</span></>}
-          sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
-          icon={<TrendingUp className="h-4 w-4" />}
-        />
-
-        <div className="mt-12 card-lux relative overflow-hidden rounded-3xl p-8 md:p-12">
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
-          <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
-            <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">2026 年初至今收益 · 1–7 月</span>
-              <div className="mt-4 flex items-end gap-3">
-                <span className="font-display text-5xl font-bold gold-text md:text-7xl leading-none">+176.21</span>
-                <span className="pb-2 font-sans text-lg text-muted-foreground md:text-xl">% (+881.04 USD)</span>
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                初始资金 <span className="text-foreground font-sans">500 USD</span> · 最终余额 <span className="text-foreground font-sans">1,381.04 USD</span>
+                初始资金 <span className="text-foreground font-sans">{initialBalance}</span> · 最终余额 <span className="text-foreground font-sans">{finalBalance}</span>
               </p>
               <p className="mt-1 text-xs text-muted-foreground/80 font-sans">
-                回测区间：2026 Jan–Jul · 交易品种：BTCUSD · 策略名称：OnlyOnce BTC EA
+                回测区间：{period} · 交易品种：{symbol} · 策略名称：{strategyName}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -630,24 +535,24 @@ function BtcBacktest() {
         </div>
 
         <div className="mt-8">
-          <div className="card-lux rounded-2xl p-6 md:p-8">
+          <div className="card-lux rounded-2xl p-5 sm:p-6 md:p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-lg font-semibold">每月回测表现</h3>
-              <span className="text-[11px] font-sans text-muted-foreground">2026 · BTCUSD</span>
+              <span className="text-[11px] font-sans text-muted-foreground">{tableYearLabel} · {symbol}</span>
             </div>
             <div className="mt-6 overflow-x-auto rounded-xl border border-border/60">
-              <table className="w-full min-w-[560px] text-sm">
+              <table className={`w-full text-sm ${showTrades ? "min-w-[560px]" : "min-w-[440px]"}`}>
                 <thead>
                   <tr className="bg-background/40 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                     <th className="px-3 py-3 text-left font-sans">月份</th>
                     <th className="px-3 py-3 text-right font-sans">收益</th>
                     <th className="px-3 py-3 text-right font-sans">胜率</th>
                     <th className="px-3 py-3 text-right font-sans">盈利因子</th>
-                    <th className="px-3 py-3 text-right font-sans">交易次数</th>
+                    {showTrades && <th className="px-3 py-3 text-right font-sans">交易次数</th>}
                   </tr>
                 </thead>
                 <tbody>
-                  {BTC_MONTHS_RAW.map((row, i) => {
+                  {months.map((row, i) => {
                     const positive = row.profit >= 0;
                     const color = positive ? "text-emerald-400" : "text-red-400";
                     const sign = positive ? "+" : "";
@@ -660,7 +565,7 @@ function BtcBacktest() {
                         </td>
                         <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
                         <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
-                        <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.trades}</td>
+                        {showTrades && <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.trades ?? "-"}</td>}
                       </tr>
                     );
                   })}
@@ -675,6 +580,85 @@ function BtcBacktest() {
         </p>
       </div>
     </section>
+  );
+}
+
+const XAU_START_BALANCE = 500;
+const XAU_MONTHS_RAW = [
+  { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
+  { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
+  { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
+  { m: "Apr", profit: 69.23, pf: 1.12, wr: 44.74, trades: 38 },
+  { m: "May", profit: 2.45, pf: 1.01, wr: 34.62, trades: 26 },
+  { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
+  { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
+];
+const XAU_MONTHS: MonthlyRow[] = (() => {
+  let balance = XAU_START_BALANCE;
+  return XAU_MONTHS_RAW.map((row) => {
+    const pct = (row.profit / balance) * 100;
+    balance += row.profit;
+    return { ...row, pct };
+  });
+})();
+
+function XauBacktest() {
+  return (
+    <StrategyBacktestSection
+      id="backtest"
+      eyebrow="回测报告"
+      symbol="XAUUSD"
+      strategyName="OnlyOnce XAU EA"
+      headlinePct="+166.56"
+      headlineUsd="+832.80 USD"
+      initialBalance="500 USD"
+      finalBalance="1,332.80 USD"
+      period="2026 Jan–Jul"
+      tableYearLabel="2026"
+      stats={[
+        { label: "盈利因子", value: "1.26" },
+        { label: "胜率", value: "38.33", unit: "%" },
+        { label: "总交易次数", value: "180" },
+        { label: "初始资金", value: "500", unit: "USD" },
+      ]}
+      months={XAU_MONTHS}
+      showTrades
+    />
+  );
+}
+
+const BTC_MONTHS: MonthlyRow[] = [
+  { m: "Jan", profit: 54.39, pct: 10.88, pf: 1.96, wr: 57.14, trades: 7 },
+  { m: "Feb", profit: 10.0, pct: 1.8, pf: 1.55, wr: 50.0, trades: 2 },
+  { m: "Mar", profit: -26.25, pct: -4.65, pf: 0.7, wr: 28.57, trades: 7 },
+  { m: "Apr", profit: 147.72, pct: 27.45, pf: 3.79, wr: 66.67, trades: 9 },
+  { m: "May", profit: 199.93, pct: 29.15, pf: 4.06, wr: 71.43, trades: 7 },
+  { m: "Jun", profit: -76.67, pct: -8.66, pf: 0.61, wr: 22.22, trades: 9 },
+  { m: "Jul", profit: 571.94, pct: 70.69, pf: 3.05, wr: 63.16, trades: 19 },
+];
+
+function BtcBacktest() {
+  return (
+    <StrategyBacktestSection
+      id="btc-backtest"
+      eyebrow="回测报告"
+      symbol="BTCUSD"
+      strategyName="OnlyOnce BTC EA"
+      headlinePct="+176.21"
+      headlineUsd="+881.04 USD"
+      initialBalance="500 USD"
+      finalBalance="1,381.04 USD"
+      period="2026 Jan–Jul"
+      tableYearLabel="2026"
+      stats={[
+        { label: "盈利因子", value: "2.16" },
+        { label: "胜率", value: "53.33", unit: "%" },
+        { label: "总交易次数", value: "60" },
+        { label: "余额最大回撤", value: "18.43", unit: "%" },
+      ]}
+      months={BTC_MONTHS}
+      showTrades
+    />
   );
 }
 
