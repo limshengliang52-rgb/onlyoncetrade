@@ -330,23 +330,23 @@ const PLAN_FEATURES = [
 
 const plans: Plan[] = [
   {
-    key: "access",
-    name: "OnlyOnce Pro",
-    tagline: "",
-    price: "$79",
-    priceNote: "/ 月",
-    features: PLAN_FEATURES,
-    cta: "开通月费方案",
-  },
-  {
     key: "basic",
     name: "OnlyOnce Plus",
     tagline: "",
     price: "$199",
     priceNote: "/ 3 个月",
-    highlight: true,
     features: PLAN_FEATURES,
     cta: "开通 3 个月方案",
+  },
+  {
+    key: "access",
+    name: "OnlyOnce Pro",
+    tagline: "",
+    price: "$79",
+    priceNote: "/ 月",
+    highlight: true,
+    features: PLAN_FEATURES,
+    cta: "开通月费方案",
   },
 ];
 
