@@ -457,7 +457,8 @@ function PlanCard({ plan }: { plan: Plan }) {
   );
 }
 
-const BACKTEST_MONTHS = [
+const BACKTEST_START_BALANCE = 500;
+const BACKTEST_MONTHS_RAW = [
   { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
   { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
   { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
@@ -466,6 +467,15 @@ const BACKTEST_MONTHS = [
   { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
   { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
 ];
+const BACKTEST_MONTHS = (() => {
+  let balance = BACKTEST_START_BALANCE;
+  return BACKTEST_MONTHS_RAW.map((row) => {
+    const pct = (row.profit / balance) * 100;
+    const opening = balance;
+    balance += row.profit;
+    return { ...row, pct, opening };
+  });
+})();
 
 function Backtest() {
   const stats = [
