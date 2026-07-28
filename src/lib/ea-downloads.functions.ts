@@ -116,12 +116,12 @@ export const getEADownloads = createServerFn({ method: "GET" })
       return { authorized: false, reason: "no_subscription", files: [] };
     }
 
-    // All current plans include both strategies. Preserve legacy rows that
-    // explicitly stored a single product.
+    // Strictly follow subscriptions.products. Legacy rows with an empty
+    // products array default to XAU only — admins must explicitly grant BTC.
     const products: string[] =
       Array.isArray(sub.products) && sub.products.length
         ? (sub.products as string[])
-        : ["xau", "btc"];
+        : ["xau"];
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

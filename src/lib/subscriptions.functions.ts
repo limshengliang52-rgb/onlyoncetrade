@@ -341,3 +341,25 @@ export const adminUpdateSubscriptionUid = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const adminUpdateSubscriptionProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; products: string[] }) => {
+    return z
+      .object({
+        id: z.string().uuid(),
+        products: z.array(z.enum(["xau", "btc"])).min(1).max(2),
+      })
+      .parse(d);
+  })
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const products = Array.from(new Set(data.products));
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({ products })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, products };
+  });

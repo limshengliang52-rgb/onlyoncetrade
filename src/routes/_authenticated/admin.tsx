@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
   adminListPayments,
   adminListSubscriptions,
   adminSetSubscriptionStatus,
+  adminUpdateSubscriptionProducts,
   adminUpdateSubscriptionUid,
   adminUpsertSubscription,
 } from "@/lib/subscriptions.functions";
@@ -60,6 +62,15 @@ function AdminPage() {
     mutationFn: (v: { id: string; mt5_uid: string }) => adminUpdateSubscriptionUid({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
     onError: (e: any) => alert(e?.message ?? "更新失败"),
+  });
+  const updateProducts = useMutation({
+    mutationFn: (v: { id: string; products: string[] }) =>
+      adminUpdateSubscriptionProducts({ data: v }),
+    onSuccess: () => {
+      toast.success("授权产品已更新");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "更新失败"),
   });
 
   if (authorized === null) {
@@ -183,9 +194,14 @@ function AdminPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
-                        <td className="px-4 py-3 font-mono text-[11px] uppercase">
-                          {Array.isArray(s.products) && s.products.length ? s.products.join(" + ") : "-"}
+                        <td className="px-4 py-3">
+                          <ProductsEditor
+                            initial={Array.isArray(s.products) ? (s.products as string[]) : []}
+                            saving={updateProducts.isPending && updateProducts.variables?.id === s.id}
+                            onSave={(products) => updateProducts.mutate({ id: s.id, products })}
+                          />
                         </td>
+
                         <td className="px-4 py-3">
                           <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
                             s.source === "stripe"
@@ -484,5 +500,59 @@ function ManualForm({
       </button>
       {error && <p className="text-xs text-red-400 md:col-span-6">{error}</p>}
     </form>
+  );
+}
+
+function ProductsEditor({
+  initial,
+  saving,
+  onSave,
+}: {
+  initial: string[];
+  saving: boolean;
+  onSave: (products: string[]) => void;
+}) {
+  const [xau, setXau] = useState(initial.includes("xau"));
+  const [btc, setBtc] = useState(initial.includes("btc"));
+
+  const current: string[] = [
+    ...(xau ? ["xau"] : []),
+    ...(btc ? ["btc"] : []),
+  ];
+  const dirty =
+    current.length !== initial.length ||
+    current.some((p) => !initial.includes(p));
+  const invalid = current.length === 0;
+
+  return (
+    <div className="flex items-center gap-2">
+      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
+        <input
+          type="checkbox"
+          checked={xau}
+          onChange={(e) => setXau(e.target.checked)}
+          className="h-3 w-3 accent-gold"
+        />
+        XAU
+      </label>
+      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
+        <input
+          type="checkbox"
+          checked={btc}
+          onChange={(e) => setBtc(e.target.checked)}
+          className="h-3 w-3 accent-gold"
+        />
+        BTC
+      </label>
+      <button
+        type="button"
+        disabled={!dirty || invalid || saving}
+        onClick={() => onSave(current)}
+        className="rounded-md border border-gold/40 bg-gold/5 px-2 py-1 text-[10px] font-semibold text-gold hover:bg-gold/10 disabled:cursor-not-allowed disabled:opacity-40"
+        title={invalid ? "至少保留一个产品" : ""}
+      >
+        {saving ? "..." : "保存"}
+      </button>
+    </div>
   );
 }
