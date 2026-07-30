@@ -244,39 +244,28 @@ function AdminPage() {
                           )}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-1.5">
-                            <button
-                              onClick={() =>
-                                upsert.mutate({
-                                  id: s.id,
-                                  mt5_uid: s.mt5_uid,
-                                  plan: s.plan,
-                                  products: s.products ?? undefined,
-                                  extend_days: 30,
-                                })
-                              }
-                              className="rounded-md border border-gold/40 bg-gold/5 px-2 py-1 text-[10px] font-semibold text-gold hover:bg-gold/10"
-                            >
-                              +30天
-                            </button>
+                          <div className="flex flex-wrap items-center gap-1.5">
                             <button
                               onClick={() => {
-                                if (!confirm("确认扣除 30 天？")) return;
-                                upsert.mutate({
-                                  id: s.id,
-                                  mt5_uid: s.mt5_uid,
-                                  plan: s.plan,
-                                  products: s.products ?? undefined,
-                                  extend_days: -30,
-                                });
+                                if (
+                                  !confirm(
+                                    "确认暂停此客户授权？\n将立即停止 EA 授权，并取消 Stripe 自动续费。",
+                                  )
+                                )
+                                  return;
+                                suspend.mutate({ id: s.id, environment: getStripeEnvironment() });
                               }}
-                              className="rounded-md border border-orange-500/40 bg-orange-500/5 px-2 py-1 text-[10px] font-semibold text-orange-400 hover:bg-orange-500/10"
+                              disabled={suspend.isPending}
+                              className="rounded-md border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                             >
-                              -30天
+                              暂停授权
                             </button>
                             <button
                               onClick={() => {
-                                const raw = prompt("自定义天数（正数=延期，负数=扣减）", "7");
+                                const raw = prompt(
+                                  "调整天数（正数=延期，负数=扣减）",
+                                  "7",
+                                );
                                 if (!raw) return;
                                 const n = parseInt(raw);
                                 if (!Number.isInteger(n) || n === 0) return alert("请输入非零整数");
@@ -288,26 +277,13 @@ function AdminPage() {
                                   extend_days: n,
                                 });
                               }}
-                              className="rounded-md border border-border bg-background/40 px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                              className="text-[10px] text-muted-foreground/70 underline hover:text-muted-foreground"
                             >
-                              自定义
+                              调整天数
                             </button>
-                            <button
-                              onClick={() => setStatus.mutate({ id: s.id, status: "cancelled" })}
-                              className="rounded-md border border-red-500/40 bg-red-500/5 px-2 py-1 text-[10px] font-semibold text-red-400 hover:bg-red-500/10"
-                            >
-                              停用
-                            </button>
-                            {s.status !== "active" && (
-                              <button
-                                onClick={() => setStatus.mutate({ id: s.id, status: "active" })}
-                                className="rounded-md border border-emerald-500/40 bg-emerald-500/5 px-2 py-1 text-[10px] font-semibold text-emerald-400 hover:bg-emerald-500/10"
-                              >
-                                激活
-                              </button>
-                            )}
                           </div>
                         </td>
+
                       </tr>
                       );
                     })}
