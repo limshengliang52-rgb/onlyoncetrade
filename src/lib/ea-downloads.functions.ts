@@ -51,21 +51,11 @@ function pickLatest(
 function matcherFor(key: FileKey): (name: string) => boolean {
   const lower = (s: string) => s.toLowerCase();
   switch (key) {
-    // RR2.5 原版黄金 EA：优先精确匹配 OnlyOnce_XAUUSD_EA.ex5 / .set
-    case "xau_ea":
-      return (n) => {
-        const l = lower(n);
-        return l === "onlyonce_xauusd_ea.ex5" || (l.endsWith(".ex5") && l.includes("xauusd"));
-      };
-    case "xau_set":
-      return (n) => {
-        const l = lower(n);
-        return l === "onlyonce_xauusd_ea.set" || (l.endsWith(".set") && l.includes("xauusd"));
-      };
+    // RR2.5 原版黄金 EA：只提供一键安装包，绝不提供 .set / 单独 .ex5
     case "xau_windows":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".zip") && l.includes("xau") && l.includes("windows");
+        return l === "onlyonce_xauusd_ea_windows_installer.zip";
       };
     case "xau_mac":
       return (n) => {
