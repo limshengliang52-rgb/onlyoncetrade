@@ -565,6 +565,7 @@ function StrategyBacktestSection({
             </div>
           </div>
         </div>
+        )}
 
         <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground font-sans">
           回测数据基于历史 MT5 数据，不代表未来保证收益。交易存在风险，请根据自身资金情况谨慎使用。
