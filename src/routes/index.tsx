@@ -524,6 +524,7 @@ function StrategyBacktestSection({
           </div>
         </div>
 
+        {months.length > 0 && (
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-5 sm:p-6 md:p-8">
             <div className="flex items-center justify-between">
