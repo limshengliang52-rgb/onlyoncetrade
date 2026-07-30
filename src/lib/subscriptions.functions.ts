@@ -79,20 +79,39 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("价格未找到，请联系管理员");
       const price = prices.data[0];
 
+      // Recurring subscription line item. The catalog price object is monthly;
+      // for the 3-month plan we build a price_data with interval_count = 3.
+      const lineItem =
+        catalog.intervalCount === 1
+          ? { price: price.id, quantity: 1 }
+          : {
+              quantity: 1,
+              price_data: {
+                currency: "usd",
+                product:
+                  typeof price.product === "string" ? price.product : price.product.id,
+                unit_amount: catalog.amountUSD * 100,
+                recurring: { interval: "month", interval_count: catalog.intervalCount },
+              },
+            };
+
+      const metadata = {
+        userId: context.userId,
+        plan: data.plan,
+        mt5_uid: data.mt5Uid,
+      };
+
       const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: price.id, quantity: 1 }],
-        mode: "payment",
+        line_items: [lineItem],
+        mode: "subscription",
         ui_mode: "embedded_page" as any,
         return_url: data.returnUrl,
         customer: customerId,
-        payment_intent_data: {
+        subscription_data: {
           description: `${catalog.name} · MT5 ${data.mt5Uid}`,
+          metadata,
         },
-        metadata: {
-          userId: context.userId,
-          plan: data.plan,
-          mt5_uid: data.mt5Uid,
-        },
+        metadata,
       } as any);
 
       return { clientSecret: session.client_secret ?? "" };
