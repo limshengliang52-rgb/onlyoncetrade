@@ -101,11 +101,14 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-5 py-10">
         <h1 className="font-display text-3xl font-bold">我的授权</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          管理 MT5 UID 授权、查看到期时间与付款记录
+查看当前方案、下次自动扣款时间、授权状态与 EA 下载
         </p>
 
         <section className="mt-10">
-          <h2 className="font-display text-xl font-semibold">开通 / 续费 AI 全自动交易策略授权</h2>
+          <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权（自动续费订阅）</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            订阅会自动续费；如需停止，请联系管理员处理。
+          </p>
           <div className="mt-4 grid gap-5 md:grid-cols-2">
             {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
               <PurchaseCard key={plan.key} plan={plan} />
@@ -129,7 +132,7 @@ function DashboardPage() {
                     <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">方案</th>
                     <th className="px-5 py-3 text-left">状态</th>
-                    <th className="px-5 py-3 text-left">到期时间</th>
+                    <th className="px-5 py-3 text-left">下次自动扣款 / 有效至</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -290,6 +293,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
         <div className="text-right">
           <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{plan.durationLabel}</div>
+          <div className="mt-0.5 text-[10px] text-gold">自动续费</div>
         </div>
       </div>
 
@@ -314,7 +318,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
             disabled={loading}
             className="mt-3 w-full rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading ? "创建结账中..." : `开通 / 续费 ${plan.durationDays} 天`}
+            {loading ? "创建结账中..." : `订阅 ${plan.billingLabel}`}
           </button>
         </div>
       ) : (
