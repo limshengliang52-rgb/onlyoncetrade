@@ -175,12 +175,15 @@ export const getEADownloads = createServerFn({ method: "GET" })
       }),
     );
 
+    // .set 参数文件是可选项，未上传时不显示灰色按钮
+    const visibleFiles = files.filter((f) => !(f.key === "xau_set" && f.missing));
+
     return {
       authorized: true,
       plan: sub.plan as string,
       products,
       expires_at: sub.expires_at as string | null,
       mt5_uid: sub.mt5_uid as string,
-      files,
+      files: visibleFiles,
     };
   });
