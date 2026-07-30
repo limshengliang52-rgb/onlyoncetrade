@@ -2,8 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type FileKey =
-  | "xau_ea"
-  | "xau_set"
   | "xau_windows"
   | "xau_mac"
   | "btc_windows"
