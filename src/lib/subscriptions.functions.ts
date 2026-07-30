@@ -234,7 +234,8 @@ export const pauseMySubscriptionRenewal = createServerFn({ method: "POST" })
       }
     }
 
-    const { error: upErr } = await context.supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: upErr } = await supabaseAdmin
       .from("subscriptions")
       .update({ cancel_at_period_end: true, next_billing_at: null })
       .eq("id", data.id);
