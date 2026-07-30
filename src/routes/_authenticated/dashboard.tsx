@@ -104,17 +104,36 @@ function DashboardPage() {
 查看当前方案、下次自动扣款时间、授权状态与 EA 下载
         </p>
 
-        <section className="mt-10">
-          <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权（自动续费订阅）</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            订阅会自动续费；如需停止，请联系管理员处理。
-          </p>
-          <div className="mt-4 grid gap-5 md:grid-cols-2">
-            {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
-              <PurchaseCard key={plan.key} plan={plan} />
-            ))}
-          </div>
-        </section>
+        {hasActiveSub ? (
+          <section className="card-lux mt-10 rounded-2xl p-6 text-sm">
+            <p className="text-foreground font-semibold">你的订阅正在自动续费中</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              订阅会在下次扣款日自动续期，授权保持有效，无需手动操作。如需停止订阅或更换方案，请
+              <a
+                href={SUPPORT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-1 text-gold underline"
+              >
+                联系客服
+              </a>
+              处理。
+            </p>
+          </section>
+        ) : (
+          <section className="mt-10">
+            <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权（自动续费订阅）</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              订阅会自动续费；如需停止，请联系管理员处理。
+            </p>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
+                <PurchaseCard key={plan.key} plan={plan} />
+              ))}
+            </div>
+          </section>
+        )}
+
 
         <section className="mt-12">
           <h2 className="font-display text-xl font-semibold">当前订阅</h2>
