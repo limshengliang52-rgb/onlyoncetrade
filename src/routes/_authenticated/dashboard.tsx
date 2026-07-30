@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import {
   createEACheckoutSession,
+  createEARenewalSession,
+  pauseMySubscriptionRenewal,
   getMySubscriptions,
   getMyPayments,
 } from "@/lib/subscriptions.functions";
@@ -109,30 +111,19 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-5 py-10">
         <h1 className="font-display text-3xl font-bold">我的授权</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-查看当前方案、下次自动扣款时间、授权状态与 EA 下载
+查看当前方案、授权状态、到期时间，续费或暂停续约，并下载 EA
         </p>
 
         {hasActiveSub ? (
-          <section className="card-lux mt-10 rounded-2xl p-6 text-sm">
-            <p className="text-foreground font-semibold">你的订阅正在自动续费中</p>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              订阅会在下次扣款日自动续期，授权保持有效，无需手动操作。如需停止订阅或更换方案，请
-              <a
-                href={SUPPORT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-1 text-gold underline"
-              >
-                联系客服
-              </a>
-              处理。
-            </p>
-          </section>
+          <ManageSubscriptionSection
+            subs={subsQuery.data ?? []}
+            onChanged={() => subsQuery.refetch()}
+          />
         ) : (
           <section className="mt-10">
-            <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权（自动续费订阅）</h2>
+            <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              订阅会自动续费；如需停止，请联系管理员处理。
+              订阅到期前可续费，用户也可在后台暂停续约。
             </p>
             <div className="mt-4 grid gap-5 md:grid-cols-2">
               {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
@@ -159,7 +150,7 @@ function DashboardPage() {
                     <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">方案</th>
                     <th className="px-5 py-3 text-left">状态</th>
-                    <th className="px-5 py-3 text-left">下次自动扣款 / 有效至</th>
+                    <th className="px-5 py-3 text-left">到期时间 / 下次续约</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,6 +180,9 @@ function DashboardPage() {
                         </td>
                         <td className="px-5 py-3 text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
+                          {s.cancel_at_period_end && (
+                            <span className="ml-2 text-[11px] text-amber-400">已暂停续约</span>
+                          )}
                         </td>
                       </tr>
                     );
@@ -198,6 +192,7 @@ function DashboardPage() {
             )}
           </div>
         </section>
+
 
         <EADownloadSection query={downloadsQuery} />
 
@@ -274,6 +269,148 @@ function DashboardPage() {
   );
 }
 
+function ManageSubscriptionSection({
+  subs,
+  onChanged,
+}: {
+  subs: any[];
+  onChanged: () => void;
+}) {
+  const active =
+    subs.find(
+      (s) => s.status === "active" && (!s.expires_at || new Date(s.expires_at) > new Date()),
+    ) ?? subs[0];
+  const [secret, setSecret] = useState<string | null>(null);
+  const [loading, setLoading] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [pausing, setPausing] = useState(false);
+  const [paused, setPaused] = useState(!!active?.cancel_at_period_end);
+
+  async function renew(plan: PlanKey) {
+    setError(null);
+    setLoading(plan);
+    try {
+      const result = await createEARenewalSession({
+        data: {
+          plan,
+          subscriptionId: active.id,
+          returnUrl: `${window.location.origin}/dashboard?renew=success`,
+          environment: getStripeEnvironment(),
+        },
+      });
+      if ("error" in result) throw new Error(result.error);
+      if (!result.clientSecret) throw new Error("未返回 client secret");
+      setSecret(result.clientSecret);
+    } catch (e: any) {
+      setError(e?.message ?? "创建结账失败");
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function pause() {
+    if (!window.confirm("确定暂停续约吗？暂停后到期将不会继续续费。")) return;
+    setError(null);
+    setPausing(true);
+    try {
+      await pauseMySubscriptionRenewal({
+        data: { id: active.id, environment: getStripeEnvironment() },
+      });
+      setPaused(true);
+      onChanged();
+    } catch (e: any) {
+      setError(e?.message ?? "暂停续约失败");
+    } finally {
+      setPausing(false);
+    }
+  }
+
+  const plan = PLAN_CATALOG[active?.plan as PlanKey];
+
+  return (
+    <section className="card-lux mt-10 rounded-2xl p-6">
+      <div className="grid gap-4 text-xs text-muted-foreground sm:grid-cols-3">
+        <div>
+          <div className="text-[10px] uppercase tracking-wider">当前方案</div>
+          <div className="mt-1 text-sm text-foreground">{plan?.name ?? active?.plan}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-wider">授权状态</div>
+          <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-400">
+            <CheckCircle2 className="h-3 w-3" /> 生效中
+          </div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-wider">到期时间 / 下次续约</div>
+          <div className="mt-1 text-sm text-foreground">
+            {active?.expires_at ? new Date(active.expires_at).toLocaleString() : "-"}
+          </div>
+        </div>
+      </div>
+
+      {paused && (
+        <p className="mt-4 text-xs text-amber-400">
+          已暂停续约：当前授权在到期时间前仍然有效，到期后 EA 将停止授权。可随时点击下方按钮续费。
+        </p>
+      )}
+      {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
+
+      {!secret ? (
+        <div className="mt-5 flex flex-wrap gap-3">
+          <button
+            onClick={() => renew("access")}
+            disabled={!!loading}
+            className="rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {loading === "access" ? "创建结账中..." : "续费 30 天（$79）"}
+          </button>
+          <button
+            onClick={() => renew("basic")}
+            disabled={!!loading}
+            className="rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {loading === "basic" ? "创建结账中..." : "续费 90 天（$199）"}
+          </button>
+          <button
+            onClick={pause}
+            disabled={pausing || paused}
+            className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-60"
+          >
+            {paused ? "已暂停续约" : pausing ? "处理中..." : "暂停续约"}
+          </button>
+          <a
+            href={SUPPORT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-gold/40 bg-gold/5 px-4 py-2.5 text-sm font-semibold text-gold hover:bg-gold/10"
+          >
+            联系客服
+          </a>
+        </div>
+      ) : (
+        <div className="mt-5">
+          <EmbeddedCheckoutProvider
+            stripe={getStripe()}
+            options={{ fetchClientSecret: async () => secret }}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+          <button
+            onClick={() => setSecret(null)}
+            className="mt-3 w-full text-center text-xs text-muted-foreground hover:text-foreground"
+          >
+            取消
+          </button>
+        </div>
+      )}
+
+      <p className="mt-4 text-[11px] text-muted-foreground">
+        续费后到期时间会在现有到期日基础上顺延；若已过期则从付款当天重新计算。
+      </p>
+    </section>
+  );
+}
+
 function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
   const [mt5Uid, setMt5Uid] = useState("");
   const [checkoutSecret, setCheckoutSecret] = useState<string | null>(null);
@@ -320,7 +457,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
         <div className="text-right">
           <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{plan.durationLabel}</div>
-          <div className="mt-0.5 text-[10px] text-gold">自动续费</div>
+          <div className="mt-0.5 text-[10px] text-gold">订阅方案</div>
         </div>
       </div>
 

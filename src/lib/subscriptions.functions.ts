@@ -121,6 +121,129 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
     }
   });
 
+/**
+ * 会员自助续费：一次性付款，webhook 会在现有 expires_at 基础上叠加 30 / 90 天。
+ */
+export const createEARenewalSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: {
+    plan: PlanKey;
+    subscriptionId: string;
+    returnUrl: string;
+    environment: StripeEnv;
+  }) =>
+    z
+      .object({
+        plan: z.enum(["basic", "access"]),
+        subscriptionId: z.string().uuid(),
+        returnUrl: z.string().url(),
+        environment: z.enum(["sandbox", "live"]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }): Promise<CheckoutResult> => {
+    try {
+      const catalog = PLAN_CATALOG[data.plan];
+      const { data: sub, error } = await context.supabase
+        .from("subscriptions")
+        .select("id, mt5_uid, user_id")
+        .eq("id", data.subscriptionId)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      if (!sub || sub.user_id !== context.userId) throw new Error("订阅不存在");
+
+      const stripe = createStripeClient(data.environment);
+      const { data: userData } = await context.supabase.auth.getUser();
+      const customerId = await resolveOrCreateCustomer(stripe, {
+        email: userData.user?.email ?? undefined,
+        userId: context.userId,
+      });
+
+      const prices = await stripe.prices.list({ lookup_keys: [catalog.priceId], limit: 1 });
+      const productId = prices.data.length
+        ? typeof prices.data[0].product === "string"
+          ? prices.data[0].product
+          : prices.data[0].product.id
+        : null;
+
+      const metadata = {
+        userId: context.userId,
+        plan: data.plan,
+        mt5_uid: sub.mt5_uid as string,
+        renewal: "1",
+      };
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            quantity: 1,
+            price_data: {
+              currency: "usd",
+              unit_amount: catalog.amountUSD * 100,
+              ...(productId
+                ? { product: productId }
+                : { product_data: { name: `${catalog.name} 续费` } }),
+            },
+          },
+        ],
+        mode: "payment",
+        ui_mode: "embedded_page" as any,
+        return_url: data.returnUrl,
+        customer: customerId,
+        payment_intent_data: {
+          description: `${catalog.name} 续费 ${catalog.durationDays} 天 · MT5 ${sub.mt5_uid}`,
+        },
+        metadata,
+      } as any);
+
+      return { clientSecret: session.client_secret ?? "" };
+    } catch (error) {
+      console.error("createEARenewalSession failed", error);
+      return { error: getStripeErrorMessage(error) };
+    }
+  });
+
+/**
+ * 会员自助暂停续约：取消 Stripe 自动续费，但保留当前周期授权，
+ * 到期后 EA 授权 API 自动返回 authorized:false。
+ */
+export const pauseMySubscriptionRenewal = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; environment: StripeEnv }) =>
+    z.object({ id: z.string().uuid(), environment: z.enum(["sandbox", "live"]) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: sub, error } = await context.supabase
+      .from("subscriptions")
+      .select("id, user_id, stripe_subscription_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!sub || sub.user_id !== context.userId) throw new Error("订阅不存在");
+
+    let stripeError: string | null = null;
+    if (sub.stripe_subscription_id) {
+      try {
+        const stripe = createStripeClient(data.environment);
+        await stripe.subscriptions.update(sub.stripe_subscription_id as string, {
+          cancel_at_period_end: true,
+        });
+      } catch (e) {
+        stripeError = getStripeErrorMessage(e);
+        console.error("pauseMySubscriptionRenewal: stripe update failed", e);
+      }
+    }
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: upErr } = await supabaseAdmin
+      .from("subscriptions")
+      .update({ cancel_at_period_end: true, next_billing_at: null })
+      .eq("id", data.id);
+    if (upErr) throw new Error(upErr.message);
+
+    return { ok: true, stripeError };
+  });
+
 export const verifyEACheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
