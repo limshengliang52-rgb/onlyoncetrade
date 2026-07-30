@@ -19,8 +19,12 @@ const CORS = {
   "Access-Control-Allow-Headers": "*",
 };
 
-function respond(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
+function respond(body: any, status = 200) {
+  const payload =
+    body && typeof body === "object" && "authorized" in body
+      ? { ok: !!body.authorized, ...body }
+      : body;
+  return new Response(JSON.stringify(payload), {
     status,
     headers: { "content-type": "application/json", ...CORS },
   });
