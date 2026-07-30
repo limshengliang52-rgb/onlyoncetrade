@@ -382,3 +382,52 @@ export const adminUpdateSubscriptionProducts = createServerFn({ method: "POST" }
     if (error) throw new Error(error.message);
     return { ok: true, products };
   });
+
+/**
+ * 暂停授权：本地订阅置为 cancelled（EA 授权 API 立即返回 authorized:false），
+ * 同时取消 Stripe 自动续费，避免下一期继续扣款。
+ */
+export const adminSuspendSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; environment: StripeEnv }) =>
+    z
+      .object({ id: z.string().uuid(), environment: z.enum(["sandbox", "live"]) })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: sub, error: readErr } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id, stripe_subscription_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!sub) throw new Error("订阅不存在");
+
+    let stripeCancelled = false;
+    let stripeError: string | null = null;
+    if (sub.stripe_subscription_id) {
+      try {
+        const stripe = createStripeClient(data.environment);
+        await stripe.subscriptions.cancel(sub.stripe_subscription_id as string);
+        stripeCancelled = true;
+      } catch (error) {
+        stripeError = getStripeErrorMessage(error);
+        console.error("suspend: stripe cancel failed", error);
+      }
+    }
+
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        status: "cancelled",
+        cancel_at_period_end: true,
+        next_billing_at: null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+
+    return { ok: true, stripeCancelled, stripeError };
+  });
