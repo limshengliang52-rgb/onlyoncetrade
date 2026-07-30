@@ -44,7 +44,7 @@ export const PLAN_CATALOG: Record<
     tagline: "月费方案，XAUUSD 黄金 + BTCUSD 比特币双策略",
     products: ["xau", "btc"],
     features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
+      "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
       "1 个 MT5 UID 授权绑定",
       "30 天权限，到期自动停止授权",
       "会员后台可下载两个 EA 策略文件",
@@ -61,7 +61,7 @@ export const PLAN_CATALOG: Record<
     tagline: "一次开通 3 个月，比月付更划算",
     products: ["xau", "btc"],
     features: [
-      "XAUUSD 黄金策略 + BTCUSD 比特币策略",
+      "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
       "1 个 MT5 UID 授权绑定",
       "90 天权限，到期自动停止授权",
       "会员后台可下载两个 EA 策略文件",
