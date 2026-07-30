@@ -315,7 +315,7 @@ type Plan = {
 };
 
 const PLAN_FEATURES = [
-  "XAUUSD 黄金策略",
+  "OnlyOnce XAUUSD EA RR2.5 黄金策略",
   "BTCUSD 比特币策略",
   "1 个 MT5 UID 授权绑定",
   "到期自动停止授权",
