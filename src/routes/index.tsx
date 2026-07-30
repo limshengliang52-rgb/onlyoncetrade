@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { getMemberCount } from "@/lib/member-count.functions";
+
+
 import { PlatformNotice } from "@/components/PlatformNotice";
 import {
   ShieldCheck,
@@ -29,12 +29,7 @@ const SITE_URL = "https://onlyoncetrade.com";
 export const Route = createFileRoute("/")({
   component: Landing,
   loader: async () => {
-    try {
-      const r = await getMemberCount();
-      return { memberCount: r?.count ?? 40 };
-    } catch {
-      return { memberCount: 40 };
-    }
+    return { memberCount: 60 };
   },
   head: () => ({
     meta: [
@@ -45,6 +40,7 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "canonical", href: SITE_URL }],
   }),
 });
+
 
 const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想咨询 OnlyOnce EA Trade");
 
@@ -124,15 +120,9 @@ function Nav() {
 }
 
 function useMemberCount() {
-  const { memberCount: initial } = Route.useLoaderData();
-  const [count, setCount] = useState<number>(initial);
-  useEffect(() => {
-    getMemberCount().then((r) => {
-      if (r && typeof r.count === "number") setCount(r.count);
-    }).catch(() => {});
-  }, []);
-  return count;
+  return 60;
 }
+
 
 function Hero() {
   const memberCount = useMemberCount();
