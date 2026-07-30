@@ -143,7 +143,14 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
             status: "active",
             expires_at: licenseRow.expires_at,
             product: licenseRow.product,
-            uid: licenseRow.uid ?? uid ?? null,
+            uid: licenseRow.uid ?? uid ?? account_id,
+            account_id,
+            signature: await signLicense({
+              uid: licenseRow.uid ?? uid ?? account_id,
+              product: licenseRow.product,
+              status: "active",
+              expires_at: String(licenseRow.expires_at),
+            }),
           });
         }
 
