@@ -60,7 +60,7 @@ function matcherFor(key: FileKey): (name: string) => boolean {
     case "xau_mac":
       return (n) => {
         const l = lower(n);
-        return l.endsWith(".zip") && l.includes("xau") && l.includes("mac");
+        return l === "onlyonce_xau_mac_installer.zip";
       };
     case "btc_windows":
       return (n) => {
