@@ -162,8 +162,10 @@ export const getEADownloads = createServerFn({ method: "GET" })
       }),
     );
 
-    // .set 参数文件是可选项，未上传时不显示灰色按钮
-    const visibleFiles = files.filter((f) => !(f.key === "xau_set" && f.missing));
+    // 永不返回 .set / 单独 .ex5 文件
+    const visibleFiles = files.filter(
+      (f) => !f.filename || !/\.(set|ex5)$/i.test(f.filename),
+    );
 
     return {
       authorized: true,
