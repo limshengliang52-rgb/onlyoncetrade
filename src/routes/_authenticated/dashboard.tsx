@@ -457,7 +457,7 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
         <div className="text-right">
           <div className="font-display text-2xl font-bold gold-text">${plan.amountUSD}</div>
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{plan.durationLabel}</div>
-          <div className="mt-0.5 text-[10px] text-gold">自动续费</div>
+          <div className="mt-0.5 text-[10px] text-gold">订阅方案</div>
         </div>
       </div>
 
