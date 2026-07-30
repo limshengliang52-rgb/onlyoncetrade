@@ -19,11 +19,39 @@ const CORS = {
   "Access-Control-Allow-Headers": "*",
 };
 
-function respond(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
+function respond(body: any, status = 200) {
+  const payload =
+    body && typeof body === "object" && "authorized" in body
+      ? { ok: !!body.authorized, ...body }
+      : body;
+  return new Response(JSON.stringify(payload), {
     status,
     headers: { "content-type": "application/json", ...CORS },
   });
+}
+
+// HMAC-SHA256 license signature so the EA can verify the response is genuine.
+async function signLicense(parts: {
+  uid: string;
+  product: string;
+  status: string;
+  expires_at: string;
+}): Promise<string> {
+  const secret =
+    process.env.LICENSE_SECRET || process.env.EA_LICENSE_API_KEY || "";
+  if (!secret) return "";
+  const payload = `${parts.uid}|${parts.product}|${parts.status}|${parts.expires_at}`;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 const UID_RE = /^[A-Za-z0-9_-]{3,32}$/;
@@ -175,6 +203,12 @@ export const Route = createFileRoute("/api/public/check")({
           started_at: data.started_at,
           server_time: nowIso,
           message: "license active",
+          signature: await signLicense({
+            uid,
+            product: rawProduct || "",
+            status: "active",
+            expires_at: String(data.expires_at),
+          }),
         });
       },
     },
