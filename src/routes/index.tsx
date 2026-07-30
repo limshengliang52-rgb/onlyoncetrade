@@ -124,15 +124,9 @@ function Nav() {
 }
 
 function useMemberCount() {
-  const { memberCount: initial } = Route.useLoaderData();
-  const [count, setCount] = useState<number>(initial);
-  useEffect(() => {
-    getMemberCount().then((r) => {
-      if (r && typeof r.count === "number") setCount(r.count);
-    }).catch(() => {});
-  }, []);
-  return count;
+  return 60;
 }
+
 
 function Hero() {
   const memberCount = useMemberCount();
