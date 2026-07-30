@@ -26,6 +26,10 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const sessionId = session.id as string;
   const paymentIntent =
     typeof session.payment_intent === "string" ? session.payment_intent : null;
+  const stripeSubscriptionId =
+    typeof session.subscription === "string"
+      ? session.subscription
+      : (session.subscription?.id ?? null);
   const customerEmail =
     (session.customer_details?.email as string | undefined) ??
     (session.customer_email as string | undefined) ??
@@ -80,6 +84,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
+        stripe_subscription_id: stripeSubscriptionId,
         customer_email: customerEmail,
         source: "stripe",
       })
@@ -99,6 +104,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
+        stripe_subscription_id: stripeSubscriptionId,
         customer_email: customerEmail,
         source: "stripe",
       })
@@ -127,6 +133,75 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   if (payErr && !payErr.message.includes("duplicate")) throw payErr;
 }
 
+/** Recurring subscription lifecycle → local subscription row. */
+async function handleStripeSubscription(sub: any, env: StripeEnv) {
+  const admin = getAdmin();
+  const userId = sub.metadata?.userId as string | undefined;
+  const mt5Uid = sub.metadata?.mt5_uid as string | undefined;
+  const plan = (sub.metadata?.plan as PlanKey | undefined) ?? null;
+  const item = sub.items?.data?.[0];
+  const periodEnd = item?.current_period_end ?? sub.current_period_end;
+  const periodEndIso = periodEnd ? new Date(periodEnd * 1000).toISOString() : null;
+
+  const activeLike = ["active", "trialing", "past_due"].includes(String(sub.status));
+  const localStatus = activeLike ? "active" : "cancelled";
+
+  const patch: Record<string, unknown> = {
+    status: localStatus,
+    stripe_subscription_id: sub.id,
+    cancel_at_period_end: !!sub.cancel_at_period_end,
+    source: "stripe",
+    ...(periodEndIso && { expires_at: periodEndIso, next_billing_at: periodEndIso }),
+    ...(plan && { plan, products: planProducts(plan) }),
+  };
+
+  // Match by stripe subscription id first, then by user + uid.
+  const { data: existing } = await admin
+    .from("subscriptions")
+    .select("id")
+    .eq("stripe_subscription_id", sub.id)
+    .maybeSingle();
+
+  if (existing) {
+    const { error } = await admin.from("subscriptions").update(patch).eq("id", existing.id);
+    if (error) throw error;
+    return;
+  }
+
+  if (!userId || !mt5Uid || !plan) {
+    console.error("subscription event missing metadata", sub.id);
+    return;
+  }
+
+  const { data: byUid } = await admin
+    .from("subscriptions")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("mt5_uid", mt5Uid)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (byUid) {
+    const { error } = await admin.from("subscriptions").update(patch).eq("id", byUid.id);
+    if (error) throw error;
+    return;
+  }
+
+  const now = new Date();
+  const { error } = await admin.from("subscriptions").insert({
+    user_id: userId,
+    mt5_uid: mt5Uid,
+    plan,
+    started_at: now.toISOString(),
+    expires_at:
+      periodEndIso ?? new Date(now.getTime() + planDurationDays(plan) * DAY_MS).toISOString(),
+    products: planProducts(plan),
+    ...patch,
+  });
+  if (error) throw error;
+}
+
 async function handleWebhook(req: Request, env: StripeEnv) {
   const event = await verifyWebhook(req, env);
   switch (event.type) {
@@ -134,6 +209,34 @@ async function handleWebhook(req: Request, env: StripeEnv) {
     case "transaction.completed":
       await handleCheckoutCompleted(event.data.object, env);
       break;
+    case "customer.subscription.created":
+    case "customer.subscription.updated":
+    case "customer.subscription.deleted":
+      await handleStripeSubscription(event.data.object, env);
+      break;
+    case "invoice.paid": {
+      const inv = event.data.object;
+      const subId =
+        typeof inv.subscription === "string"
+          ? inv.subscription
+          : (inv.subscription?.id ??
+            inv.parent?.subscription_details?.subscription ??
+            null);
+      if (subId) {
+        const periodEnd = inv.lines?.data?.[0]?.period?.end;
+        const patch: Record<string, unknown> = { status: "active" };
+        if (periodEnd) {
+          const iso = new Date(periodEnd * 1000).toISOString();
+          patch.expires_at = iso;
+          patch.next_billing_at = iso;
+        }
+        await getAdmin()
+          .from("subscriptions")
+          .update(patch)
+          .eq("stripe_subscription_id", typeof subId === "string" ? subId : subId.id);
+      }
+      break;
+    }
     default:
       console.log("Unhandled event:", event.type);
   }

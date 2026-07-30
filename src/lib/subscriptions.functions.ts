@@ -79,20 +79,39 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("价格未找到，请联系管理员");
       const price = prices.data[0];
 
+      // Recurring subscription line item. The catalog price object is monthly;
+      // for the 3-month plan we build a price_data with interval_count = 3.
+      const lineItem =
+        catalog.intervalCount === 1
+          ? { price: price.id, quantity: 1 }
+          : {
+              quantity: 1,
+              price_data: {
+                currency: "usd",
+                product:
+                  typeof price.product === "string" ? price.product : price.product.id,
+                unit_amount: catalog.amountUSD * 100,
+                recurring: { interval: "month", interval_count: catalog.intervalCount },
+              },
+            };
+
+      const metadata = {
+        userId: context.userId,
+        plan: data.plan,
+        mt5_uid: data.mt5Uid,
+      };
+
       const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: price.id, quantity: 1 }],
-        mode: "payment",
+        line_items: [lineItem],
+        mode: "subscription",
         ui_mode: "embedded_page" as any,
         return_url: data.returnUrl,
         customer: customerId,
-        payment_intent_data: {
+        subscription_data: {
           description: `${catalog.name} · MT5 ${data.mt5Uid}`,
+          metadata,
         },
-        metadata: {
-          userId: context.userId,
-          plan: data.plan,
-          mt5_uid: data.mt5Uid,
-        },
+        metadata,
       } as any);
 
       return { clientSecret: session.client_secret ?? "" };
@@ -362,4 +381,53 @@ export const adminUpdateSubscriptionProducts = createServerFn({ method: "POST" }
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true, products };
+  });
+
+/**
+ * 暂停授权：本地订阅置为 cancelled（EA 授权 API 立即返回 authorized:false），
+ * 同时取消 Stripe 自动续费，避免下一期继续扣款。
+ */
+export const adminSuspendSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; environment: StripeEnv }) =>
+    z
+      .object({ id: z.string().uuid(), environment: z.enum(["sandbox", "live"]) })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: sub, error: readErr } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id, stripe_subscription_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!sub) throw new Error("订阅不存在");
+
+    let stripeCancelled = false;
+    let stripeError: string | null = null;
+    if (sub.stripe_subscription_id) {
+      try {
+        const stripe = createStripeClient(data.environment);
+        await stripe.subscriptions.cancel(sub.stripe_subscription_id as string);
+        stripeCancelled = true;
+      } catch (error) {
+        stripeError = getStripeErrorMessage(error);
+        console.error("suspend: stripe cancel failed", error);
+      }
+    }
+
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        status: "cancelled",
+        cancel_at_period_end: true,
+        next_billing_at: null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+
+    return { ok: true, stripeCancelled, stripeError };
   });
