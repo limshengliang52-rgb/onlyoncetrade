@@ -113,26 +113,15 @@ function DashboardPage() {
         </p>
 
         {hasActiveSub ? (
-          <section className="card-lux mt-10 rounded-2xl p-6 text-sm">
-            <p className="text-foreground font-semibold">你的订阅正在自动续费中</p>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              订阅会在下次扣款日自动续期，授权保持有效，无需手动操作。如需停止订阅或更换方案，请
-              <a
-                href={SUPPORT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-1 text-gold underline"
-              >
-                联系客服
-              </a>
-              处理。
-            </p>
-          </section>
+          <ManageSubscriptionSection
+            subs={subsQuery.data ?? []}
+            onChanged={() => subsQuery.refetch()}
+          />
         ) : (
           <section className="mt-10">
-            <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权（自动续费订阅）</h2>
+            <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              订阅会自动续费；如需停止，请联系管理员处理。
+              订阅到期前可续费，用户也可在后台暂停续约。
             </p>
             <div className="mt-4 grid gap-5 md:grid-cols-2">
               {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
@@ -159,7 +148,7 @@ function DashboardPage() {
                     <th className="px-5 py-3 text-left normal-case tracking-normal">MT5 UID</th>
                     <th className="px-5 py-3 text-left">方案</th>
                     <th className="px-5 py-3 text-left">状态</th>
-                    <th className="px-5 py-3 text-left">下次自动扣款 / 有效至</th>
+                    <th className="px-5 py-3 text-left">到期时间 / 下次续约</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,6 +178,9 @@ function DashboardPage() {
                         </td>
                         <td className="px-5 py-3 text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
+                          {s.cancel_at_period_end && (
+                            <span className="ml-2 text-[11px] text-amber-400">已暂停续约</span>
+                          )}
                         </td>
                       </tr>
                     );
@@ -198,6 +190,7 @@ function DashboardPage() {
             )}
           </div>
         </section>
+
 
         <EADownloadSection query={downloadsQuery} />
 
