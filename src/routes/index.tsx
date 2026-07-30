@@ -315,7 +315,7 @@ type Plan = {
 };
 
 const PLAN_FEATURES = [
-  "XAUUSD 黄金策略",
+  "OnlyOnce XAUUSD EA RR2.5 黄金策略",
   "BTCUSD 比特币策略",
   "1 个 MT5 UID 授权绑定",
   "到期自动停止授权",
@@ -524,6 +524,7 @@ function StrategyBacktestSection({
           </div>
         </div>
 
+        {months.length > 0 && (
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-5 sm:p-6 md:p-8">
             <div className="flex items-center justify-between">
@@ -564,6 +565,7 @@ function StrategyBacktestSection({
             </div>
           </div>
         </div>
+        )}
 
         <p className="mt-8 text-center text-xs leading-relaxed text-muted-foreground font-sans">
           回测数据基于历史 MT5 数据，不代表未来保证收益。交易存在风险，请根据自身资金情况谨慎使用。
@@ -573,46 +575,28 @@ function StrategyBacktestSection({
   );
 }
 
-const XAU_START_BALANCE = 500;
-const XAU_MONTHS_RAW = [
-  { m: "Jan", profit: 277.91, pf: 1.67, wr: 37.93, trades: 29 },
-  { m: "Feb", profit: 169.91, pf: 1.36, wr: 31.82, trades: 22 },
-  { m: "Mar", profit: 99.26, pf: 1.14, wr: 37.5, trades: 24 },
-  { m: "Apr", profit: 69.23, pf: 1.12, wr: 44.74, trades: 38 },
-  { m: "May", profit: 2.45, pf: 1.01, wr: 34.62, trades: 26 },
-  { m: "Jun", profit: 183.79, pf: 1.42, wr: 38.46, trades: 26 },
-  { m: "Jul", profit: 45.28, pf: 1.21, wr: 40.0, trades: 15 },
-];
-const XAU_MONTHS: MonthlyRow[] = (() => {
-  let balance = XAU_START_BALANCE;
-  return XAU_MONTHS_RAW.map((row) => {
-    const pct = (row.profit / balance) * 100;
-    balance += row.profit;
-    return { ...row, pct };
-  });
-})();
-
 function XauBacktest() {
   return (
     <StrategyBacktestSection
       id="backtest"
       eyebrow="回测报告"
       symbol="XAUUSD"
-      strategyName="OnlyOnce XAU EA"
-      headlinePct="+166.56"
-      headlineUsd="+832.80 USD"
+      strategyName="OnlyOnce XAUUSD EA RR2.5（原版）"
+      headlinePct="+223.04"
+      headlineUsd="+1,115.20 USD"
       initialBalance="500 USD"
-      finalBalance="1,332.80 USD"
-      period="2026 Jan–Jul"
+      finalBalance="1,615.20 USD"
+      period="2026-01-01 – 2026-07-30"
       tableYearLabel="2026"
       stats={[
-        { label: "盈利因子", value: "1.26" },
-        { label: "胜率", value: "38.33", unit: "%" },
-        { label: "总交易次数", value: "180" },
-        { label: "初始资金", value: "500", unit: "USD" },
+        { label: "盈利因子 (PF)", value: "1.33" },
+        { label: "夏普比率", value: "2.86" },
+        { label: "总交易单数", value: "172" },
+        { label: "胜率", value: "33.72", unit: "%" },
+        { label: "余额最大回撤", value: "32.75", unit: "%" },
+        { label: "净值最大回撤", value: "34.38", unit: "%" },
       ]}
-      months={XAU_MONTHS}
-      showTrades
+      months={[]}
     />
   );
 }

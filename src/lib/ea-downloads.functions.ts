@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type FileKey =
+  | "xau_ea"
+  | "xau_set"
   | "xau_windows"
   | "xau_mac"
   | "btc_windows"
@@ -51,6 +53,17 @@ function pickLatest(
 function matcherFor(key: FileKey): (name: string) => boolean {
   const lower = (s: string) => s.toLowerCase();
   switch (key) {
+    // RR2.5 原版黄金 EA：优先精确匹配 OnlyOnce_XAUUSD_EA.ex5 / .set
+    case "xau_ea":
+      return (n) => {
+        const l = lower(n);
+        return l === "onlyonce_xauusd_ea.ex5" || (l.endsWith(".ex5") && l.includes("xauusd"));
+      };
+    case "xau_set":
+      return (n) => {
+        const l = lower(n);
+        return l === "onlyonce_xauusd_ea.set" || (l.endsWith(".set") && l.includes("xauusd"));
+      };
     case "xau_windows":
       return (n) => {
         const l = lower(n);
@@ -133,8 +146,10 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const wanted: { key: FileKey; label: string }[] = [];
     if (products.includes("xau")) {
-      wanted.push({ key: "xau_windows", label: "下载 XAUUSD EA (Windows)" });
-      wanted.push({ key: "xau_mac", label: "下载 XAUUSD EA (MacBook)" });
+      wanted.push({ key: "xau_ea", label: "下载 OnlyOnce XAUUSD EA RR2.5 (.ex5)" });
+      wanted.push({ key: "xau_set", label: "下载 OnlyOnce XAUUSD EA RR2.5 参数 (.set)" });
+      wanted.push({ key: "xau_windows", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (Windows)" });
+      wanted.push({ key: "xau_mac", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (MacBook)" });
     }
     if (products.includes("btc")) {
       wanted.push({ key: "btc_windows", label: "下载 BTCUSD EA (Windows)" });
@@ -160,12 +175,15 @@ export const getEADownloads = createServerFn({ method: "GET" })
       }),
     );
 
+    // .set 参数文件是可选项，未上传时不显示灰色按钮
+    const visibleFiles = files.filter((f) => !(f.key === "xau_set" && f.missing));
+
     return {
       authorized: true,
       plan: sub.plan as string,
       products,
       expires_at: sub.expires_at as string | null,
       mt5_uid: sub.mt5_uid as string,
-      files,
+      files: visibleFiles,
     };
   });

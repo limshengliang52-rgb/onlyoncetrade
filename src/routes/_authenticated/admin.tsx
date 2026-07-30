@@ -487,7 +487,7 @@ function ManualForm({
               checked={products.includes(p)}
               onChange={() => toggle(p)}
             />
-            <span className="uppercase font-mono">{p}</span>
+            <span className="font-mono">{p === "xau" ? "XAUUSD RR2.5" : "BTCUSD"}</span>
           </label>
         ))}
       </div>
@@ -533,7 +533,7 @@ function ProductsEditor({
           onChange={(e) => setXau(e.target.checked)}
           className="h-3 w-3 accent-gold"
         />
-        XAU
+        XAUUSD RR2.5
       </label>
       <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
         <input
