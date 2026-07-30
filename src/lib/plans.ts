@@ -24,6 +24,8 @@ export const PLAN_CATALOG: Record<
     slug: PlanSlug;
     name: string;
     priceId: string;
+    intervalCount: number;
+    billingLabel: string;
     amountUSD: number;
     originalUSD?: number;
     durationDays: number;
@@ -37,16 +39,18 @@ export const PLAN_CATALOG: Record<
     key: "access",
     slug: "plus",
     name: "OnlyOnce Plus",
-    priceId: "plan_access_30d_usd",
+    priceId: "plan_plus_monthly_sub_usd",
+    intervalCount: 1,
+    billingLabel: "$79 / 月，自动续费",
     amountUSD: 79,
     durationDays: 30,
     durationLabel: "/ 月",
-    tagline: "月费方案，XAUUSD 黄金 + BTCUSD 比特币双策略",
+    tagline: "月费自动续费订阅，XAUUSD 黄金 + BTCUSD 比特币双策略",
     products: ["xau", "btc"],
     features: [
       "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
       "1 个 MT5 UID 授权绑定",
-      "30 天权限，到期自动停止授权",
+      "每 30 天自动续费，未暂停即持续授权",
       "会员后台可下载两个 EA 策略文件",
     ],
   },
@@ -54,16 +58,18 @@ export const PLAN_CATALOG: Record<
     key: "basic",
     slug: "pro",
     name: "OnlyOnce Pro",
-    priceId: "plan_dual_3m_199_usd",
+    priceId: "plan_pro_3month_sub_usd",
+    intervalCount: 3,
+    billingLabel: "$199 / 3 个月，自动续费",
     amountUSD: 199,
     durationDays: 90,
     durationLabel: "/ 3 个月",
-    tagline: "一次开通 3 个月，比月付更划算",
+    tagline: "3 个月周期自动续费订阅，比月付更划算",
     products: ["xau", "btc"],
     features: [
       "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
       "1 个 MT5 UID 授权绑定",
-      "90 天权限，到期自动停止授权",
+      "每 3 个月自动续费，未暂停即持续授权",
       "会员后台可下载两个 EA 策略文件",
     ],
   },
