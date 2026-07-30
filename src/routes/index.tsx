@@ -234,7 +234,7 @@ function HowItWorks() {
       n: "02",
       icon: CalendarClock,
       title: "开通 EA 权限",
-      desc: "月费或 3 个月自动续费订阅。默认同时开启 XAUUSD 与 BTCUSD 两个策略。",
+      desc: "30 天或 90 天订阅方案。默认同时开启 XAUUSD 与 BTCUSD 两个策略。",
     },
     {
       n: "03",
@@ -318,7 +318,7 @@ const PLAN_FEATURES = [
   "OnlyOnce XAUUSD EA RR2.5 黄金策略",
   "BTCUSD 比特币策略",
   "1 个 MT5 UID 授权绑定",
-  "订阅自动续费，无需手动操作",
+  "订阅到期前可在后台续费",
   "会员后台下载两个 EA",
   "支持 Windows / Mac 一键安装 EA 文件",
 ];
@@ -329,7 +329,7 @@ const plans: Plan[] = [
     name: "OnlyOnce Plus",
     tagline: "",
     price: "$79",
-    priceNote: "/ 月，自动续费",
+    priceNote: "/ 30 天",
     features: PLAN_FEATURES,
     cta: "订阅月费方案",
   },
@@ -338,7 +338,7 @@ const plans: Plan[] = [
     name: "OnlyOnce Pro",
     tagline: "",
     price: "$199",
-    priceNote: "/ 3 个月，自动续费",
+    priceNote: "/ 90 天",
     highlight: true,
     features: PLAN_FEATURES,
     cta: "订阅 3 个月方案",
@@ -353,7 +353,7 @@ function Pricing() {
         <SectionHeader
           eyebrow="Pricing"
           title={<>开通 <span className="gold-text">AI 全自动交易策略授权</span></>}
-          sub="自动续费订阅制。每个方案都包含 XAUUSD 黄金 + BTCUSD 比特币两个策略，付款成功后自动加入 MT5 UID 白名单"
+          sub="订阅到期前可续费，用户也可在后台暂停续约。每个方案都包含 XAUUSD 黄金 + BTCUSD 比特币两个策略，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
@@ -380,7 +380,7 @@ function Pricing() {
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          * 所有方案均为 UID 授权制，不出售 EA 文件所有权。订阅会自动续费；如需停止，请联系管理员处理。
+          * 所有方案均为 UID 授权制，不出售 EA 文件所有权。订阅到期前可续费，用户也可在后台暂停续约。
         </p>
         <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground/80">
           本服务仅提供 EA 工具授权与技术说明，不构成投资建议，也不承诺任何收益。交易存在亏损风险，请自行评估后使用。
@@ -737,7 +737,7 @@ function CTA() {
               <span className="gold-text"> AI 全自动交易策略授权</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。订阅会自动续费；如需停止，请联系管理员处理。
+              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。订阅到期前可续费，用户也可在后台暂停续约。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
