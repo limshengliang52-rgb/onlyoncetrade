@@ -134,9 +134,8 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const wanted: { key: FileKey; label: string }[] = [];
     if (products.includes("xau")) {
-      // 仅提供一键安装包，不提供 .set / 单独 .ex5
-      wanted.push({ key: "xau_windows", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (Windows)" });
-      wanted.push({ key: "xau_mac", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (MacBook)" });
+      wanted.push({ key: "xau_windows", label: "下载 XAUUSD EA（Windows）" });
+      wanted.push({ key: "xau_mac", label: "下载 XAUUSD EA（MacBook）" });
     }
     if (products.includes("btc")) {
       wanted.push({ key: "btc_windows", label: "下载 BTCUSD EA (Windows)" });
