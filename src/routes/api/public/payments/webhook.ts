@@ -60,7 +60,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     .select("id, expires_at")
     .eq("user_id", userId)
     .eq("mt5_uid", mt5Uid)
-    .in("status", ["active", "pending"])
+    .in("status", ["active", "pending", "expired", "cancelled"])
     .order("expires_at", { ascending: false })
     .limit(1)
     .maybeSingle();
