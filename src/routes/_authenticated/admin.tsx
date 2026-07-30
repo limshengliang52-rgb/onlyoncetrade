@@ -6,12 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   adminListPayments,
   adminListSubscriptions,
-  adminSetSubscriptionStatus,
-  adminUpdateSubscriptionProducts,
+  adminSuspendSubscription,
   adminUpdateSubscriptionUid,
   adminUpsertSubscription,
 } from "@/lib/subscriptions.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
+import { getStripeEnvironment } from "@/lib/stripe";
 import { Sparkles, ArrowLeft, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -53,24 +53,24 @@ function AdminPage() {
       qc.invalidateQueries({ queryKey: ["admin-subs"] });
     },
   });
-  const setStatus = useMutation({
-    mutationFn: (v: Parameters<typeof adminSetSubscriptionStatus>[0]["data"]) =>
-      adminSetSubscriptionStatus({ data: v }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
+  const suspend = useMutation({
+    mutationFn: (v: { id: string; environment: "sandbox" | "live" }) =>
+      adminSuspendSubscription({ data: v }),
+    onSuccess: (r: any) => {
+      toast.success(
+        r?.stripeCancelled
+          ? "已暂停授权，并已取消 Stripe 自动续费"
+          : "已暂停授权（该订阅没有 Stripe 自动续费记录）",
+      );
+      if (r?.stripeError) toast.error(`Stripe 取消失败：${r.stripeError}`);
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "暂停失败"),
   });
   const updateUid = useMutation({
     mutationFn: (v: { id: string; mt5_uid: string }) => adminUpdateSubscriptionUid({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
     onError: (e: any) => alert(e?.message ?? "更新失败"),
-  });
-  const updateProducts = useMutation({
-    mutationFn: (v: { id: string; products: string[] }) =>
-      adminUpdateSubscriptionProducts({ data: v }),
-    onSuccess: () => {
-      toast.success("授权产品已更新");
-      qc.invalidateQueries({ queryKey: ["admin-subs"] });
-    },
-    onError: (e: any) => toast.error(e?.message ?? "更新失败"),
   });
 
   if (authorized === null) {
@@ -155,7 +155,6 @@ function AdminPage() {
                       <th className="px-4 py-3 text-left">用户</th>
                       <th className="px-4 py-3 text-left">MT5 UID</th>
                       <th className="px-4 py-3 text-left">方案</th>
-                      <th className="px-4 py-3 text-left">授权产品</th>
                       <th className="px-4 py-3 text-left">来源</th>
                       <th className="px-4 py-3 text-left">状态</th>
                       <th className="px-4 py-3 text-left">到期</th>
@@ -194,13 +193,7 @@ function AdminPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3">{PLAN_CATALOG[s.plan as PlanKey]?.name ?? s.plan}</td>
-                        <td className="px-4 py-3">
-                          <ProductsEditor
-                            initial={Array.isArray(s.products) ? (s.products as string[]) : []}
-                            saving={updateProducts.isPending && updateProducts.variables?.id === s.id}
-                            onSave={(products) => updateProducts.mutate({ id: s.id, products })}
-                          />
-                        </td>
+                        
 
                         <td className="px-4 py-3">
                           <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
@@ -476,59 +469,5 @@ function ManualForm({
       </button>
       {error && <p className="text-xs text-red-400 md:col-span-6">{error}</p>}
     </form>
-  );
-}
-
-function ProductsEditor({
-  initial,
-  saving,
-  onSave,
-}: {
-  initial: string[];
-  saving: boolean;
-  onSave: (products: string[]) => void;
-}) {
-  const [xau, setXau] = useState(initial.includes("xau"));
-  const [btc, setBtc] = useState(initial.includes("btc"));
-
-  const current: string[] = [
-    ...(xau ? ["xau"] : []),
-    ...(btc ? ["btc"] : []),
-  ];
-  const dirty =
-    current.length !== initial.length ||
-    current.some((p) => !initial.includes(p));
-  const invalid = current.length === 0;
-
-  return (
-    <div className="flex items-center gap-2">
-      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
-        <input
-          type="checkbox"
-          checked={xau}
-          onChange={(e) => setXau(e.target.checked)}
-          className="h-3 w-3 accent-gold"
-        />
-        XAUUSD RR2.5
-      </label>
-      <label className="flex cursor-pointer items-center gap-1 text-[11px] font-semibold uppercase">
-        <input
-          type="checkbox"
-          checked={btc}
-          onChange={(e) => setBtc(e.target.checked)}
-          className="h-3 w-3 accent-gold"
-        />
-        BTC
-      </label>
-      <button
-        type="button"
-        disabled={!dirty || invalid || saving}
-        onClick={() => onSave(current)}
-        className="rounded-md border border-gold/40 bg-gold/5 px-2 py-1 text-[10px] font-semibold text-gold hover:bg-gold/10 disabled:cursor-not-allowed disabled:opacity-40"
-        title={invalid ? "至少保留一个产品" : ""}
-      >
-        {saving ? "..." : "保存"}
-      </button>
-    </div>
   );
 }
