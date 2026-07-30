@@ -26,6 +26,10 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   const sessionId = session.id as string;
   const paymentIntent =
     typeof session.payment_intent === "string" ? session.payment_intent : null;
+  const stripeSubscriptionId =
+    typeof session.subscription === "string"
+      ? session.subscription
+      : (session.subscription?.id ?? null);
   const customerEmail =
     (session.customer_details?.email as string | undefined) ??
     (session.customer_email as string | undefined) ??
@@ -80,6 +84,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
+        stripe_subscription_id: stripeSubscriptionId,
         customer_email: customerEmail,
         source: "stripe",
       })
@@ -99,6 +104,7 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
         products: productsFor(plan),
         stripe_session_id: sessionId,
         stripe_payment_intent: paymentIntent,
+        stripe_subscription_id: stripeSubscriptionId,
         customer_email: customerEmail,
         source: "stripe",
       })
