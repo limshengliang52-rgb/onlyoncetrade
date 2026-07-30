@@ -487,7 +487,7 @@ function ManualForm({
               checked={products.includes(p)}
               onChange={() => toggle(p)}
             />
-            <span className="uppercase font-mono">{p}</span>
+            <span className="font-mono">{p === "xau" ? "XAUUSD RR2.5" : "BTCUSD"}</span>
           </label>
         ))}
       </div>
