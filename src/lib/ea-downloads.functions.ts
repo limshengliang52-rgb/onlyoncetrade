@@ -134,8 +134,7 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const wanted: { key: FileKey; label: string }[] = [];
     if (products.includes("xau")) {
-      wanted.push({ key: "xau_ea", label: "下载 OnlyOnce XAUUSD EA RR2.5 (.ex5)" });
-      wanted.push({ key: "xau_set", label: "下载 OnlyOnce XAUUSD EA RR2.5 参数 (.set)" });
+      // 仅提供一键安装包，不提供 .set / 单独 .ex5
       wanted.push({ key: "xau_windows", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (Windows)" });
       wanted.push({ key: "xau_mac", label: "OnlyOnce XAUUSD EA RR2.5 安装包 (MacBook)" });
     }
