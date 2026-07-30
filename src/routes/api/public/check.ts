@@ -203,6 +203,12 @@ export const Route = createFileRoute("/api/public/check")({
           started_at: data.started_at,
           server_time: nowIso,
           message: "license active",
+          signature: await signLicense({
+            uid,
+            product: rawProduct || "",
+            status: "active",
+            expires_at: String(data.expires_at),
+          }),
         });
       },
     },
