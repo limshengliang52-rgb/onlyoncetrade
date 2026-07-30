@@ -28,6 +28,30 @@ function respond(body: unknown, status = 200) {
 
 const ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
 
+// HMAC-SHA256 license signature so the EA can verify the response is genuine.
+async function signLicense(parts: {
+  uid: string;
+  product: string;
+  status: string;
+  expires_at: string;
+}): Promise<string> {
+  const secret =
+    process.env.LICENSE_SECRET || process.env.EA_LICENSE_API_KEY || "";
+  if (!secret) return "";
+  const payload = `${parts.uid}|${parts.product}|${parts.status}|${parts.expires_at}`;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 function pickParam(url: URL, ...keys: string[]): string {
   for (const k of keys) {
     const v = url.searchParams.get(k);
