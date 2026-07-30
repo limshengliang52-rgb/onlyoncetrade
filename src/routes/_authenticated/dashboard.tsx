@@ -25,6 +25,10 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 const mt5Re = /^[A-Za-z0-9_-]{3,32}$/;
 
+const SUPPORT_URL =
+  "https://wa.me/60136330303?text=" +
+  encodeURIComponent("你好，我想咨询 OnlyOnce EA Trade 订阅");
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
@@ -59,6 +63,10 @@ function DashboardPage() {
     refetchOnWindowFocus: false,
   });
 
+
+  const hasActiveSub = !!subsQuery.data?.some(
+    (s: any) => s.status === "active" && (!s.expires_at || new Date(s.expires_at) > new Date()),
+  );
 
   async function handleLogout() {
     await supabase.auth.signOut();
