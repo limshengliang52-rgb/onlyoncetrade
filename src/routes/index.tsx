@@ -29,7 +29,7 @@ const SITE_URL = "https://onlyoncetrade.com";
 export const Route = createFileRoute("/")({
   component: Landing,
   loader: async () => {
-    return { memberCount: 60 };
+    return { memberCount: 63 };
   },
   head: () => ({
     meta: [
@@ -120,7 +120,7 @@ function Nav() {
 }
 
 function useMemberCount() {
-  return 60;
+  return 63;
 }
 
 
