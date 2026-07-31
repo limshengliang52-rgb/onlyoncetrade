@@ -593,8 +593,8 @@ function XauBacktest() {
         { label: "夏普比率", value: "2.86" },
         { label: "总交易单数", value: "172" },
         { label: "胜率", value: "33.72", unit: "%" },
-        { label: "余额最大回撤", value: "32.75", unit: "%" },
-        { label: "净值最大回撤", value: "34.38", unit: "%" },
+        { label: "余额最大回撤", value: "约 140+", unit: "USD" },
+        { label: "净值最大回撤", value: "约 140+", unit: "USD" },
       ]}
       months={[]}
     />
