@@ -559,6 +559,27 @@ function EADownloadSection({
               <PlatformNotice />
             </div>
 
+            <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/5 p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
+                <div className="text-sm">
+                  <p className="font-semibold text-foreground">EA 启动前必须设置</p>
+                  <ol className="mt-2 list-decimal space-y-1 pl-4 text-xs text-muted-foreground">
+                    <li>MT5 顶部菜单点击 Tools / 工具 → Options / 选项 → Expert Advisors / EA交易。</li>
+                    <li>勾选 “Allow WebRequest for listed URL”。</li>
+                    <li>在列表加入：https://onlyoncetrade.com</li>
+                    <li>点击 OK 后，重新把 EA 拖到图表，或重启 MT5。</li>
+                  </ol>
+                  <p className="mt-2 text-xs text-amber-400">
+                    如果没有做这一步，EA 会显示 LOCKED / Error 4014，即使后台已经授权也不能运行。
+                  </p>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Before running the EA, MT5 must allow WebRequest: Tools → Options → Expert Advisors → tick “Allow WebRequest for listed URL” → add https://onlyoncetrade.com → OK → reattach or restart the EA. Without this step, the EA may show LOCKED / Error 4014 even if the license is active.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.files
                 .filter(
