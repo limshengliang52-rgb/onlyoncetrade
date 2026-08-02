@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
+import { getMemberCount } from "@/lib/member-count.functions";
+
 
 const SITE_URL = "https://onlyoncetrade.com";
 
