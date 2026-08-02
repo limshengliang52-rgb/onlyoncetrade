@@ -50,7 +50,18 @@ function pickLatest(
   return matches[0];
 }
 
+const EXPECTED_FILENAME: Record<FileKey, string> = {
+  xau_windows: "OnlyOnce_XAUUSD_EA_Windows_Installer.zip",
+  xau_mac: "OnlyOnce_XAU_Mac_Installer.zip",
+  btc_windows: "OnlyOnce_BTCUSD_EA_Windows_Installer.zip",
+  btc_mac: "OnlyOnce_BTCUSD_EA_Mac_Installer.zip",
+  guide_cn: "OnlyOnce_Install_Guide_CN.pdf",
+  guide_en: "OnlyOnce_Install_Guide_EN.pdf",
+  guide_mac: "OnlyOnce_Install_Guide_Mac.pdf",
+};
+
 function matcherFor(key: FileKey): (name: string) => boolean {
+
   const lower = (s: string) => s.toLowerCase();
   switch (key) {
     // RR2.5 原版黄金 EA：只提供一键安装包，绝不提供 .set / 单独 .ex5
