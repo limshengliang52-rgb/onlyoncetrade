@@ -4,8 +4,8 @@ export type PlanSlug = "pro" | "plus";
 // URL slug → internal plan key (DB enum). Old slugs like "basic" / "access"
 // are intentionally NOT accepted at /checkout/:slug — they redirect to pricing.
 export const PLAN_SLUG_TO_KEY: Record<PlanSlug, PlanKey> = {
-  pro: "basic", // $240 / 90 days (OnlyOnce Pro)
-  plus: "access", // $99 / 30 days (OnlyOnce Plus)
+  pro: "basic", // $240 / 90 days (Only One EA Pro)
+  plus: "access", // $99 / 30 days (Only One EA Plus)
 };
 
 export const PLAN_KEY_TO_SLUG: Record<PlanKey, PlanSlug> = {
@@ -38,17 +38,17 @@ export const PLAN_CATALOG: Record<
   access: {
     key: "access",
     slug: "plus",
-    name: "OnlyOnce Plus",
+    name: "Only One EA Plus",
     priceId: "plan_plus_monthly_sub_usd",
     intervalCount: 1,
     billingLabel: "$99 / 30 天",
     amountUSD: 99,
     durationDays: 30,
     durationLabel: "/ 月",
-    tagline: "30 天订阅方案，XAUUSD 黄金 + BTCUSD 比特币双策略",
+    tagline: "30 天订阅方案，包含 XAUUSD EA + BTCUSD EA",
     products: ["xau", "btc"],
     features: [
-      "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
+      "包含 XAUUSD EA + BTCUSD EA",
       "1 个 MT5 UID 授权绑定",
       "到期前可续费，也可在后台暂停续约",
       "会员后台可下载两个 EA 策略文件",
@@ -57,7 +57,7 @@ export const PLAN_CATALOG: Record<
   basic: {
     key: "basic",
     slug: "pro",
-    name: "OnlyOnce Pro",
+    name: "Only One EA Pro",
     priceId: "plan_pro_3month_sub_usd",
     intervalCount: 3,
     billingLabel: "$240 / 90 天",
@@ -67,7 +67,7 @@ export const PLAN_CATALOG: Record<
     tagline: "90 天订阅方案，比月付更划算",
     products: ["xau", "btc"],
     features: [
-      "OnlyOnce XAUUSD EA RR2.5 黄金策略 + BTCUSD 比特币策略",
+      "包含 XAUUSD EA + BTCUSD EA",
       "1 个 MT5 UID 授权绑定",
       "到期前可续费，也可在后台暂停续约",
       "会员后台可下载两个 EA 策略文件",
