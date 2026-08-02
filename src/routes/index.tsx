@@ -315,8 +315,7 @@ type Plan = {
 };
 
 const PLAN_FEATURES = [
-  "OnlyOnce XAUUSD EA RR2.5 黄金策略",
-  "BTCUSD 比特币策略",
+  "包含 XAUUSD EA + BTCUSD EA",
   "1 个 MT5 UID 授权绑定",
   "订阅到期前可在后台续费",
   "会员后台下载两个 EA",
