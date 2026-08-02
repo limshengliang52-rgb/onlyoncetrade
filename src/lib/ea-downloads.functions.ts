@@ -148,12 +148,12 @@ export const getEADownloads = createServerFn({ method: "GET" })
 
     const wanted: { key: FileKey; label: string }[] = [];
     if (products.includes("xau")) {
-      wanted.push({ key: "xau_windows", label: "下载 XAUUSD EA（Windows）" });
-      wanted.push({ key: "xau_mac", label: "下载 XAUUSD EA（MacBook）" });
+      wanted.push({ key: "xau_windows", label: "下载 OnlyOnce XAUUSD EA（Windows）" });
+      wanted.push({ key: "xau_mac", label: "下载 OnlyOnce XAUUSD EA（MacBook）" });
     }
     if (products.includes("btc")) {
-      wanted.push({ key: "btc_windows", label: "下载 BTCUSD EA (Windows)" });
-      wanted.push({ key: "btc_mac", label: "下载 BTCUSD EA (MacBook)" });
+      wanted.push({ key: "btc_windows", label: "下载 OnlyOnce BTCUSD EA（Windows）" });
+      wanted.push({ key: "btc_mac", label: "下载 OnlyOnce BTCUSD EA（MacBook）" });
     }
     wanted.push({ key: "guide_cn", label: "Windows 安装说明 (中文 PDF)" });
     wanted.push({ key: "guide_en", label: "Windows Install Guide (English PDF)" });
