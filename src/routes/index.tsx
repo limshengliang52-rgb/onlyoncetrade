@@ -315,8 +315,7 @@ type Plan = {
 };
 
 const PLAN_FEATURES = [
-  "OnlyOnce XAUUSD EA RR2.5 黄金策略",
-  "BTCUSD 比特币策略",
+  "包含 XAUUSD EA + BTCUSD EA",
   "1 个 MT5 UID 授权绑定",
   "订阅到期前可在后台续费",
   "会员后台下载两个 EA",
@@ -326,7 +325,7 @@ const PLAN_FEATURES = [
 const plans: Plan[] = [
   {
     slug: "plus",
-    name: "OnlyOnce Plus",
+    name: "Only One EA Plus",
     tagline: "",
     price: "$99",
     priceNote: "/ 30 天",
@@ -335,7 +334,7 @@ const plans: Plan[] = [
   },
   {
     slug: "pro",
-    name: "OnlyOnce Pro",
+    name: "Only One EA Pro",
     tagline: "",
     price: "$240",
     priceNote: "/ 90 天",
@@ -353,7 +352,7 @@ function Pricing() {
         <SectionHeader
           eyebrow="Pricing"
           title={<>开通 <span className="gold-text">AI 全自动交易策略授权</span></>}
-          sub="订阅到期前可续费，用户也可在后台暂停续约。每个方案都包含 XAUUSD 黄金 + BTCUSD 比特币两个策略，付款成功后自动加入 MT5 UID 白名单"
+          sub="订阅到期前可续费，用户也可在后台暂停续约。每个方案都包含 XAUUSD EA + BTCUSD EA，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
