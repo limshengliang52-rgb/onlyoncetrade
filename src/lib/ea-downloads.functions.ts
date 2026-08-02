@@ -16,7 +16,9 @@ export type EADownloadFile = {
   url: string | null;
   missing?: boolean;
   filename?: string;
+  expectedFilename?: string;
 };
+
 
 export type EADownloadsResult = {
   authorized: boolean;
