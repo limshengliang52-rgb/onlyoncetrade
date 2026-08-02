@@ -29,8 +29,10 @@ const SITE_URL = "https://onlyoncetrade.com";
 export const Route = createFileRoute("/")({
   component: Landing,
   loader: async () => {
-    return { memberCount: 70 };
+    const { count } = await getMemberCount();
+    return { memberCount: count };
   },
+
   head: () => ({
     meta: [
       { property: "og:image", content: `${SITE_URL}${ogImage}` },
