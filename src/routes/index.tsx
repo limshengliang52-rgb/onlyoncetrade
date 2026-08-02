@@ -124,8 +124,10 @@ function Nav() {
 }
 
 function useMemberCount() {
-  return 70;
+  const { memberCount } = Route.useLoaderData();
+  return memberCount;
 }
+
 
 
 function Hero() {
