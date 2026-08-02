@@ -29,7 +29,7 @@ const SITE_URL = "https://onlyoncetrade.com";
 export const Route = createFileRoute("/")({
   component: Landing,
   loader: async () => {
-    return { memberCount: 63 };
+    return { memberCount: 70 };
   },
   head: () => ({
     meta: [
@@ -120,7 +120,7 @@ function Nav() {
 }
 
 function useMemberCount() {
-  return 63;
+  return 70;
 }
 
 
@@ -328,7 +328,7 @@ const plans: Plan[] = [
     slug: "plus",
     name: "OnlyOnce Plus",
     tagline: "",
-    price: "$79",
+    price: "$99",
     priceNote: "/ 30 天",
     features: PLAN_FEATURES,
     cta: "订阅月费方案",
@@ -337,7 +337,7 @@ const plans: Plan[] = [
     slug: "pro",
     name: "OnlyOnce Pro",
     tagline: "",
-    price: "$199",
+    price: "$240",
     priceNote: "/ 90 天",
     highlight: true,
     features: PLAN_FEATURES,
