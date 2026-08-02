@@ -152,17 +152,31 @@ export const getEADownloads = createServerFn({ method: "GET" })
       wanted.map(async (f): Promise<EADownloadFile> => {
         const match = pickLatest(objects, matcherFor(f.key));
         if (!match) {
-          return { key: f.key, label: f.label, url: null, missing: true };
+          return {
+            key: f.key,
+            label: f.label,
+            url: null,
+            missing: true,
+            expectedFilename: EXPECTED_FILENAME[f.key],
+          };
         }
         const { data: signed, error: sErr } = await supabaseAdmin.storage
           .from("ea-files")
           .createSignedUrl(match.name, 300, { download: true });
         if (sErr || !signed) {
-          return { key: f.key, label: f.label, url: null, missing: true, filename: match.name };
+          return {
+            key: f.key,
+            label: f.label,
+            url: null,
+            missing: true,
+            filename: match.name,
+            expectedFilename: EXPECTED_FILENAME[f.key],
+          };
         }
         return { key: f.key, label: f.label, url: signed.signedUrl, filename: match.name };
       }),
     );
+
 
     // 永不返回 .set / 单独 .ex5 文件
     const visibleFiles = files.filter(
