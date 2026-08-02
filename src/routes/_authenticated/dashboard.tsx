@@ -588,25 +588,38 @@ function EADownloadSection({
                 )
                 .map((f) => {
                   const disabled = !f.url || f.missing;
+                  if (disabled) {
+                    return (
+                      <div
+                        key={f.key}
+                        className="rounded-lg border border-border/60 bg-muted/30 px-4 py-3 text-sm text-muted-foreground"
+                      >
+                        <div className="flex items-center gap-2 font-medium text-foreground/80">
+                          <AlertTriangle className="h-4 w-4 text-amber-400" />
+                          {f.label}
+                        </div>
+                        <p className="mt-1 text-[11px] leading-relaxed">
+                          文件未上传，请联系客服。缺少文件：
+                          <span className="break-all text-amber-400">
+                            {" "}
+                            {f.expectedFilename ?? f.filename ?? "未知文件"}
+                          </span>
+                        </p>
+                      </div>
+                    );
+                  }
                   return (
                     <a
                       key={f.key}
                       href={f.url ?? "#"}
-                      onClick={(e) => {
-                        if (disabled) e.preventDefault();
-                      }}
-                      className={
-                        "inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition " +
-                        (disabled
-                          ? "cursor-not-allowed border-border/60 bg-muted/30 text-muted-foreground"
-                          : "border-transparent bg-gold-gradient text-primary-foreground hover:brightness-110")
-                      }
+                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-transparent bg-gold-gradient px-4 py-3 text-sm font-medium text-primary-foreground transition hover:brightness-110"
                     >
                       <Download className="h-4 w-4" />
                       {f.label}
                     </a>
                   );
                 })}
+
             </div>
             <div className="mt-4 rounded-lg border border-gold/25 bg-gold/5 p-3 text-[11px] leading-relaxed text-muted-foreground">
               <p>
