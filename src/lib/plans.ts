@@ -4,8 +4,8 @@ export type PlanSlug = "pro" | "plus";
 // URL slug → internal plan key (DB enum). Old slugs like "basic" / "access"
 // are intentionally NOT accepted at /checkout/:slug — they redirect to pricing.
 export const PLAN_SLUG_TO_KEY: Record<PlanSlug, PlanKey> = {
-  pro: "basic", // $240 / 90 days (Only One EA Pro)
-  plus: "access", // $99 / 30 days (Only One EA Plus)
+  pro: "basic", // $240 / 90 days (OnlyOnce EA Pro)
+  plus: "access", // $99 / 30 days (OnlyOnce EA Plus)
 };
 
 export const PLAN_KEY_TO_SLUG: Record<PlanKey, PlanSlug> = {
@@ -38,7 +38,7 @@ export const PLAN_CATALOG: Record<
   access: {
     key: "access",
     slug: "plus",
-    name: "Only One EA Plus",
+    name: "OnlyOnce EA Plus",
     priceId: "plan_plus_monthly_sub_usd",
     intervalCount: 1,
     billingLabel: "$99 / 30 天",
@@ -57,7 +57,7 @@ export const PLAN_CATALOG: Record<
   basic: {
     key: "basic",
     slug: "pro",
-    name: "Only One EA Pro",
+    name: "OnlyOnce EA Pro",
     priceId: "plan_pro_3month_sub_usd",
     intervalCount: 3,
     billingLabel: "$240 / 90 天",
