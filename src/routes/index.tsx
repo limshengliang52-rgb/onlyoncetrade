@@ -23,14 +23,18 @@ import {
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
+import { getMemberCount } from "@/lib/member-count.functions";
+
 
 const SITE_URL = "https://onlyoncetrade.com";
 
 export const Route = createFileRoute("/")({
   component: Landing,
   loader: async () => {
-    return { memberCount: 70 };
+    const { count } = await getMemberCount();
+    return { memberCount: count };
   },
+
   head: () => ({
     meta: [
       { property: "og:image", content: `${SITE_URL}${ogImage}` },
@@ -120,8 +124,10 @@ function Nav() {
 }
 
 function useMemberCount() {
-  return 70;
+  const { memberCount } = Route.useLoaderData();
+  return memberCount;
 }
+
 
 
 function Hero() {
