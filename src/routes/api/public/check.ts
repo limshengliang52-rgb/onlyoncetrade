@@ -57,11 +57,12 @@ async function signLicense(parts: {
 const UID_RE = /^[A-Za-z0-9_-]{3,32}$/;
 const PRODUCT_RE = /^[A-Za-z0-9_-]{2,32}$/;
 
-// Legacy rows without an explicit products array are treated as XAU-only.
-// Admins must explicitly grant BTC (or the user renews via a new dual plan).
+// Both current plans are dual-strategy, so rows without an explicit products
+// array are treated as XAU + BTC.
 function planProducts(_plan: string): string[] {
-  return ["xau"];
+  return ["xau", "btc"];
 }
+
 
 // Normalize the requested product to internal keys (xau/btc)
 function normalizeProduct(p: string): string {

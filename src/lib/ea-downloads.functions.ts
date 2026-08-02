@@ -16,7 +16,9 @@ export type EADownloadFile = {
   url: string | null;
   missing?: boolean;
   filename?: string;
+  expectedFilename?: string;
 };
+
 
 export type EADownloadsResult = {
   authorized: boolean;
@@ -48,7 +50,18 @@ function pickLatest(
   return matches[0];
 }
 
+const EXPECTED_FILENAME: Record<FileKey, string> = {
+  xau_windows: "OnlyOnce_XAUUSD_EA_Windows_Installer.zip",
+  xau_mac: "OnlyOnce_XAU_Mac_Installer.zip",
+  btc_windows: "OnlyOnce_BTCUSD_EA_Windows_Installer.zip",
+  btc_mac: "OnlyOnce_BTCUSD_EA_Mac_Installer.zip",
+  guide_cn: "OnlyOnce_Install_Guide_CN.pdf",
+  guide_en: "OnlyOnce_Install_Guide_EN.pdf",
+  guide_mac: "OnlyOnce_Install_Guide_Mac.pdf",
+};
+
 function matcherFor(key: FileKey): (name: string) => boolean {
+
   const lower = (s: string) => s.toLowerCase();
   switch (key) {
     // RR2.5 原版黄金 EA：只提供一键安装包，绝不提供 .set / 单独 .ex5
@@ -117,12 +130,13 @@ export const getEADownloads = createServerFn({ method: "GET" })
       return { authorized: false, reason: "no_subscription", files: [] };
     }
 
-    // Strictly follow subscriptions.products. Legacy rows with an empty
-    // products array default to XAU only — admins must explicitly grant BTC.
+    // Both current plans are dual-strategy (XAU + BTC). Rows with an empty
+    // products array fall back to the full dual-strategy set.
     const products: string[] =
       Array.isArray(sub.products) && sub.products.length
         ? (sub.products as string[])
-        : ["xau"];
+        : ["xau", "btc"];
+
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -149,17 +163,31 @@ export const getEADownloads = createServerFn({ method: "GET" })
       wanted.map(async (f): Promise<EADownloadFile> => {
         const match = pickLatest(objects, matcherFor(f.key));
         if (!match) {
-          return { key: f.key, label: f.label, url: null, missing: true };
+          return {
+            key: f.key,
+            label: f.label,
+            url: null,
+            missing: true,
+            expectedFilename: EXPECTED_FILENAME[f.key],
+          };
         }
         const { data: signed, error: sErr } = await supabaseAdmin.storage
           .from("ea-files")
           .createSignedUrl(match.name, 300, { download: true });
         if (sErr || !signed) {
-          return { key: f.key, label: f.label, url: null, missing: true, filename: match.name };
+          return {
+            key: f.key,
+            label: f.label,
+            url: null,
+            missing: true,
+            filename: match.name,
+            expectedFilename: EXPECTED_FILENAME[f.key],
+          };
         }
         return { key: f.key, label: f.label, url: signed.signedUrl, filename: match.name };
       }),
     );
+
 
     // 永不返回 .set / 单独 .ex5 文件
     const visibleFiles = files.filter(
