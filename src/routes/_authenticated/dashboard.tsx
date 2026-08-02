@@ -362,14 +362,14 @@ function ManageSubscriptionSection({
             disabled={!!loading}
             className="rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading === "access" ? "创建结账中..." : "续费 30 天（$79）"}
+            {loading === "access" ? "创建结账中..." : "续费 30 天（$99）"}
           </button>
           <button
             onClick={() => renew("basic")}
             disabled={!!loading}
             className="rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading === "basic" ? "创建结账中..." : "续费 90 天（$199）"}
+            {loading === "basic" ? "创建结账中..." : "续费 90 天（$240）"}
           </button>
           <button
             onClick={pause}
