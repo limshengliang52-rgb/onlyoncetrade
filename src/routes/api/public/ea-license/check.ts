@@ -183,9 +183,8 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
         const allowed: string[] =
           Array.isArray(sub.products) && sub.products.length
             ? (sub.products as string[])
-            : sub.plan === "access"
-              ? ["xau", "btc"]
-              : ["xau"];
+            : ["xau", "btc"];
+
         if (productKey && !allowed.includes(productKey)) {
           return respond({ authorized: false, reason: "product_not_allowed" });
         }
