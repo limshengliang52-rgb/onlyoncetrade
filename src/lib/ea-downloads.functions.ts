@@ -119,12 +119,13 @@ export const getEADownloads = createServerFn({ method: "GET" })
       return { authorized: false, reason: "no_subscription", files: [] };
     }
 
-    // Strictly follow subscriptions.products. Legacy rows with an empty
-    // products array default to XAU only — admins must explicitly grant BTC.
+    // Both current plans are dual-strategy (XAU + BTC). Rows with an empty
+    // products array fall back to the full dual-strategy set.
     const products: string[] =
       Array.isArray(sub.products) && sub.products.length
         ? (sub.products as string[])
-        : ["xau"];
+        : ["xau", "btc"];
+
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
