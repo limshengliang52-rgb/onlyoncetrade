@@ -76,15 +76,9 @@ function matcherFor(key: FileKey): (name: string) => boolean {
         return l === "onlyonce_xau_mac_installer.zip";
       };
     case "btc_windows":
-      return (n) => {
-        const l = lower(n);
-        return l.endsWith(".zip") && l.includes("btc") && l.includes("windows");
-      };
+      return (n) => lower(n) === "onlyonce_btcusd_ea_windows_installer.zip";
     case "btc_mac":
-      return (n) => {
-        const l = lower(n);
-        return l.endsWith(".zip") && l.includes("btc") && l.includes("mac");
-      };
+      return (n) => lower(n) === "onlyonce_btcusd_ea_mac_installer.zip";
     case "guide_cn":
       return (n) => {
         const l = lower(n);
