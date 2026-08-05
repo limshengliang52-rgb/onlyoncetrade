@@ -342,7 +342,7 @@ const plans: Plan[] = [
     slug: "pro",
     name: "OnlyOnce EA Pro",
     tagline: "",
-    price: "$240",
+    price: "$270",
     priceNote: "/ 90 天",
     highlight: true,
     features: PLAN_FEATURES,
