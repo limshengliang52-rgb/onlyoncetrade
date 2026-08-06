@@ -86,7 +86,24 @@ function EALicensesPage() {
     mutationFn: (v: { id: string; status: "active" | "expired" | "suspended" }) =>
       setEALicenseStatus({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "操作失败"),
   });
+  const requestSuspend = useMutation({
+    mutationFn: (id: string) => requestSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "提交暂停申请失败"),
+  });
+  const approveSuspend = useMutation({
+    mutationFn: (id: string) => approveSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "同意暂停失败"),
+  });
+  const rejectSuspend = useMutation({
+    mutationFn: (id: string) => rejectSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "驳回失败"),
+  });
+
 
   const apiBase = useMemo(
     () => (typeof window !== "undefined" ? window.location.origin : "https://onlyoncetrade.com"),
