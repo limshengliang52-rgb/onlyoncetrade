@@ -105,11 +105,12 @@ export function EquityCurve({
       </svg>
 
       <div className="flex justify-between gap-1 border-t border-border/50 px-3 py-2 text-[10px] font-sans text-muted-foreground">
-        {points.map((p) => (
-          <span key={p.label} className="truncate">
+        {points.map((p, i) => (
+          <span key={`${p.label}-${i}`} className="truncate">
             {p.label}
           </span>
         ))}
+
       </div>
     </div>
   );
