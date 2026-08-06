@@ -95,7 +95,9 @@ function EALicensesPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
     onError: (e: any) => alert(e?.message ?? "提交暂停申请失败"),
   });
+  const [confirmSuspendId, setConfirmSuspendId] = useState<string | null>(null);
   const approveSuspend = useMutation({
+
     mutationFn: (id: string) => approveSuspendEALicense({ data: { id } }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
     onError: (e: any) => alert(e?.message ?? "同意暂停失败"),
