@@ -15,6 +15,8 @@ import {
 } from "@/lib/ea-licenses.functions";
 
 import { ArrowLeft, ShieldAlert, Sparkles, Pencil, Trash2, Plus } from "lucide-react";
+import { ConfirmSuspendDialog } from "@/components/ConfirmSuspendDialog";
+
 
 export const Route = createFileRoute("/_authenticated/ea-licenses")({
   component: EALicensesPage,
