@@ -70,6 +70,23 @@ function AdminPage() {
     },
     onError: (e: any) => toast.error(e?.message ?? "暂停失败"),
   });
+  const requestSuspend = useMutation({
+    mutationFn: (v: { id: string }) => requestSuspendSubscription({ data: v }),
+    onSuccess: () => {
+      toast.success("已提交暂停申请，等待管理员同意");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "提交暂停申请失败"),
+  });
+  const rejectSuspend = useMutation({
+    mutationFn: (v: { id: string }) => cancelSuspendRequest({ data: v }),
+    onSuccess: () => {
+      toast.success("已驳回暂停申请");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "驳回失败"),
+  });
+
   const updateUid = useMutation({
     mutationFn: (v: { id: string; mt5_uid: string }) => adminUpdateSubscriptionUid({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
