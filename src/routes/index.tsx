@@ -58,9 +58,8 @@ function Landing() {
       <Features />
       <Pricing />
       <XauBacktest />
+      <BtcBacktest />
       <TradeRecords />
-      <MinCapital />
-
       <MinCapital />
       <Risk />
       <CTA />
