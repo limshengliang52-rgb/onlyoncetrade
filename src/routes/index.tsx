@@ -462,6 +462,20 @@ function PlanCard({ plan }: { plan: Plan }) {
 type MonthlyRow = { m: string; profit: number; pct: number; pf: number; wr: number; trades?: number };
 type StatItem = { label: string; value: string; unit?: string };
 
+/** Smooth start→end illustrative curve (no invented monthly rows). */
+function buildDemoCurve(initialBalance: string, finalBalance: string): EquityPoint[] {
+  const parse = (s: string) => Number(s.replace(/[^0-9.]/g, "")) || 0;
+  const start = parse(initialBalance);
+  const end = parse(finalBalance);
+  const steps = 24;
+  return Array.from({ length: steps + 1 }, (_, i) => {
+    const t = i / steps;
+    const eased = Math.pow(t, 1.6);
+    return { label: i === 0 ? "Start" : i === steps ? "End" : "", value: Number((start + (end - start) * eased).toFixed(2)) };
+  });
+}
+
+
 function StrategyBacktestSection({
   id,
   eyebrow,
@@ -532,19 +546,14 @@ function StrategyBacktestSection({
 
           {/* equity curve */}
           <div className="relative mt-6">
-            {curve && curve.length > 1 ? (
-              <EquityCurve points={curve} />
-            ) : (
-              <div className="rounded-2xl border border-primary/20 bg-background/50 p-5">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                  Equity Curve
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground font-sans">
-                  该策略的月度明细以 MT5 Strategy Tester 原始报告为准，暂不在此展示逐月资金曲线，避免任何推算或美化。
-                </p>
-              </div>
+            <EquityCurve points={curve && curve.length > 1 ? curve : buildDemoCurve(initialBalance, finalBalance)} />
+            {!(curve && curve.length > 1) && (
+              <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground font-sans">
+                该曲线仅为初始资金到最终余额的走势示意，逐月明细以 MT5 Strategy Tester 原始报告为准。
+              </p>
             )}
           </div>
+
 
           <p className="relative mt-4 text-xs text-muted-foreground font-sans">
             初始资金 <span className="text-foreground">{initialBalance}</span> · 最终余额{" "}
