@@ -26,6 +26,9 @@ export type Database = {
           phone: string | null
           product: string
           status: string
+          suspend_request_note: string | null
+          suspend_requested_at: string | null
+          suspend_requested_by: string | null
           uid: string | null
           updated_at: string
         }
@@ -40,6 +43,9 @@ export type Database = {
           phone?: string | null
           product: string
           status?: string
+          suspend_request_note?: string | null
+          suspend_requested_at?: string | null
+          suspend_requested_by?: string | null
           uid?: string | null
           updated_at?: string
         }
@@ -54,6 +60,9 @@ export type Database = {
           phone?: string | null
           product?: string
           status?: string
+          suspend_request_note?: string | null
+          suspend_requested_at?: string | null
+          suspend_requested_by?: string | null
           uid?: string | null
           updated_at?: string
         }
@@ -163,6 +172,9 @@ export type Database = {
           stripe_payment_intent: string | null
           stripe_session_id: string | null
           stripe_subscription_id: string | null
+          suspend_request_note: string | null
+          suspend_requested_at: string | null
+          suspend_requested_by: string | null
           updated_at: string
           user_id: string
         }
@@ -183,6 +195,9 @@ export type Database = {
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
+          suspend_request_note?: string | null
+          suspend_requested_at?: string | null
+          suspend_requested_by?: string | null
           updated_at?: string
           user_id: string
         }
@@ -203,6 +218,9 @@ export type Database = {
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
           stripe_subscription_id?: string | null
+          suspend_request_note?: string | null
+          suspend_requested_at?: string | null
+          suspend_requested_by?: string | null
           updated_at?: string
           user_id?: string
         }

@@ -507,8 +507,63 @@ export const adminUpdateSubscriptionProducts = createServerFn({ method: "POST" }
   });
 
 /**
- * 暂停授权：本地订阅置为 cancelled（EA 授权 API 立即返回 authorized:false），
- * 同时取消 Stripe 自动续费，避免下一期继续扣款。
+ * 申请暂停授权（不会立即停授权）：只写入 suspend_requested_at，
+ * 状态显示为「暂停申请待审核 / 待管理员同意」，需管理员确认后才真正暂停。
+ */
+export const requestSuspendSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; note?: string }) =>
+    z.object({ id: z.string().uuid(), note: z.string().max(300).optional() }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: sub, error: readErr } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id, user_id, suspend_requested_at")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!sub) throw new Error("订阅不存在");
+
+    if (sub.user_id !== context.userId) {
+      await requireAdmin(context);
+    }
+    if (sub.suspend_requested_at) return { ok: true, alreadyPending: true };
+
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        suspend_requested_at: new Date().toISOString(),
+        suspend_requested_by: context.userId,
+        suspend_request_note: data.note ?? null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, alreadyPending: false };
+  });
+
+/** 管理员驳回 / 取消暂停申请 */
+export const cancelSuspendRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        suspend_requested_at: null,
+        suspend_requested_by: null,
+        suspend_request_note: null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/**
+ * 管理员同意暂停：本地订阅置为 cancelled（EA 授权 API 立即返回 authorized:false），
+ * 同时取消 Stripe 自动续费，避免下一期继续扣款。必须先有待审核的暂停申请。
  */
 export const adminSuspendSubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -523,11 +578,14 @@ export const adminSuspendSubscription = createServerFn({ method: "POST" })
 
     const { data: sub, error: readErr } = await supabaseAdmin
       .from("subscriptions")
-      .select("id, stripe_subscription_id")
+      .select("id, stripe_subscription_id, suspend_requested_at")
       .eq("id", data.id)
       .maybeSingle();
     if (readErr) throw new Error(readErr.message);
     if (!sub) throw new Error("订阅不存在");
+    if (!sub.suspend_requested_at) throw new Error("该订阅没有待审核的暂停申请，请先提交暂停申请");
+
+
 
     let stripeCancelled = false;
     let stripeError: string | null = null;
@@ -548,7 +606,11 @@ export const adminSuspendSubscription = createServerFn({ method: "POST" })
         status: "cancelled",
         cancel_at_period_end: true,
         next_billing_at: null,
+        suspend_requested_at: null,
+        suspend_requested_by: null,
+        suspend_request_note: null,
       })
+
       .eq("id", data.id);
     if (error) throw new Error(error.message);
 

@@ -9,7 +9,10 @@ import {
   adminSuspendSubscription,
   adminUpdateSubscriptionUid,
   adminUpsertSubscription,
+  cancelSuspendRequest,
+  requestSuspendSubscription,
 } from "@/lib/subscriptions.functions";
+
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { Sparkles, ArrowLeft, ShieldAlert } from "lucide-react";
@@ -67,6 +70,23 @@ function AdminPage() {
     },
     onError: (e: any) => toast.error(e?.message ?? "暂停失败"),
   });
+  const requestSuspend = useMutation({
+    mutationFn: (v: { id: string }) => requestSuspendSubscription({ data: v }),
+    onSuccess: () => {
+      toast.success("已提交暂停申请，等待管理员同意");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "提交暂停申请失败"),
+  });
+  const rejectSuspend = useMutation({
+    mutationFn: (v: { id: string }) => cancelSuspendRequest({ data: v }),
+    onSuccess: () => {
+      toast.success("已驳回暂停申请");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "驳回失败"),
+  });
+
   const updateUid = useMutation({
     mutationFn: (v: { id: string; mt5_uid: string }) => adminUpdateSubscriptionUid({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-subs"] }),
@@ -204,7 +224,15 @@ function AdminPage() {
                             {s.source === "stripe" ? "Stripe 付款" : "手动"}
                           </span>
                         </td>
-                        <td className="px-4 py-3">{s.status}</td>
+                        <td className="px-4 py-3">
+                          {s.status}
+                          {s.suspend_requested_at && s.status !== "cancelled" && (
+                            <div className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
+                              暂停申请待审核 · 待管理员同意
+                            </div>
+                          )}
+                        </td>
+
                         <td className="px-4 py-3 text-xs text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
                         </td>
@@ -238,21 +266,49 @@ function AdminPage() {
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <button
-                              onClick={() => {
-                                if (
-                                  !confirm(
-                                    "确认暂停此客户授权？\n将立即停止 EA 授权，并取消 Stripe 自动续费。",
+                            {s.suspend_requested_at ? (
+                              <>
+                                <button
+                                  onClick={() => {
+                                    if (
+                                      !confirm(
+                                        "暂停授权后 EA 将无法通过授权检查，是否确认暂停？\n同时会取消 Stripe 自动续费。",
+                                      )
+                                    )
+                                      return;
+                                    suspend.mutate({ id: s.id, environment: getStripeEnvironment() });
+                                  }}
+                                  disabled={suspend.isPending}
+                                  className="rounded-md border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+                                >
+                                  同意暂停
+                                </button>
+                                <button
+                                  onClick={() => rejectSuspend.mutate({ id: s.id })}
+                                  disabled={rejectSuspend.isPending}
+                                  className="rounded-md border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                >
+                                  驳回申请
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  if (
+                                    !confirm(
+                                      "暂停授权需管理员审核。是否提交暂停申请？提交后状态显示「待管理员同意」，需再点击「同意暂停」才会真正停用。",
+                                    )
                                   )
-                                )
-                                  return;
-                                suspend.mutate({ id: s.id, environment: getStripeEnvironment() });
-                              }}
-                              disabled={suspend.isPending}
-                              className="rounded-md border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
-                            >
-                              暂停授权
-                            </button>
+                                    return;
+                                  requestSuspend.mutate({ id: s.id });
+                                }}
+                                disabled={requestSuspend.isPending}
+                                className="rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-[11px] font-bold text-amber-400 hover:bg-amber-500/20 disabled:opacity-50"
+                              >
+                                申请暂停授权
+                              </button>
+                            )}
+
                             <button
                               onClick={() => {
                                 const raw = prompt(

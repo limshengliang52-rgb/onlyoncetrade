@@ -3,13 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  approveSuspendEALicense,
   deleteEALicense,
   extendEALicense,
   listEALicenses,
+  rejectSuspendEALicense,
+  requestSuspendEALicense,
   setEALicenseStatus,
   upsertEALicense,
   type EALicenseInput,
 } from "@/lib/ea-licenses.functions";
+
 import { ArrowLeft, ShieldAlert, Sparkles, Pencil, Trash2, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/ea-licenses")({
@@ -82,7 +86,24 @@ function EALicensesPage() {
     mutationFn: (v: { id: string; status: "active" | "expired" | "suspended" }) =>
       setEALicenseStatus({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "操作失败"),
   });
+  const requestSuspend = useMutation({
+    mutationFn: (id: string) => requestSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "提交暂停申请失败"),
+  });
+  const approveSuspend = useMutation({
+    mutationFn: (id: string) => approveSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "同意暂停失败"),
+  });
+  const rejectSuspend = useMutation({
+    mutationFn: (id: string) => rejectSuspendEALicense({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
+    onError: (e: any) => alert(e?.message ?? "驳回失败"),
+  });
+
 
   const apiBase = useMemo(
     () => (typeof window !== "undefined" ? window.location.origin : "https://onlyoncetrade.com"),
@@ -290,15 +311,27 @@ function EALicensesPage() {
                       <td className="px-4 py-3">
                         <select
                           value={r.status}
-                          onChange={(e) =>
-                            setStatus.mutate({ id: r.id, status: e.target.value as any })
-                          }
+                          onChange={(e) => {
+                            const next = e.target.value as "active" | "expired" | "suspended";
+                            if (next === "suspended") {
+                              if (!confirm("暂停授权需管理员审核。是否提交暂停申请（状态将显示「待管理员同意」）？"))
+                                return;
+                              requestSuspend.mutate(r.id);
+                              return;
+                            }
+                            setStatus.mutate({ id: r.id, status: next });
+                          }}
                           className="rounded border border-border bg-background/60 px-2 py-1 text-xs"
                         >
                           <option value="active">active</option>
                           <option value="suspended">suspended</option>
                           <option value="expired">expired</option>
                         </select>
+                        {r.suspend_requested_at && r.status !== "suspended" && (
+                          <div className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
+                            暂停申请待审核 · 待管理员同意
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-xs text-muted-foreground">
                         {r.expires_at ? new Date(r.expires_at).toLocaleString() : "-"}
@@ -332,12 +365,46 @@ function EALicensesPage() {
                           >
                             自定义
                           </button>
-                          {r.status === "active" ? (
+                          {r.status !== "suspended" && r.suspend_requested_at ? (
+                            <>
+                              <button
+                                onClick={() => {
+                                  if (
+                                    !confirm(
+                                      "暂停授权后 EA 将无法通过授权检查，是否确认暂停？",
+                                    )
+                                  )
+                                    return;
+                                  approveSuspend.mutate(r.id);
+                                }}
+                                disabled={approveSuspend.isPending}
+                                className="rounded-md border border-red-500/50 bg-red-500/10 px-2 py-1 text-[10px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+                              >
+                                同意暂停
+                              </button>
+                              <button
+                                onClick={() => rejectSuspend.mutate(r.id)}
+                                disabled={rejectSuspend.isPending}
+                                className="rounded-md border border-border px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+                              >
+                                驳回申请
+                              </button>
+                            </>
+                          ) : r.status === "active" ? (
                             <button
-                              onClick={() => setStatus.mutate({ id: r.id, status: "suspended" })}
-                              className="rounded-md border border-red-500/40 bg-red-500/5 px-2 py-1 text-[10px] font-semibold text-red-400 hover:bg-red-500/10"
+                              onClick={() => {
+                                if (
+                                  !confirm(
+                                    "暂停授权需管理员审核。是否提交暂停申请（状态将显示「待管理员同意」）？",
+                                  )
+                                )
+                                  return;
+                                requestSuspend.mutate(r.id);
+                              }}
+                              disabled={requestSuspend.isPending}
+                              className="rounded-md border border-amber-500/40 bg-amber-500/5 px-2 py-1 text-[10px] font-semibold text-amber-400 hover:bg-amber-500/10 disabled:opacity-50"
                             >
-                              停用
+                              申请暂停
                             </button>
                           ) : (
                             <button
@@ -347,6 +414,7 @@ function EALicensesPage() {
                               激活
                             </button>
                           )}
+
                           <button
                             onClick={() => {
                               setForm({
