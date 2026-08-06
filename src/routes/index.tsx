@@ -157,7 +157,7 @@ function Hero() {
             <p className="mt-2 text-sm">交易存在风险，策略系统不保证盈利。请确认自身风险承受能力后再开通。</p>
           </div>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
-            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
             <span>已有 <span className="font-semibold text-foreground">{memberCount}</span> 位会员开通 EA 权限</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
