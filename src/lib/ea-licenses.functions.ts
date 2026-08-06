@@ -143,12 +143,16 @@ export const setEALicenseStatus = createServerFn({ method: "POST" })
         throw new Error("暂停授权需先提交暂停申请，并由管理员点击「同意暂停」");
       }
     }
-    const patch: Record<string, unknown> = { status: data.status };
-    if (data.status !== "suspended") {
-      patch["suspend_requested_at"] = null;
-      patch["suspend_requested_by"] = null;
-      patch["suspend_request_note"] = null;
-    }
+    const patch =
+      data.status === "suspended"
+        ? { status: data.status }
+        : {
+            status: data.status,
+            suspend_requested_at: null,
+            suspend_requested_by: null,
+            suspend_request_note: null,
+          };
+
     const { error } = await supabaseAdmin
       .from("ea_licenses")
       .update(patch)
