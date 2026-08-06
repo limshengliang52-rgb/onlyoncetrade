@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-
+import tr1 from "@/assets/tr-1.jpeg.asset.json";
+import tr2 from "@/assets/tr-2.jpeg.asset.json";
+import tr3 from "@/assets/tr-3.jpeg.asset.json";
+import tr4 from "@/assets/tr-4.jpeg.asset.json";
 
 import { PlatformNotice } from "@/components/PlatformNotice";
 import {
