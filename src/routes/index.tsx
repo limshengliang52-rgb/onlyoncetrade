@@ -27,6 +27,8 @@ import {
 
 import ogImage from "@/assets/og-image.jpg";
 import { EquityCurve, type EquityPoint } from "@/components/EquityCurve";
+import { TradeScroller } from "@/components/TradeScroller";
+
 import { getMemberCount } from "@/lib/member-count.functions";
 
 
