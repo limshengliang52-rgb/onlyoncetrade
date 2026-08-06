@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
+import { EquityCurve, type EquityPoint } from "@/components/EquityCurve";
 import { getMemberCount } from "@/lib/member-count.functions";
 
 
