@@ -659,7 +659,8 @@ function XauBacktest() {
         { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
       ]}
       months={[]}
-    />
+      curve={XAU_CURVE}
+
   );
 }
 
