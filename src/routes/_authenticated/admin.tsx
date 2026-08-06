@@ -16,6 +16,8 @@ import {
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { Sparkles, ArrowLeft, ShieldAlert } from "lucide-react";
+import { ConfirmSuspendDialog } from "@/components/ConfirmSuspendDialog";
+
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
@@ -56,7 +58,9 @@ function AdminPage() {
       qc.invalidateQueries({ queryKey: ["admin-subs"] });
     },
   });
+  const [confirmSuspendId, setConfirmSuspendId] = useState<string | null>(null);
   const suspend = useMutation({
+
     mutationFn: (v: { id: string; environment: "sandbox" | "live" }) =>
       adminSuspendSubscription({ data: v }),
     onSuccess: (r: any) => {
@@ -269,16 +273,9 @@ function AdminPage() {
                             {s.suspend_requested_at ? (
                               <>
                                 <button
-                                  onClick={() => {
-                                    if (
-                                      !confirm(
-                                        "暂停授权后 EA 将无法通过授权检查，是否确认暂停？\n同时会取消 Stripe 自动续费。",
-                                      )
-                                    )
-                                      return;
-                                    suspend.mutate({ id: s.id, environment: getStripeEnvironment() });
-                                  }}
+                                  onClick={() => setConfirmSuspendId(s.id)}
                                   disabled={suspend.isPending}
+
                                   className="rounded-md border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-[11px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                                 >
                                   同意暂停
@@ -410,7 +407,18 @@ function AdminPage() {
           </div>
         </section>
       </div>
+      <ConfirmSuspendDialog
+        open={confirmSuspendId !== null}
+        pending={suspend.isPending}
+        onCancel={() => setConfirmSuspendId(null)}
+        onConfirm={() => {
+          if (confirmSuspendId)
+            suspend.mutate({ id: confirmSuspendId, environment: getStripeEnvironment() });
+          setConfirmSuspendId(null);
+        }}
+      />
     </main>
+
   );
 }
 

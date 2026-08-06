@@ -15,6 +15,8 @@ import {
 } from "@/lib/ea-licenses.functions";
 
 import { ArrowLeft, ShieldAlert, Sparkles, Pencil, Trash2, Plus } from "lucide-react";
+import { ConfirmSuspendDialog } from "@/components/ConfirmSuspendDialog";
+
 
 export const Route = createFileRoute("/_authenticated/ea-licenses")({
   component: EALicensesPage,
@@ -93,7 +95,9 @@ function EALicensesPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
     onError: (e: any) => alert(e?.message ?? "提交暂停申请失败"),
   });
+  const [confirmSuspendId, setConfirmSuspendId] = useState<string | null>(null);
   const approveSuspend = useMutation({
+
     mutationFn: (id: string) => approveSuspendEALicense({ data: { id } }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["ea-licenses"] }),
     onError: (e: any) => alert(e?.message ?? "同意暂停失败"),
@@ -368,16 +372,9 @@ function EALicensesPage() {
                           {r.status !== "suspended" && r.suspend_requested_at ? (
                             <>
                               <button
-                                onClick={() => {
-                                  if (
-                                    !confirm(
-                                      "暂停授权后 EA 将无法通过授权检查，是否确认暂停？",
-                                    )
-                                  )
-                                    return;
-                                  approveSuspend.mutate(r.id);
-                                }}
+                                onClick={() => setConfirmSuspendId(r.id)}
                                 disabled={approveSuspend.isPending}
+
                                 className="rounded-md border border-red-500/50 bg-red-500/10 px-2 py-1 text-[10px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                               >
                                 同意暂停
@@ -454,6 +451,16 @@ function EALicensesPage() {
           )}
         </div>
       </div>
+      <ConfirmSuspendDialog
+        open={confirmSuspendId !== null}
+        pending={approveSuspend.isPending}
+        onCancel={() => setConfirmSuspendId(null)}
+        onConfirm={() => {
+          if (confirmSuspendId) approveSuspend.mutate(confirmSuspendId);
+          setConfirmSuspendId(null);
+        }}
+      />
     </main>
+
   );
 }
