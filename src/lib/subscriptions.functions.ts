@@ -586,13 +586,6 @@ export const adminSuspendSubscription = createServerFn({ method: "POST" })
     if (!sub.suspend_requested_at) throw new Error("该订阅没有待审核的暂停申请，请先提交暂停申请");
 
 
-    const { data: sub, error: readErr } = await supabaseAdmin
-      .from("subscriptions")
-      .select("id, stripe_subscription_id")
-      .eq("id", data.id)
-      .maybeSingle();
-    if (readErr) throw new Error(readErr.message);
-    if (!sub) throw new Error("订阅不存在");
 
     let stripeCancelled = false;
     let stripeError: string | null = null;
