@@ -65,7 +65,6 @@ function Landing() {
       <XauBacktest />
       <BtcBacktest />
       <LiveTradeRecords />
-      <TradeRecords />
 
       <MinCapital />
       <Risk />
