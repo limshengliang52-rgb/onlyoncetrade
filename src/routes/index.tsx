@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import ogImage from "@/assets/og-image.jpg";
+import { EquityCurve, type EquityPoint } from "@/components/EquityCurve";
 import { getMemberCount } from "@/lib/member-count.functions";
 
 
@@ -58,6 +59,7 @@ function Landing() {
       <Pricing />
       <XauBacktest />
       <BtcBacktest />
+      <TradeRecords />
       <MinCapital />
       <Risk />
       <CTA />
@@ -155,7 +157,7 @@ function Hero() {
             <p className="mt-2 text-sm">交易存在风险，策略系统不保证盈利。请确认自身风险承受能力后再开通。</p>
           </div>
           <div className="mt-7 flex items-center justify-center gap-3 text-sm text-muted-foreground">
-            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+            <span className="inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
             <span>已有 <span className="font-semibold text-foreground">{memberCount}</span> 位会员开通 EA 权限</span>
           </div>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -472,6 +474,7 @@ function StrategyBacktestSection({
   period,
   stats,
   months,
+  curve,
   showTrades = false,
   tableYearLabel,
 }: {
@@ -486,6 +489,7 @@ function StrategyBacktestSection({
   period: string;
   stats: StatItem[];
   months: MonthlyRow[];
+  curve?: EquityPoint[];
   showTrades?: boolean;
   tableYearLabel: string;
 }) {
@@ -499,33 +503,65 @@ function StrategyBacktestSection({
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
-        <div className="mt-10 card-lux relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-12">
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
-          <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
+        <div className="mt-10 card-lux ring-gold relative overflow-hidden rounded-3xl p-5 sm:p-8 md:p-10">
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" aria-hidden />
+
+          {/* dashboard header */}
+          <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">{tableYearLabel} 年初至今收益</span>
-              <div className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-1">
-                <span className="font-display text-5xl font-bold gold-text sm:text-6xl md:text-7xl leading-none">{headlinePct}</span>
-                <span className="pb-2 font-sans text-base text-muted-foreground sm:text-lg md:text-xl">% ({headlineUsd})</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
+                Strategy Backtest · {tableYearLabel}
+              </span>
+              <h3 className="mt-2 font-display text-xl font-bold sm:text-2xl">
+                OnlyOnce <span className="font-sans">{symbol}</span> EA
+              </h3>
+              <p className="mt-1 break-words text-xs text-muted-foreground/80 font-sans">
+                {period} · {strategyName}
+              </p>
+            </div>
+            <div className="min-w-0 text-left sm:text-right">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Cumulative ROI
               </div>
-              <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                初始资金 <span className="text-foreground font-sans">{initialBalance}</span> · 最终余额 <span className="text-foreground font-sans">{finalBalance}</span>
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground/80 font-sans">
-                回测区间：{period} · 交易品种：{symbol} · 策略名称：{strategyName}
-              </p>
+              <div className="mt-1 font-display text-3xl font-bold leading-none gold-text sm:text-4xl md:text-5xl">
+                {headlinePct}%
+              </div>
+              <div className="mt-1 font-sans text-xs text-muted-foreground">{headlineUsd}</div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {stats.map((s) => (
-                <div key={s.label} className="rounded-xl border border-border/60 bg-background/40 p-4">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
-                  <div className="mt-2 font-display text-xl font-bold text-foreground">
-                    <span className="font-sans">{s.value}</span>
-                    {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
-                  </div>
+          </div>
+
+          {/* equity curve */}
+          <div className="relative mt-6">
+            {curve && curve.length > 1 ? (
+              <EquityCurve points={curve} />
+            ) : (
+              <div className="rounded-2xl border border-primary/20 bg-background/50 p-5">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  Equity Curve
                 </div>
-              ))}
-            </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground font-sans">
+                  该策略的月度明细以 MT5 Strategy Tester 原始报告为准，暂不在此展示逐月资金曲线，避免任何推算或美化。
+                </p>
+              </div>
+            )}
+          </div>
+
+          <p className="relative mt-4 text-xs text-muted-foreground font-sans">
+            初始资金 <span className="text-foreground">{initialBalance}</span> · 最终余额{" "}
+            <span className="text-foreground">{finalBalance}</span>
+          </p>
+
+          {/* metric grid */}
+          <div className="relative mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
+            {stats.map((s) => (
+              <div key={s.label} className="min-w-0 rounded-xl border border-primary/15 bg-background/40 p-4">
+                <div className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
+                <div className="mt-2 font-display text-lg font-bold text-foreground sm:text-xl">
+                  <span className="break-words font-sans">{s.value}</span>
+                  {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -550,7 +586,7 @@ function StrategyBacktestSection({
                 <tbody>
                   {months.map((row, i) => {
                     const positive = row.profit >= 0;
-                    const color = positive ? "text-emerald-400" : "text-red-400";
+                    const color = positive ? "text-primary" : "text-destructive";
                     const sign = positive ? "+" : "";
                     return (
                       <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
@@ -594,12 +630,12 @@ function XauBacktest() {
       period="2026-01-01 – 2026-07-30"
       tableYearLabel="2026"
       stats={[
-        { label: "盈利因子 (PF)", value: "1.33" },
-        { label: "夏普比率", value: "2.86" },
-        { label: "总交易单数", value: "172" },
-        { label: "胜率", value: "33.72", unit: "%" },
-        { label: "余额最大回撤", value: "约 140+", unit: "USD" },
-        { label: "净值最大回撤", value: "约 140+", unit: "USD" },
+        { label: "Profit Factor", value: "1.33" },
+        { label: "Sharpe Ratio", value: "2.86" },
+        { label: "Trades", value: "172" },
+        { label: "Win Rate", value: "33.72", unit: "%" },
+        { label: "Balance Drawdown", value: "约 140+", unit: "USD" },
+        { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
       ]}
       months={[]}
     />
@@ -616,6 +652,16 @@ const BTC_MONTHS: MonthlyRow[] = [
   { m: "Jul", profit: 571.94, pct: 70.69, pf: 3.05, wr: 63.16, trades: 19 },
 ];
 
+const BTC_CURVE: EquityPoint[] = (() => {
+  let bal = 500;
+  const pts: EquityPoint[] = [{ label: "Start", value: bal }];
+  for (const row of BTC_MONTHS) {
+    bal += row.profit;
+    pts.push({ label: row.m, value: Number(bal.toFixed(2)) });
+  }
+  return pts;
+})();
+
 function BtcBacktest() {
   return (
     <StrategyBacktestSection
@@ -630,14 +676,59 @@ function BtcBacktest() {
       period="2026 Jan–Jul"
       tableYearLabel="2026"
       stats={[
-        { label: "盈利因子", value: "2.16" },
-        { label: "胜率", value: "53.33", unit: "%" },
-        { label: "总交易次数", value: "60" },
-        { label: "余额最大回撤", value: "18.43", unit: "%" },
+        { label: "Profit Factor", value: "2.16" },
+        { label: "Win Rate", value: "53.33", unit: "%" },
+        { label: "Trades", value: "60" },
+        { label: "Max Drawdown", value: "18.43", unit: "%" },
       ]}
       months={BTC_MONTHS}
+      curve={BTC_CURVE}
       showTrades
     />
+  );
+}
+
+function TradeRecords() {
+  const slots = [1, 2, 3];
+  return (
+    <section id="trade-records" className="relative border-t border-border/50 py-20 md:py-24">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Trade Records"
+          title={<>会员 <span className="gold-text">分享记录</span></>}
+          sub="此区域用于展示会员自愿分享的交易截图。内容仅供参考，不代表任何收益承诺。"
+          icon={<Activity className="h-4 w-4" />}
+        />
+        <div className="mt-10 -mx-5 overflow-x-auto px-5 pb-2">
+          <div className="flex min-w-0 gap-4 sm:grid sm:grid-cols-3 sm:gap-5">
+            {slots.map((n) => (
+              <div
+                key={n}
+                className="relative w-[78vw] shrink-0 overflow-hidden rounded-2xl border border-primary/20 bg-background/40 p-5 sm:w-auto"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-50" aria-hidden />
+                <div className="relative flex aspect-[4/3] items-center justify-center rounded-xl border border-dashed border-primary/25 bg-surface/40">
+                  <span className="px-4 text-center text-xs leading-relaxed text-muted-foreground font-sans">
+                    等待上传交易截图
+                    <br />
+                    Trade record coming soon
+                  </span>
+                </div>
+                <div className="relative mt-4 flex items-center justify-between gap-2">
+                  <span className="truncate text-sm font-semibold text-foreground">会员记录 #{n}</span>
+                  <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[10px] font-sans text-primary">
+                    Pending
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground font-sans">
+          会员分享记录为个别账户的历史结果，市场环境、资金规模与风险设置不同，结果不可复制。
+        </p>
+      </div>
+    </section>
   );
 }
 
