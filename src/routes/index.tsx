@@ -462,6 +462,20 @@ function PlanCard({ plan }: { plan: Plan }) {
 type MonthlyRow = { m: string; profit: number; pct: number; pf: number; wr: number; trades?: number };
 type StatItem = { label: string; value: string; unit?: string };
 
+/** Smooth start→end illustrative curve (no invented monthly rows). */
+function buildDemoCurve(initialBalance: string, finalBalance: string): EquityPoint[] {
+  const parse = (s: string) => Number(s.replace(/[^0-9.]/g, "")) || 0;
+  const start = parse(initialBalance);
+  const end = parse(finalBalance);
+  const steps = 24;
+  return Array.from({ length: steps + 1 }, (_, i) => {
+    const t = i / steps;
+    const eased = Math.pow(t, 1.6);
+    return { label: i === 0 ? "Start" : i === steps ? "End" : "", value: Number((start + (end - start) * eased).toFixed(2)) };
+  });
+}
+
+
 function StrategyBacktestSection({
   id,
   eyebrow,
