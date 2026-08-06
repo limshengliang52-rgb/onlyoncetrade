@@ -1,33 +1,18 @@
-import { useEffect, useState } from "react";
-
 export type TradeShot = { src: string; symbol: string; roi: string; date: string };
 
 /**
- * Vertical auto-scrolling trade-record showcase.
- * Continuously scrolls images like a slow vertical marquee / 竖向走马灯.
- * One image is mainly in view while the next one gently peeks in from below.
- * Fixed-height container so the page never jumps.
+ * Vertical CSS marquee for trade-record screenshots.
+ * Duplicates the list for a seamless loop, scrolls continuously via CSS,
+ * and pauses on hover. No JavaScript-driven switching.
  */
 export function TradeScroller({
   items,
-  speed = 10000,
+  duration = 32000,
 }: {
   items: TradeShot[];
-  speed?: number;
+  duration?: number;
 }) {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  // Total duration to scroll one full duplicated set (one item per `speed` ms).
-  const duration = Math.max(items.length * speed, 20000);
-
-  useEffect(() => {
-    if (items.length <= 1) return;
-    const t = setInterval(() => setIndex((i) => (i + 1) % items.length), speed);
-    return () => clearInterval(t);
-  }, [items.length, speed]);
-
-  const current = items[index];
+  const loopItems = [...items, ...items];
 
   if (items.length === 0) return null;
 
@@ -45,19 +30,14 @@ export function TradeScroller({
         aria-hidden
       />
 
-      <div
-        className="relative h-[300px] overflow-hidden rounded-xl border border-primary/20 bg-surface/40 sm:h-[380px]"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="group relative h-[300px] overflow-hidden rounded-xl border border-primary/20 bg-surface/40 sm:h-[380px]">
         <div
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-4 group-hover:[animation-play-state:paused]"
           style={{
             animation: `trade-marquee ${duration}ms linear infinite`,
-            animationPlayState: paused ? "paused" : "running",
           }}
         >
-          {[...items, ...items].map((r, i) => (
+          {loopItems.map((r, i) => (
             <div
               key={i}
               className="h-[88%] w-full shrink-0 overflow-hidden rounded-xl border border-primary/20 bg-surface/40"
@@ -74,30 +54,6 @@ export function TradeScroller({
 
         <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-background/70 to-transparent" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-background/70 to-transparent" aria-hidden />
-      </div>
-
-      {current && (
-        <div className="relative mt-3 flex items-center justify-between gap-2">
-          <span className="truncate text-sm font-semibold text-foreground">
-            {current.symbol}
-            <span className="ml-2 font-sans text-xs text-primary">{current.roi}</span>
-          </span>
-          <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[10px] font-sans text-primary">
-            {current.date}
-          </span>
-        </div>
-      )}
-
-      <div className="relative mt-3 flex justify-center gap-1.5">
-        {items.map((_, i) => (
-          <span
-            key={i}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              i === index ? "w-5 bg-primary" : "w-1.5 bg-primary/30"
-            }`}
-            aria-hidden
-          />
-        ))}
       </div>
     </div>
   );
