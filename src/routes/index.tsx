@@ -402,10 +402,10 @@ function PlanCard({ plan }: { plan: Plan }) {
   return (
     <div
       className={
-        "relative flex flex-col rounded-2xl p-8 " +
+        "relative flex flex-col rounded-2xl p-8 group/card " +
         (plan.highlight
-          ? "card-lux ring-gold border border-gold/40"
-          : "card-lux")
+          ? "card-lux ring-gold border border-gold/40 plan-card-hover"
+          : "card-lux plan-card-hover")
       }
     >
       {plan.highlight && (
@@ -446,10 +446,10 @@ function PlanCard({ plan }: { plan: Plan }) {
       <a
         href={`/checkout/${plan.slug}`}
         className={
-          "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition " +
+          "mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 " +
           (plan.highlight
-            ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:brightness-110"
-            : "border border-gold/30 bg-gold/5 text-gold hover:bg-gold/10")
+            ? "bg-gold-gradient text-primary-foreground shadow-[0_10px_30px_-10px_var(--gold)] hover:shadow-[0_10px_45px_-10px_var(--gold)] group-hover/card:shadow-[0_0_35px_-8px_var(--gold)] group-hover/card:brightness-110"
+            : "border border-gold/30 bg-gold/5 text-gold hover:border-gold/50 hover:bg-gold/10 hover:shadow-[0_0_25px_-8px_oklch(0.65_0.18_270/0.35)] group-hover/card:shadow-[0_0_25px_-8px_oklch(0.65_0.18_270/0.3)] group-hover/card:bg-gold/10")
         }
       >
         {plan.cta}
