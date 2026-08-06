@@ -473,6 +473,7 @@ function StrategyBacktestSection({
   period,
   stats,
   months,
+  curve,
   showTrades = false,
   tableYearLabel,
 }: {
@@ -487,6 +488,7 @@ function StrategyBacktestSection({
   period: string;
   stats: StatItem[];
   months: MonthlyRow[];
+  curve?: EquityPoint[];
   showTrades?: boolean;
   tableYearLabel: string;
 }) {
