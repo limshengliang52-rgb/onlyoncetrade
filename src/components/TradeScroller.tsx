@@ -32,7 +32,7 @@ export function TradeScroller({
 
       <div className="group relative h-[300px] overflow-hidden rounded-xl border border-primary/20 bg-surface/40 sm:h-[380px]">
         <div
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-4 group-hover:[animation-play-state:paused]"
           style={{
             animation: `trade-marquee ${duration}ms linear infinite`,
           }}
