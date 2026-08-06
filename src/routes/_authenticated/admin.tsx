@@ -58,7 +58,9 @@ function AdminPage() {
       qc.invalidateQueries({ queryKey: ["admin-subs"] });
     },
   });
+  const [confirmSuspendId, setConfirmSuspendId] = useState<string | null>(null);
   const suspend = useMutation({
+
     mutationFn: (v: { id: string; environment: "sandbox" | "live" }) =>
       adminSuspendSubscription({ data: v }),
     onSuccess: (r: any) => {
