@@ -668,8 +668,9 @@ function XauBacktest() {
         { label: "Balance Drawdown", value: "约 140+", unit: "USD" },
         { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
       ]}
-      months={[]}
+      months={XAU_MONTHS}
       curve={XAU_CURVE}
+      showTrades
     />
 
 
