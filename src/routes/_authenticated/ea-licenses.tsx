@@ -3,13 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  approveSuspendEALicense,
   deleteEALicense,
   extendEALicense,
   listEALicenses,
+  rejectSuspendEALicense,
+  requestSuspendEALicense,
   setEALicenseStatus,
   upsertEALicense,
   type EALicenseInput,
 } from "@/lib/ea-licenses.functions";
+
 import { ArrowLeft, ShieldAlert, Sparkles, Pencil, Trash2, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/ea-licenses")({
