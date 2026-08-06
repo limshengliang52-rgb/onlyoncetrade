@@ -410,7 +410,18 @@ function AdminPage() {
           </div>
         </section>
       </div>
+      <ConfirmSuspendDialog
+        open={confirmSuspendId !== null}
+        pending={suspend.isPending}
+        onCancel={() => setConfirmSuspendId(null)}
+        onConfirm={() => {
+          if (confirmSuspendId)
+            suspend.mutate({ id: confirmSuspendId, environment: getStripeEnvironment() });
+          setConfirmSuspendId(null);
+        }}
+      />
     </main>
+
   );
 }
 
