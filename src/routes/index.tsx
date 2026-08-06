@@ -586,7 +586,7 @@ function StrategyBacktestSection({
                 <tbody>
                   {months.map((row, i) => {
                     const positive = row.profit >= 0;
-                    const color = positive ? "text-emerald-400" : "text-red-400";
+                    const color = positive ? "text-primary" : "text-destructive";
                     const sign = positive ? "+" : "";
                     return (
                       <tr key={row.m} className={i % 2 ? "bg-background/20" : ""}>
