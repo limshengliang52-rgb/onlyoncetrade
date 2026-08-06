@@ -735,7 +735,29 @@ const TRADE_RECORDS = [
   { src: tr4.url, symbol: "XAUUSD", roi: "-177.97%", date: "2026-08-05" },
 ];
 
+function LiveTradeRecords() {
+  return (
+    <section id="live-trade-records" className="relative border-t border-border/50 py-16 md:py-20">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Live Trade Records"
+          title={<>会员 <span className="gold-text">战绩展示</span></>}
+          sub="会员实盘交易截图自动轮播展示。内容仅供参考，不代表收益承诺。"
+          icon={<Activity className="h-4 w-4" />}
+        />
+        <div className="mx-auto mt-10 max-w-md">
+          <TradeScroller items={TRADE_RECORDS} />
+        </div>
+        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground font-sans">
+          内容仅供参考，不代表收益承诺。交易存在风险，请谨慎评估自身资金与风险承受能力。
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function TradeRecords() {
+
   return (
     <section id="trade-records" className="relative border-t border-border/50 py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-5">
