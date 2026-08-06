@@ -224,7 +224,15 @@ function AdminPage() {
                             {s.source === "stripe" ? "Stripe 付款" : "手动"}
                           </span>
                         </td>
-                        <td className="px-4 py-3">{s.status}</td>
+                        <td className="px-4 py-3">
+                          {s.status}
+                          {s.suspend_requested_at && s.status !== "cancelled" && (
+                            <div className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
+                              暂停申请待审核 · 待管理员同意
+                            </div>
+                          )}
+                        </td>
+
                         <td className="px-4 py-3 text-xs text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
                         </td>
