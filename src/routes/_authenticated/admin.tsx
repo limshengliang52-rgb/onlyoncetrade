@@ -16,6 +16,8 @@ import {
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { Sparkles, ArrowLeft, ShieldAlert } from "lucide-react";
+import { ConfirmSuspendDialog } from "@/components/ConfirmSuspendDialog";
+
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
