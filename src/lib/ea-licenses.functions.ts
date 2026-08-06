@@ -132,10 +132,102 @@ export const setEALicenseStatus = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await requireAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (data.status === "suspended") {
+      const { data: row } = await supabaseAdmin
+        .from("ea_licenses")
+        .select("suspend_requested_at")
+        .eq("id", data.id)
+        .maybeSingle();
+      if (!row) throw new Error("授权不存在");
+      if (!(row as any).suspend_requested_at) {
+        throw new Error("暂停授权需先提交暂停申请，并由管理员点击「同意暂停」");
+      }
+    }
+    const patch: Record<string, unknown> = { status: data.status };
+    if (data.status !== "suspended") {
+      patch["suspend_requested_at"] = null;
+      patch["suspend_requested_by"] = null;
+      patch["suspend_request_note"] = null;
+    }
     const { error } = await supabaseAdmin
       .from("ea_licenses")
-      .update({ status: data.status })
+      .update(patch)
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/**
+ * 提交暂停授权申请：不会立即停用授权，仅标记为「待管理员同意」。
+ */
+export const requestSuspendEALicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; note?: string }) =>
+    z.object({ id: z.string().uuid(), note: z.string().max(300).optional() }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row } = await supabaseAdmin
+      .from("ea_licenses")
+      .select("id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!row) throw new Error("授权不存在");
+    const { error } = await supabaseAdmin
+      .from("ea_licenses")
+      .update({
+        suspend_requested_at: new Date().toISOString(),
+        suspend_requested_by: context.userId,
+        suspend_request_note: data.note ?? null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** 管理员同意暂停：授权真正变为 suspended（EA 授权检查将不通过） */
+export const approveSuspendEALicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row } = await supabaseAdmin
+      .from("ea_licenses")
+      .select("suspend_requested_at")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!row) throw new Error("授权不存在");
+    if (!(row as any).suspend_requested_at) throw new Error("没有待审核的暂停申请");
+    const { error } = await supabaseAdmin
+      .from("ea_licenses")
+      .update({
+        status: "suspended",
+        suspend_requested_at: null,
+        suspend_requested_by: null,
+        suspend_request_note: null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** 管理员驳回暂停申请 */
+export const rejectSuspendEALicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("ea_licenses")
+      .update({
+        suspend_requested_at: null,
+        suspend_requested_by: null,
+        suspend_request_note: null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
