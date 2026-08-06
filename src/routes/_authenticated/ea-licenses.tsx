@@ -454,6 +454,16 @@ function EALicensesPage() {
           )}
         </div>
       </div>
+      <ConfirmSuspendDialog
+        open={confirmSuspendId !== null}
+        pending={approveSuspend.isPending}
+        onCancel={() => setConfirmSuspendId(null)}
+        onConfirm={() => {
+          if (confirmSuspendId) approveSuspend.mutate(confirmSuspendId);
+          setConfirmSuspendId(null);
+        }}
+      />
     </main>
+
   );
 }
