@@ -499,33 +499,65 @@ function StrategyBacktestSection({
           icon={<TrendingUp className="h-4 w-4" />}
         />
 
-        <div className="mt-10 card-lux relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-12">
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/10 blur-3xl" aria-hidden />
-          <div className="relative grid gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
+        <div className="mt-10 card-lux ring-gold relative overflow-hidden rounded-3xl p-5 sm:p-8 md:p-10">
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" aria-hidden />
+
+          {/* dashboard header */}
+          <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">{tableYearLabel} 年初至今收益</span>
-              <div className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-1">
-                <span className="font-display text-5xl font-bold gold-text sm:text-6xl md:text-7xl leading-none">{headlinePct}</span>
-                <span className="pb-2 font-sans text-base text-muted-foreground sm:text-lg md:text-xl">% ({headlineUsd})</span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
+                Strategy Backtest · {tableYearLabel}
+              </span>
+              <h3 className="mt-2 font-display text-xl font-bold sm:text-2xl">
+                OnlyOnce <span className="font-sans">{symbol}</span> EA
+              </h3>
+              <p className="mt-1 break-words text-xs text-muted-foreground/80 font-sans">
+                {period} · {strategyName}
+              </p>
+            </div>
+            <div className="min-w-0 text-left sm:text-right">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Cumulative ROI
               </div>
-              <p className="mt-4 text-sm text-muted-foreground md:text-base">
-                初始资金 <span className="text-foreground font-sans">{initialBalance}</span> · 最终余额 <span className="text-foreground font-sans">{finalBalance}</span>
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground/80 font-sans">
-                回测区间：{period} · 交易品种：{symbol} · 策略名称：{strategyName}
-              </p>
+              <div className="mt-1 font-display text-3xl font-bold leading-none gold-text sm:text-4xl md:text-5xl">
+                {headlinePct}%
+              </div>
+              <div className="mt-1 font-sans text-xs text-muted-foreground">{headlineUsd}</div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {stats.map((s) => (
-                <div key={s.label} className="rounded-xl border border-border/60 bg-background/40 p-4">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
-                  <div className="mt-2 font-display text-xl font-bold text-foreground">
-                    <span className="font-sans">{s.value}</span>
-                    {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
-                  </div>
+          </div>
+
+          {/* equity curve */}
+          <div className="relative mt-6">
+            {curve && curve.length > 1 ? (
+              <EquityCurve points={curve} />
+            ) : (
+              <div className="rounded-2xl border border-primary/20 bg-background/50 p-5">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  Equity Curve
                 </div>
-              ))}
-            </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground font-sans">
+                  该策略的月度明细以 MT5 Strategy Tester 原始报告为准，暂不在此展示逐月资金曲线，避免任何推算或美化。
+                </p>
+              </div>
+            )}
+          </div>
+
+          <p className="relative mt-4 text-xs text-muted-foreground font-sans">
+            初始资金 <span className="text-foreground">{initialBalance}</span> · 最终余额{" "}
+            <span className="text-foreground">{finalBalance}</span>
+          </p>
+
+          {/* metric grid */}
+          <div className="relative mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
+            {stats.map((s) => (
+              <div key={s.label} className="min-w-0 rounded-xl border border-primary/15 bg-background/40 p-4">
+                <div className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
+                <div className="mt-2 font-display text-lg font-bold text-foreground sm:text-xl">
+                  <span className="break-words font-sans">{s.value}</span>
+                  {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
