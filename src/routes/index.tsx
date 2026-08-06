@@ -625,8 +625,20 @@ function StrategyBacktestSection({
   );
 }
 
+const XAU_CURVE: EquityPoint[] = [
+  { label: "Start", value: 500 },
+  { label: "Jan", value: 619.32 },
+  { label: "Feb", value: 673.52 },
+  { label: "Mar", value: 1016.33 },
+  { label: "Apr", value: 1084.02 },
+  { label: "May", value: 1033.4 },
+  { label: "Jun", value: 1358.13 },
+  { label: "Jul", value: 1615.2 },
+];
+
 function XauBacktest() {
   return (
+
     <StrategyBacktestSection
       id="backtest"
       eyebrow="回测报告"
@@ -647,7 +659,10 @@ function XauBacktest() {
         { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
       ]}
       months={[]}
+      curve={XAU_CURVE}
     />
+
+
   );
 }
 
