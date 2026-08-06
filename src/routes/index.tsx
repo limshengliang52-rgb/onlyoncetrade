@@ -630,12 +630,12 @@ function XauBacktest() {
       period="2026-01-01 – 2026-07-30"
       tableYearLabel="2026"
       stats={[
-        { label: "盈利因子 (PF)", value: "1.33" },
-        { label: "夏普比率", value: "2.86" },
-        { label: "总交易单数", value: "172" },
-        { label: "胜率", value: "33.72", unit: "%" },
-        { label: "余额最大回撤", value: "约 140+", unit: "USD" },
-        { label: "净值最大回撤", value: "约 140+", unit: "USD" },
+        { label: "Profit Factor", value: "1.33" },
+        { label: "Sharpe Ratio", value: "2.86" },
+        { label: "Trades", value: "172" },
+        { label: "Win Rate", value: "33.72", unit: "%" },
+        { label: "Balance Drawdown", value: "约 140+", unit: "USD" },
+        { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
       ]}
       months={[]}
     />
