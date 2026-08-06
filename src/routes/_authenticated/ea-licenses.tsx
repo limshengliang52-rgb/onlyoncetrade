@@ -372,16 +372,9 @@ function EALicensesPage() {
                           {r.status !== "suspended" && r.suspend_requested_at ? (
                             <>
                               <button
-                                onClick={() => {
-                                  if (
-                                    !confirm(
-                                      "暂停授权后 EA 将无法通过授权检查，是否确认暂停？",
-                                    )
-                                  )
-                                    return;
-                                  approveSuspend.mutate(r.id);
-                                }}
+                                onClick={() => setConfirmSuspendId(r.id)}
                                 disabled={approveSuspend.isPending}
+
                                 className="rounded-md border border-red-500/50 bg-red-500/10 px-2 py-1 text-[10px] font-bold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                               >
                                 同意暂停
