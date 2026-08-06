@@ -606,7 +606,11 @@ export const adminSuspendSubscription = createServerFn({ method: "POST" })
         status: "cancelled",
         cancel_at_period_end: true,
         next_billing_at: null,
+        suspend_requested_at: null,
+        suspend_requested_by: null,
+        suspend_request_note: null,
       })
+
       .eq("id", data.id);
     if (error) throw new Error(error.message);
 
