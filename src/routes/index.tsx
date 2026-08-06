@@ -625,6 +625,16 @@ function StrategyBacktestSection({
   );
 }
 
+const XAU_MONTHS: MonthlyRow[] = [
+  { m: "Jan", profit: 119.32, pct: 23.86, pf: 1.26, wr: 29.03, trades: 31 },
+  { m: "Feb", profit: 54.2, pct: 8.75, pf: 1.13, wr: 19.05, trades: 21 },
+  { m: "Mar", profit: 342.81, pct: 50.9, pf: 1.54, wr: 37.5, trades: 24 },
+  { m: "Apr", profit: 67.69, pct: 6.66, pf: 1.1, wr: 35.29, trades: 34 },
+  { m: "May", profit: -50.63, pct: -4.67, pf: 0.88, wr: 29.17, trades: 24 },
+  { m: "Jun", profit: 324.74, pct: 31.42, pf: 1.88, wr: 40.0, trades: 20 },
+  { m: "Jul", profit: 257.07, pct: 18.93, pf: 1.61, wr: 38.1, trades: 21 },
+];
+
 const XAU_CURVE: EquityPoint[] = [
   { label: "Start", value: 500 },
   { label: "Jan", value: 619.32 },
