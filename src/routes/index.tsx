@@ -660,6 +660,8 @@ function XauBacktest() {
       ]}
       months={[]}
       curve={XAU_CURVE}
+    />
+
 
   );
 }
