@@ -723,8 +723,14 @@ function BtcBacktest() {
   );
 }
 
+const TRADE_RECORDS = [
+  { src: tr1.url, symbol: "XAUUSD", roi: "+354.02%", date: "2026-07-28" },
+  { src: tr2.url, symbol: "XAUUSD", roi: "+455.04%", date: "2026-07-30" },
+  { src: tr3.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-05" },
+  { src: tr4.url, symbol: "XAUUSD", roi: "-177.97%", date: "2026-08-05" },
+];
+
 function TradeRecords() {
-  const slots = [1, 2, 3];
   return (
     <section id="trade-records" className="relative border-t border-border/50 py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-5">
@@ -735,24 +741,25 @@ function TradeRecords() {
           icon={<Activity className="h-4 w-4" />}
         />
         <div className="mt-10 -mx-5 overflow-x-auto px-5 pb-2">
-          <div className="flex min-w-0 gap-4 sm:grid sm:grid-cols-3 sm:gap-5">
-            {slots.map((n) => (
+          <div className="flex min-w-0 gap-4 sm:grid sm:grid-cols-4 sm:gap-5">
+            {TRADE_RECORDS.map((r, i) => (
               <div
-                key={n}
-                className="relative w-[78vw] shrink-0 overflow-hidden rounded-2xl border border-primary/20 bg-background/40 p-5 sm:w-auto"
+                key={i}
+                className="relative w-[70vw] shrink-0 overflow-hidden rounded-2xl border border-primary/20 bg-background/40 p-4 sm:w-auto"
               >
                 <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-50" aria-hidden />
-                <div className="relative flex aspect-[4/3] items-center justify-center rounded-xl border border-dashed border-primary/25 bg-surface/40">
-                  <span className="px-4 text-center text-xs leading-relaxed text-muted-foreground font-sans">
-                    等待上传交易截图
-                    <br />
-                    Trade record coming soon
-                  </span>
+                <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-surface/40">
+                  <img
+                    src={r.src}
+                    alt={`会员分享的 ${r.symbol} 交易记录截图 ${r.roi}`}
+                    loading="lazy"
+                    className="h-auto w-full object-cover"
+                  />
                 </div>
                 <div className="relative mt-4 flex items-center justify-between gap-2">
-                  <span className="truncate text-sm font-semibold text-foreground">会员记录 #{n}</span>
+                  <span className="truncate text-sm font-semibold text-foreground">{r.symbol}</span>
                   <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[10px] font-sans text-primary">
-                    Pending
+                    {r.date}
                   </span>
                 </div>
               </div>
