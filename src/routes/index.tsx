@@ -65,7 +65,6 @@ function Landing() {
       <XauBacktest />
       <BtcBacktest />
       <LiveTradeRecords />
-      <TradeRecords />
 
       <MinCapital />
       <Risk />
@@ -752,51 +751,6 @@ function LiveTradeRecords() {
         </div>
         <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground font-sans">
           内容仅供参考，不代表收益承诺。交易存在风险，请谨慎评估自身资金与风险承受能力。
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function TradeRecords() {
-
-  return (
-    <section id="trade-records" className="relative border-t border-border/50 py-20 md:py-24">
-      <div className="mx-auto max-w-6xl px-5">
-        <SectionHeader
-          eyebrow="Trade Records"
-          title={<>会员 <span className="gold-text">分享记录</span></>}
-          sub="此区域用于展示会员自愿分享的交易截图。内容仅供参考，不代表任何收益承诺。"
-          icon={<Activity className="h-4 w-4" />}
-        />
-        <div className="mt-10 -mx-5 overflow-x-auto px-5 pb-2">
-          <div className="flex min-w-0 gap-4 sm:grid sm:grid-cols-4 sm:gap-5">
-            {TRADE_RECORDS.map((r, i) => (
-              <div
-                key={i}
-                className="relative w-[70vw] shrink-0 overflow-hidden rounded-2xl border border-primary/20 bg-background/40 p-4 sm:w-auto"
-              >
-                <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-50" aria-hidden />
-                <div className="relative overflow-hidden rounded-xl border border-primary/20 bg-surface/40">
-                  <img
-                    src={r.src}
-                    alt={`会员分享的 ${r.symbol} 交易记录截图 ${r.roi}`}
-                    loading="lazy"
-                    className="h-auto w-full object-cover"
-                  />
-                </div>
-                <div className="relative mt-4 flex items-center justify-between gap-2">
-                  <span className="truncate text-sm font-semibold text-foreground">{r.symbol}</span>
-                  <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[10px] font-sans text-primary">
-                    {r.date}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground font-sans">
-          会员分享记录为个别账户的历史结果，市场环境、资金规模与风险设置不同，结果不可复制。
         </p>
       </div>
     </section>
