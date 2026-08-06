@@ -4,41 +4,64 @@ export type TradeShot = { src: string; symbol: string; roi: string; date: string
 
 /**
  * Vertical auto-scrolling trade-record showcase.
- * Shows one screenshot at a time, sliding upward on a loop.
+ * Continuously scrolls images like a slow vertical marquee / 竖向走马灯.
+ * One image is mainly in view while the next one gently peeks in from below.
  * Fixed-height container so the page never jumps.
  */
 export function TradeScroller({
   items,
-  interval = 3500,
+  speed = 10000,
 }: {
   items: TradeShot[];
-  interval?: number;
+  speed?: number;
 }) {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  // Total duration to scroll one full duplicated set (one item per `speed` ms).
+  const duration = Math.max(items.length * speed, 20000);
 
   useEffect(() => {
     if (items.length <= 1) return;
-    const t = setInterval(() => setIndex((i) => (i + 1) % items.length), interval);
+    const t = setInterval(() => setIndex((i) => (i + 1) % items.length), speed);
     return () => clearInterval(t);
-  }, [items.length, interval]);
+  }, [items.length, speed]);
 
   const current = items[index];
 
+  if (items.length === 0) return null;
+
   return (
     <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-background/50 p-3 sm:p-4">
+      <style>{`
+        @keyframes trade-marquee {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+      `}</style>
       <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-50" aria-hidden />
       <div
         className="pointer-events-none absolute -right-10 top-0 h-40 w-40 rounded-full bg-primary/15 blur-3xl"
         aria-hidden
       />
 
-      <div className="relative h-[300px] overflow-hidden rounded-xl border border-primary/20 bg-surface/40 sm:h-[380px]">
+      <div
+        className="relative h-[300px] overflow-hidden rounded-xl border border-primary/20 bg-surface/40 sm:h-[380px]"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
         <div
-          className="h-full w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ transform: `translateY(-${index * 100}%)` }}
+          className="flex flex-col items-center gap-4"
+          style={{
+            animation: `trade-marquee ${duration}ms linear infinite`,
+            animationPlayState: paused ? "paused" : "running",
+          }}
         >
-          {items.map((r, i) => (
-            <div key={i} className="h-full w-full">
+          {[...items, ...items].map((r, i) => (
+            <div
+              key={i}
+              className="h-[88%] w-full shrink-0 overflow-hidden rounded-xl border border-primary/20 bg-surface/40"
+            >
               <img
                 src={r.src}
                 alt={`会员 ${r.symbol} 交易战绩截图 ${r.roi}`}
