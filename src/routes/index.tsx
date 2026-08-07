@@ -748,9 +748,8 @@ function LiveTradeRecords() {
         <div className="mx-auto mt-10 max-w-md">
           <TradeScroller items={TRADE_RECORDS} />
         </div>
-        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground font-sans">
-          内容仅供参考，不代表收益承诺。交易存在风险，请谨慎评估自身资金与风险承受能力。
-        </p>
+        
+
       </div>
     </section>
   );
