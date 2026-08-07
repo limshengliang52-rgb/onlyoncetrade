@@ -743,7 +743,6 @@ function LiveTradeRecords() {
         <SectionHeader
           eyebrow="Live Trade Records"
           title={<>会员 <span className="gold-text">战绩展示</span></>}
-          sub="会员实盘交易截图自动轮播展示。内容仅供参考，不代表收益承诺。"
           icon={<Activity className="h-4 w-4" />}
         />
         <div className="mx-auto mt-10 max-w-md">
