@@ -734,6 +734,9 @@ const TRADE_RECORDS = [
   { src: tr2.url, symbol: "XAUUSD", roi: "+455.04%", date: "2026-07-30" },
   { src: tr3.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-05" },
   { src: tr4.url, symbol: "XAUUSD", roi: "-177.97%", date: "2026-08-05" },
+  { src: tr5.url, symbol: "XAUUSD", roi: "+554.53%", date: "2026-08-05" },
+  { src: tr6.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-07" },
+  { src: tr7.url, symbol: "BTCUSD", roi: "+498.06%", date: "2026-08-07" },
 ];
 
 function LiveTradeRecords() {
