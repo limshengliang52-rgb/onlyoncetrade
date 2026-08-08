@@ -6,6 +6,8 @@ import tr4 from "@/assets/tr-4.jpeg.asset.json";
 import tr5 from "@/assets/tr-5.jpeg.asset.json";
 import tr6 from "@/assets/tr-6.jpeg.asset.json";
 import tr7 from "@/assets/tr-7.jpeg.asset.json";
+import tr8 from "@/assets/tr-8.jpeg.asset.json";
+import tr9 from "@/assets/tr-9.jpeg.asset.json";
 
 import { PlatformNotice } from "@/components/PlatformNotice";
 import {
@@ -740,6 +742,8 @@ const TRADE_RECORDS = [
   { src: tr5.url, symbol: "XAUUSD", roi: "+554.53%", date: "2026-08-05" },
   { src: tr6.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-07" },
   { src: tr7.url, symbol: "BTCUSD", roi: "+498.06%", date: "2026-08-07" },
+  { src: tr8.url, symbol: "XAUUSD", roi: "+755.52%", date: "2026-08-07" },
+  { src: tr9.url, symbol: "XAUUSD", roi: "+682.58%", date: "2026-08-08" },
 ];
 
 function LiveTradeRecords() {
