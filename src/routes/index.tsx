@@ -1,3 +1,4 @@
+import { SectionRail } from "@/components/SectionRail";
 import { createFileRoute } from "@tanstack/react-router";
 import tr1 from "@/assets/tr-1.jpeg.asset.json";
 import tr2 from "@/assets/tr-2.jpeg.asset.json";
@@ -76,6 +77,7 @@ function Landing() {
       <CTA />
       <Strategy />
       <Footer />
+      <SectionRail />
       <FloatingWhatsApp />
     </main>
   );
