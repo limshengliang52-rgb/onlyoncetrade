@@ -76,6 +76,7 @@ function Landing() {
       <CTA />
       <Strategy />
       <Footer />
+      <SectionRail />
       <FloatingWhatsApp />
     </main>
   );
