@@ -5,6 +5,8 @@ const SECTIONS = [
   { id: "how", label: "开通流程" },
   { id: "features", label: "功能" },
   { id: "pricing", label: "订阅方案" },
+  { id: "backtest", label: "回测数据" },
+  { id: "live-trade-records", label: "会员战绩" },
   { id: "risk", label: "风险说明" },
 ];
 
