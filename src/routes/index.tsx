@@ -717,8 +717,8 @@ function BtcBacktest() {
       eyebrow="回测报告"
       symbol="BTCUSD"
       strategyName="OnlyOnce BTC EA"
-      headlinePct="+176.21"
-      headlineUsd="+881.04 USD"
+      headlinePct="+145"
+      headlineUsd="+726.76 USD"
       initialBalance="500 USD"
       finalBalance="1,381.04 USD"
       period="2026 Jan–Jul"
@@ -727,7 +727,7 @@ function BtcBacktest() {
         { label: "Profit Factor", value: "2.16" },
         { label: "Win Rate", value: "53.33", unit: "%" },
         { label: "Trades", value: "60" },
-        { label: "Max Drawdown", value: "18.43", unit: "%" },
+        { label: "Max Drawdown", value: "133", unit: "USD" },
       ]}
       months={BTC_MONTHS}
       curve={BTC_CURVE}
