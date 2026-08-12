@@ -691,13 +691,13 @@ function XauBacktest() {
 }
 
 const BTC_MONTHS: MonthlyRow[] = [
-  { m: "Jan", profit: 54.39, pct: 10.88, pf: 1.96, wr: 57.14, trades: 7 },
-  { m: "Feb", profit: 10.0, pct: 1.8, pf: 1.55, wr: 50.0, trades: 2 },
-  { m: "Mar", profit: -26.25, pct: -4.65, pf: 0.7, wr: 28.57, trades: 7 },
-  { m: "Apr", profit: 147.72, pct: 27.45, pf: 3.79, wr: 66.67, trades: 9 },
-  { m: "May", profit: 199.93, pct: 29.15, pf: 4.06, wr: 71.43, trades: 7 },
-  { m: "Jun", profit: -76.67, pct: -8.66, pf: 0.61, wr: 22.22, trades: 9 },
-  { m: "Jul", profit: 571.94, pct: 70.69, pf: 3.05, wr: 63.16, trades: 19 },
+  { m: "Jan", profit: 55.52, pct: 11.10, pf: 1.97, wr: 57.14, trades: 7 },
+  { m: "Feb", profit: 10.05, pct: 1.81, pf: 1.55, wr: 50.00, trades: 2 },
+  { m: "Mar", profit: -27.27, pct: -4.82, pf: 0.70, wr: 28.57, trades: 7 },
+  { m: "Apr", profit: 194.00, pct: 35.76, pf: 4.66, wr: 70.00, trades: 10 },
+  { m: "May", profit: 112.49, pct: 14.88, pf: 1.84, wr: 55.56, trades: 9 },
+  { m: "Jun", profit: -60.79, pct: -6.99, pf: 0.75, wr: 27.27, trades: 11 },
+  { m: "Jul", profit: 841.25, pct: 103.27, pf: 3.85, wr: 68.18, trades: 22 },
 ];
 
 const BTC_CURVE: EquityPoint[] = (() => {
@@ -717,17 +717,17 @@ function BtcBacktest() {
       eyebrow="回测报告"
       symbol="BTCUSD"
       strategyName="OnlyOnce BTC EA"
-      headlinePct="+145"
-      headlineUsd="+726.76 USD"
+      headlinePct="+225.05"
+      headlineUsd="+1,125.25 USD"
       initialBalance="500 USD"
-      finalBalance="1,381.04 USD"
+      finalBalance="1,625.25 USD"
       period="2026 Jan–Jul"
       tableYearLabel="2026"
       stats={[
-        { label: "Profit Factor", value: "2.16" },
-        { label: "Win Rate", value: "53.33", unit: "%" },
-        { label: "Trades", value: "60" },
-        { label: "Max Drawdown", value: "133", unit: "USD" },
+        { label: "Profit Factor", value: "2.21" },
+        { label: "Win Rate", value: "54.41", unit: "%" },
+        { label: "Trades", value: "68" },
+        { label: "Balance Max Drawdown", value: "22", unit: "%" },
       ]}
       months={BTC_MONTHS}
       curve={BTC_CURVE}
