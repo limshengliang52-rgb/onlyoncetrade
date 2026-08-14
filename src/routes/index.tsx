@@ -528,6 +528,7 @@ function StrategyBacktestSection({
           title={
             <span style={{ textWrap: "normal" }}>
               <span className="block whitespace-nowrap md:inline">OnlyOnce <span className="font-sans">{symbol}</span> EA</span>
+              {" "}
               <span
                 className="block whitespace-nowrap gold-text md:inline"
                 style={{ wordBreak: "keep-all", overflowWrap: "normal" }}
