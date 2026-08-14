@@ -85,8 +85,32 @@
   }
   h1, h2, h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
+    text-wrap: balance;
+    line-break: strict;
   }
+  p, li {
+    text-wrap: pretty;
+  }
+}
+
+@utility mobile-heading {
+  word-break: keep-all;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  line-break: strict;
+}
+
+@utility mobile-copy {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+  line-break: auto;
+}
+
+@utility phrase {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 @utility gold-text {
