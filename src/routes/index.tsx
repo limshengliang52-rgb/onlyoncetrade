@@ -525,7 +525,13 @@ function StrategyBacktestSection({
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
           eyebrow={eyebrow}
-          title={<>OnlyOnce <span className="font-sans">{symbol}</span> EA <span className="gold-text">回测战绩</span></>}
+          title={
+            <>
+              <span className="whitespace-nowrap">OnlyOnce <span className="font-sans">{symbol}</span> EA</span>
+              <br className="md:hidden" />
+              <span className="gold-text whitespace-nowrap">回测战绩</span>
+            </>
+          }
           sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
           icon={<TrendingUp className="h-4 w-4" />}
         />
