@@ -1,14 +1,9 @@
-import { SectionRail } from "@/components/SectionRail";
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import tr1 from "@/assets/tr-1.jpeg.asset.json";
 import tr2 from "@/assets/tr-2.jpeg.asset.json";
 import tr3 from "@/assets/tr-3.jpeg.asset.json";
 import tr4 from "@/assets/tr-4.jpeg.asset.json";
-import tr5 from "@/assets/tr-5.jpeg.asset.json";
-import tr6 from "@/assets/tr-6.jpeg.asset.json";
-import tr7 from "@/assets/tr-7.jpeg.asset.json";
-import tr8 from "@/assets/tr-8.jpeg.asset.json";
-import tr9 from "@/assets/tr-9.jpeg.asset.json";
 
 import { PlatformNotice } from "@/components/PlatformNotice";
 import {
@@ -60,12 +55,26 @@ export const Route = createFileRoute("/")({
 
 const WHATSAPP_URL = "https://wa.me/60136330303?text=" + encodeURIComponent("你好，我想咨询 OnlyOnce EA Trade");
 
+const SECTION_NAV_ITEMS = [
+  { id: "top", label: "MT5 EA" },
+  { id: "how", label: "How it works" },
+  { id: "features", label: "Features" },
+  { id: "pricing", label: "Pricing" },
+  { id: "backtest", label: "回测报告" },
+  { id: "btc-backtest", label: "回测报告" },
+  { id: "live-trade-records", label: "Live Trade Records" },
+  { id: "capital", label: "Minimum Capital" },
+  { id: "risk", label: "Risk Disclosure" },
+  { id: "cta", label: "Get Started" },
+  { id: "strategy", label: "Strategy" },
+];
+
 function Landing() {
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-gold/30 selection:text-foreground">
       <Nav />
+      <SectionRail />
       <Hero />
-      <Strategy />
       <HowItWorks />
       <Features />
       <Pricing />
@@ -76,10 +85,84 @@ function Landing() {
       <MinCapital />
       <Risk />
       <CTA />
+      <Strategy />
       <Footer />
-      <SectionRail />
       <FloatingWhatsApp />
     </main>
+  );
+}
+
+function SectionRail() {
+  const [activeId, setActiveId] = useState(SECTION_NAV_ITEMS[0].id);
+
+  useEffect(() => {
+    const sections = SECTION_NAV_ITEMS
+      .map((item) => document.getElementById(item.id))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible?.target.id) {
+          setActiveId(visible.target.id);
+        }
+      },
+      {
+        rootMargin: "-28% 0px -52% 0px",
+        threshold: [0.12, 0.25, 0.5, 0.75],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <nav
+      aria-label="页面区块导航"
+      className="fixed right-7 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-end gap-3 xl:flex"
+    >
+      {SECTION_NAV_ITEMS.map((item, index) => {
+        const active = item.id === activeId;
+        return (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            aria-current={active ? "true" : undefined}
+            className="group flex items-center gap-3 text-right"
+          >
+            <span
+              className={
+                "max-w-0 overflow-hidden whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] opacity-0 transition-all duration-300 group-hover:max-w-48 group-hover:opacity-100 " +
+                (active ? "max-w-48 text-foreground opacity-100" : "text-muted-foreground")
+              }
+            >
+              {String(index + 1).padStart(2, "0")} · {item.label}
+            </span>
+            <span
+              className={
+                "grid h-5 w-5 place-items-center rounded-full border transition-all duration-300 " +
+                (active
+                  ? "border-primary/70 bg-primary/15 shadow-[0_0_18px_oklch(0.65_0.18_270/0.45)]"
+                  : "border-border/70 bg-background/40 group-hover:border-primary/45 group-hover:bg-primary/10")
+              }
+            >
+              <span
+                className={
+                  "h-1.5 w-1.5 rounded-full transition-all duration-300 " +
+                  (active ? "bg-primary" : "bg-muted-foreground/40 group-hover:bg-primary/70")
+                }
+              />
+            </span>
+          </a>
+        );
+      })}
+    </nav>
   );
 }
 
@@ -156,16 +239,17 @@ function Hero() {
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
             MT5 EA · 黄金与 BTC 策略
           </span>
-          <h1
-            className="mt-6 font-display text-[30px] font-bold tracking-tight sm:text-5xl md:text-6xl"
-            style={{ wordBreak: "keep-all", overflowWrap: "normal", textWrap: "balance", lineHeight: 1.12 }}
-          >
-            <span className="block">AI 自动化交易系统</span>
-            <span className="mt-1 block text-[22px] gold-text sm:text-4xl md:text-5xl">
-              黄金与 BTC 策略自动执行
+          <h1 className="mobile-heading mt-6 font-display text-[28px] font-bold leading-[1.16] sm:text-5xl md:text-6xl">
+            <span className="block">
+              <span className="phrase">AI 自动化</span>
+              <span className="phrase">交易系统</span>
+            </span>
+            <span className="mt-2 block text-[22px] leading-[1.18] gold-text sm:text-4xl md:text-5xl">
+              <span className="phrase">黄金与 BTC</span>{" "}
+              <span className="phrase">策略自动执行</span>
             </span>
           </h1>
-          <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground [text-wrap:pretty] md:text-lg">
+          <div className="mobile-copy mx-auto mt-6 max-w-2xl text-[15px] leading-relaxed text-muted-foreground md:text-lg">
             <p>OnlyOnce 为黄金与比特币交易者提供 MT5 策略自动执行、UID 授权、风险控制与订阅管理服务。会员开通后，把 EA 挂在自己的 MT5 账户，系统按规则化信号运行，并设有每日亏损保护。</p>
             <p className="mt-2 text-sm">交易存在风险，策略系统不保证盈利。请确认自身风险承受能力后再开通。</p>
           </div>
@@ -229,13 +313,14 @@ function Strategy() {
         <span className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
           <Target className="h-3 w-3" /> Strategy
         </span>
-        <h2 className="mt-4 font-display text-2xl font-bold md:text-3xl">
-          <span className="gold-text">进场逻辑</span> 说明
+        <h2 className="mobile-heading mt-4 font-display text-2xl font-bold leading-tight md:text-3xl">
+          <span className="phrase gold-text">进场逻辑</span>
+          <span className="phrase">说明</span>
         </h2>
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+        <p className="mobile-copy mt-4 text-sm leading-relaxed text-muted-foreground">
           本策略主要根据市场趋势、关键价格结构和确认信号来判断进场机会。系统会先识别当前方向，再等待价格回到重要支撑/阻力、均线或结构区域附近。当趋势方向、价格位置与确认条件一致时，才会执行进场；若市场震荡过大、方向不清晰或风险条件不符合，则会过滤交易，减少不必要的开仓。
         </p>
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+        <p className="mobile-copy mt-3 text-xs leading-relaxed text-muted-foreground">
           这是规则化的执行逻辑，不代表未来盈利保证。任何 EA 都存在亏损风险，请确认自身风险承受能力后再开通。
         </p>
       </div>
@@ -372,7 +457,13 @@ function Pricing() {
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeader
           eyebrow="Pricing"
-          title={<>开通 <span className="gold-text">AI 全自动交易策略授权</span></>}
+          title={
+            <>
+              <span className="phrase">开通</span>{" "}
+              <span className="phrase gold-text">AI 全自动交易</span>
+              <span className="phrase gold-text">策略授权</span>
+            </>
+          }
           sub="订阅到期前可续费，用户也可在后台暂停续约。每个方案都包含 XAUUSD EA + BTCUSD EA，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
@@ -415,7 +506,7 @@ function PlanCard({ plan }: { plan: Plan }) {
   return (
     <div
       className={
-        "relative flex flex-col rounded-2xl p-8 group/card " +
+        "relative flex flex-col rounded-2xl p-6 sm:p-8 group/card " +
         (plan.highlight
           ? "card-lux ring-gold border border-gold/40 plan-card-hover"
           : "card-lux plan-card-hover")
@@ -427,14 +518,14 @@ function PlanCard({ plan }: { plan: Plan }) {
         </span>
       )}
       <div>
-        <h3 className="font-display text-2xl font-bold whitespace-nowrap">{plan.name}</h3>
+        <h3 className="mobile-heading font-display text-[22px] font-bold leading-snug sm:text-2xl">{plan.name}</h3>
         {plan.tagline && (
           <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
         )}
       </div>
 
-      <div className="mt-4 flex items-end gap-3">
-        <span className="font-display text-4xl font-bold gold-text">{plan.price}</span>
+      <div className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-1">
+        <span className="font-display text-[34px] font-bold leading-none gold-text sm:text-4xl">{plan.price}</span>
         {plan.priceNote && (
           <span className="pb-1.5 text-sm text-muted-foreground">{plan.priceNote}</span>
         )}
@@ -447,7 +538,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold/15 text-gold">
               <Check className="h-3 w-3" strokeWidth={3} />
             </span>
-            <span className="text-foreground/90">{f}</span>
+            <span className="mobile-copy text-foreground/90">{f}</span>
           </li>
         ))}
       </ul>
@@ -526,16 +617,13 @@ function StrategyBacktestSection({
         <SectionHeader
           eyebrow={eyebrow}
           title={
-            <span style={{ textWrap: "normal" }}>
-              <span className="block whitespace-nowrap md:inline">OnlyOnce <span className="font-sans">{symbol}</span> EA</span>
-              {" "}
-              <span
-                className="block whitespace-nowrap gold-text md:inline"
-                style={{ wordBreak: "keep-all", overflowWrap: "normal" }}
-              >
-                回测战绩
+            <>
+              <span className="block">
+                <span className="phrase">OnlyOnce</span>{" "}
+                <span className="phrase font-sans">{symbol} EA</span>
               </span>
-            </span>
+              <span className="block gold-text">回测战绩</span>
+            </>
           }
           sub="数据来自 MT5 Strategy Tester。历史回测不代表未来保证收益，仅用于展示策略历史表现、交易频率与波动。"
           icon={<TrendingUp className="h-4 w-4" />}
@@ -547,7 +635,7 @@ function StrategyBacktestSection({
           {/* dashboard header */}
           <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-primary sm:text-[11px] sm:tracking-[0.24em]">
                 Strategy Backtest · {tableYearLabel}
               </span>
               <h3 className="mt-2 font-display text-xl font-bold sm:text-2xl">
@@ -588,7 +676,7 @@ function StrategyBacktestSection({
           <div className="relative mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
             {stats.map((s) => (
               <div key={s.label} className="min-w-0 rounded-xl border border-primary/15 bg-background/40 p-4">
-                <div className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
+                <div className="text-[10px] font-semibold uppercase leading-snug tracking-[0.08em] text-muted-foreground sm:tracking-[0.16em]">{s.label}</div>
                 <div className="mt-2 font-display text-lg font-bold text-foreground sm:text-xl">
                   <span className="break-words font-sans">{s.value}</span>
                   {s.unit && <span className="ml-1 text-sm text-muted-foreground font-sans">{s.unit}</span>}
@@ -601,7 +689,7 @@ function StrategyBacktestSection({
         {months.length > 0 && (
         <div className="mt-8">
           <div className="card-lux rounded-2xl p-5 sm:p-6 md:p-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-display text-lg font-semibold">每月回测表现</h3>
               <span className="text-[11px] font-sans text-muted-foreground">{tableYearLabel} · {symbol}</span>
             </div>
@@ -626,7 +714,7 @@ function StrategyBacktestSection({
                         <td className="px-3 py-2.5 font-sans font-medium text-foreground">{row.m}</td>
                         <td className={`px-3 py-2.5 text-right font-sans font-semibold ${color}`}>
                           {sign}{row.pct.toFixed(2)}%
-                          <span className="ml-1 text-xs text-muted-foreground">({sign}{row.profit.toFixed(2)} USD)</span>
+                          <span className="block text-[11px] text-muted-foreground sm:ml-1 sm:inline sm:text-xs">({sign}{row.profit.toFixed(2)} USD)</span>
                         </td>
                         <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.wr.toFixed(2)}%</td>
                         <td className="px-3 py-2.5 text-right font-sans text-foreground/80">{row.pf.toFixed(2)}</td>
@@ -702,10 +790,10 @@ function XauBacktest() {
 }
 
 const BTC_MONTHS: MonthlyRow[] = [
-  { m: "Jan", profit: 55.52, pct: 11.10, pf: 1.97, wr: 57.14, trades: 7 },
-  { m: "Feb", profit: 10.05, pct: 1.81, pf: 1.55, wr: 50.00, trades: 2 },
-  { m: "Mar", profit: -27.27, pct: -4.82, pf: 0.70, wr: 28.57, trades: 7 },
-  { m: "Apr", profit: 194.00, pct: 35.76, pf: 4.66, wr: 70.00, trades: 10 },
+  { m: "Jan", profit: 55.52, pct: 11.1, pf: 1.97, wr: 57.14, trades: 7 },
+  { m: "Feb", profit: 10.05, pct: 1.81, pf: 1.55, wr: 50.0, trades: 2 },
+  { m: "Mar", profit: -27.27, pct: -4.82, pf: 0.7, wr: 28.57, trades: 7 },
+  { m: "Apr", profit: 194.0, pct: 35.76, pf: 4.66, wr: 70.0, trades: 10 },
   { m: "May", profit: 112.49, pct: 14.88, pf: 1.84, wr: 55.56, trades: 9 },
   { m: "Jun", profit: -60.79, pct: -6.99, pf: 0.75, wr: 27.27, trades: 11 },
   { m: "Jul", profit: 841.25, pct: 103.27, pf: 3.85, wr: 68.18, trades: 22 },
@@ -737,8 +825,10 @@ function BtcBacktest() {
       stats={[
         { label: "Profit Factor", value: "2.21" },
         { label: "Win Rate", value: "54.41", unit: "%" },
+        { label: "Sharpe Ratio", value: "7.22" },
         { label: "Trades", value: "68" },
-        { label: "Balance Max Drawdown", value: "22", unit: "%" },
+        { label: "Balance Max Drawdown", value: "215.49", unit: "USD" },
+        { label: "Equity Max Drawdown", value: "322.65", unit: "USD" },
       ]}
       months={BTC_MONTHS}
       curve={BTC_CURVE}
@@ -752,11 +842,6 @@ const TRADE_RECORDS = [
   { src: tr2.url, symbol: "XAUUSD", roi: "+455.04%", date: "2026-07-30" },
   { src: tr3.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-05" },
   { src: tr4.url, symbol: "XAUUSD", roi: "-177.97%", date: "2026-08-05" },
-  { src: tr5.url, symbol: "XAUUSD", roi: "+554.53%", date: "2026-08-05" },
-  { src: tr6.url, symbol: "XAUUSD", roi: "+1,132.65%", date: "2026-08-07" },
-  { src: tr7.url, symbol: "BTCUSD", roi: "+498.06%", date: "2026-08-07" },
-  { src: tr8.url, symbol: "XAUUSD", roi: "+755.52%", date: "2026-08-07" },
-  { src: tr9.url, symbol: "XAUUSD", roi: "+682.58%", date: "2026-08-08" },
 ];
 
 function LiveTradeRecords() {
@@ -780,7 +865,7 @@ function LiveTradeRecords() {
 
 function MinCapital() {
   return (
-    <section className="relative py-20">
+    <section id="capital" className="relative py-20">
       <div className="mx-auto max-w-5xl px-5">
         <div className="card-lux relative overflow-hidden rounded-3xl p-8 md:p-12">
           <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-gold/10 blur-3xl" aria-hidden />
@@ -790,8 +875,9 @@ function MinCapital() {
             </div>
             <div className="min-w-0">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">Minimum Capital</span>
-              <h3 className="mt-2 font-display text-2xl font-bold md:text-3xl">
-                建议最低起始资金：<span className="gold-text">500 USD</span>
+              <h3 className="mobile-heading mt-2 font-display text-[25px] font-bold leading-tight md:text-3xl">
+                <span className="phrase">建议最低起始资金：</span>
+                <span className="phrase gold-text">500 USD</span>
               </h3>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">
                 这是为了让 EA 的<span className="text-foreground"> 风控、止损距离与 MT5 最小手数 </span>
@@ -863,7 +949,7 @@ function Risk() {
 
 function CTA() {
   return (
-    <section className="relative py-24">
+    <section id="cta" className="relative py-24">
       <div className="mx-auto max-w-4xl px-5">
         <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-gradient-to-br from-surface-elevated via-surface to-background p-10 text-center md:p-16">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" aria-hidden />
@@ -873,10 +959,10 @@ function CTA() {
             <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
               Get Started
             </span>
-            <h2 className="mt-6 font-display text-3xl font-bold leading-tight md:text-5xl">
-              开通
-              <br className="hidden sm:block" />
-              <span className="gold-text"> AI 全自动交易策略授权</span>
+            <h2 className="mobile-heading mt-6 font-display text-[28px] font-bold leading-tight md:text-5xl">
+              <span className="block">开通</span>
+              <span className="block gold-text">AI 全自动交易</span>
+              <span className="block gold-text">策略授权</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
               登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。订阅到期前可续费，用户也可在后台暂停续约。
@@ -955,11 +1041,11 @@ function SectionHeader({
 }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+      <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-gold sm:text-[11px] sm:tracking-[0.2em]">
         {icon} {eyebrow}
       </span>
-      <h2 className="mt-5 font-display text-3xl font-bold leading-tight md:text-4xl">{title}</h2>
-      {sub && <p className="mt-4 text-sm text-muted-foreground md:text-base">{sub}</p>}
+      <h2 className="mobile-heading mt-5 font-display text-[28px] font-bold leading-[1.16] md:text-4xl">{title}</h2>
+      {sub && <p className="mobile-copy mt-4 text-sm leading-relaxed text-muted-foreground md:text-base">{sub}</p>}
     </div>
   );
 }
