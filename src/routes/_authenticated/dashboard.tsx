@@ -18,7 +18,7 @@ import { getEADownloads } from "@/lib/ea-downloads.functions";
 import { PLAN_CATALOG, type PlanKey } from "@/lib/plans";
 import { PlatformNotice } from "@/components/PlatformNotice";
 
-import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, AlertTriangle } from "lucide-react";
+import { Sparkles, LogOut, ShieldCheck, Clock, CheckCircle2, XCircle, Download, AlertTriangle, RefreshCw } from "lucide-react";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -62,7 +62,8 @@ function DashboardPage() {
   const downloadsQuery = useQuery({
     queryKey: ["my-ea-downloads"],
     queryFn: () => getEADownloads(),
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: 45 * 60 * 1000,
   });
 
 
@@ -628,7 +629,7 @@ function EADownloadSection({
               </p>
             </div>
             <p className="mt-3 text-[11px] text-muted-foreground">
-              下载链接为临时签名 URL，5 分钟内有效。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
+              下载链接为临时签名 URL，1 小时内有效，并会自动刷新。请勿分享给他人；EA 会绑定你的 MT5 UID 授权检测。
             </p>
             <div className="mt-4 rounded-lg border border-border/60 bg-background/40 p-4 text-[11px] leading-relaxed text-muted-foreground">
               <p className="text-foreground">
