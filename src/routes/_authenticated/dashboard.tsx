@@ -581,7 +581,19 @@ function EADownloadSection({
               </div>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            <div className="mt-6 flex items-center justify-between">
+              <div className="text-sm font-medium text-foreground">可用 EA 安装包</div>
+              <button
+                onClick={() => query.refetch()}
+                disabled={query.isRefetching || query.isLoading}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground disabled:opacity-60"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${query.isRefetching ? "animate-spin" : ""}`} />
+                {query.isRefetching ? "刷新中..." : "刷新下载链接"}
+              </button>
+            </div>
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {data.files
                 .filter(
                   (f) =>
