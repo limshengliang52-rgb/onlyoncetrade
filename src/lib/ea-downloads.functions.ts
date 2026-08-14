@@ -167,7 +167,7 @@ export const getEADownloads = createServerFn({ method: "GET" })
         }
         const { data: signed, error: sErr } = await supabaseAdmin.storage
           .from("ea-files")
-          .createSignedUrl(match.name, 300, { download: true });
+          .createSignedUrl(match.name, 3600, { download: true });
         if (sErr || !signed) {
           return {
             key: f.key,
