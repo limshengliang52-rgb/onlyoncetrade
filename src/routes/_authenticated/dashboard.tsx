@@ -286,6 +286,10 @@ function ManageSubscriptionSection({
   const [error, setError] = useState<string | null>(null);
   const [pausing, setPausing] = useState(false);
   const [paused, setPaused] = useState(!!active?.cancel_at_period_end);
+  const [pauseRequested, setPauseRequested] = useState(
+    !!(active as any)?.renewal_pause_requested_at,
+  );
+
 
   async function renew(plan: PlanKey) {
     setError(null);
