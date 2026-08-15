@@ -50,7 +50,7 @@ export const PLAN_CATALOG: Record<
     features: [
       "包含 XAUUSD EA + BTCUSD EA",
       "1 个 MT5 UID 授权绑定",
-      "到期前可续费，也可在后台暂停续约",
+      "到期前可续费；如需暂停续费，可在后台提交申请，由客服确认后处理",
       "会员后台可下载两个 EA 策略文件",
     ],
   },
@@ -69,7 +69,7 @@ export const PLAN_CATALOG: Record<
     features: [
       "包含 XAUUSD EA + BTCUSD EA",
       "1 个 MT5 UID 授权绑定",
-      "到期前可续费，也可在后台暂停续约",
+      "到期前可续费；如需暂停续费，可在后台提交申请，由客服确认后处理",
       "会员后台可下载两个 EA 策略文件",
     ],
   },

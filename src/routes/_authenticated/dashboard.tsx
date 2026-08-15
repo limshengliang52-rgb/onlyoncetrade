@@ -112,7 +112,7 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-5 py-10">
         <h1 className="font-display text-3xl font-bold">我的授权</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-查看当前方案、授权状态、到期时间，续费或暂停续约，并下载 EA
+查看当前方案、授权状态、到期时间，续费或申请暂停续费，并下载 EA
         </p>
 
         {hasActiveSub ? (
@@ -124,7 +124,7 @@ function DashboardPage() {
           <section className="mt-10">
             <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              订阅到期前可续费，用户也可在后台暂停续约。
+              订阅到期前可续费。如需暂停续费，可在后台提交申请，由客服确认后处理。
             </p>
             <div className="mt-4 grid gap-5 md:grid-cols-2">
               {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
@@ -181,9 +181,11 @@ function DashboardPage() {
                         </td>
                         <td className="px-5 py-3 text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
-                          {s.cancel_at_period_end && (
-                            <span className="ml-2 text-[11px] text-amber-400">已暂停续约</span>
-                          )}
+                          {s.cancel_at_period_end ? (
+                            <span className="ml-2 text-[11px] text-amber-400">已暂停续费</span>
+                          ) : (s as any).renewal_pause_requested_at ? (
+                            <span className="ml-2 text-[11px] text-amber-400">暂停续费申请待审核</span>
+                          ) : null}
                         </td>
                       </tr>
                     );
