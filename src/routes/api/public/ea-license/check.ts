@@ -1,16 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-let _admin: SupabaseClient | null = null;
-function getAdmin(): SupabaseClient {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { auth: { autoRefreshToken: false, persistSession: false } },
-    );
-  }
-  return _admin;
+async function getAdmin() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin;
 }
 
 const CORS = {
@@ -94,7 +86,7 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
           return respond({ authorized: false, reason: "invalid_params" });
         }
 
-        const admin = getAdmin();
+        const admin = await getAdmin();
         const nowIso = new Date().toISOString();
 
         // Lazy-expire ea_licenses matching this account+product
