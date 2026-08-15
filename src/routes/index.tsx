@@ -755,7 +755,7 @@ const XAU_CURVE: EquityPoint[] = [
   { label: "Apr", value: 1084.02 },
   { label: "May", value: 1033.4 },
   { label: "Jun", value: 1358.13 },
-  { label: "Jul", value: 1615.2 },
+  { label: "Jul", value: 1800.42 },
 ];
 
 function XauBacktest() {
@@ -766,19 +766,19 @@ function XauBacktest() {
       eyebrow="回测报告"
       symbol="XAUUSD"
       strategyName="OnlyOnce XAUUSD EA RR2.5（原版）"
-      headlinePct="+223.04"
-      headlineUsd="+1,115.20 USD"
+      headlinePct="+260.08"
+      headlineUsd="+1,300.42 USD"
       initialBalance="500 USD"
-      finalBalance="1,615.20 USD"
+      finalBalance="1,800.42 USD"
       period="2026-01-01 – 2026-07-30"
       tableYearLabel="2026"
       stats={[
-        { label: "Profit Factor", value: "1.33" },
-        { label: "Sharpe Ratio", value: "2.86" },
-        { label: "Trades", value: "172" },
-        { label: "Win Rate", value: "33.72", unit: "%" },
-        { label: "Balance Drawdown", value: "约 140+", unit: "USD" },
-        { label: "Equity Drawdown", value: "约 140+", unit: "USD" },
+        { label: "Profit Factor", value: "1.34" },
+        { label: "Sharpe Ratio", value: "3.44" },
+        { label: "Trades", value: "188" },
+        { label: "Win Rate", value: "31.38", unit: "%" },
+        { label: "Balance Max Drawdown", value: "564.16", unit: "USD (34.60%)" },
+        { label: "Equity Max Drawdown", value: "584.68", unit: "USD (35.48%)" },
       ]}
       months={XAU_MONTHS}
       curve={XAU_CURVE}
