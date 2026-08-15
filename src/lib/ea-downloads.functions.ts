@@ -195,10 +195,11 @@ export const getEADownloads = createServerFn({ method: "GET" })
     );
 
 
-    // 永不返回 .set / 单独 .ex5 文件
-    const visibleFiles = files.filter(
-      (f) => !f.filename || !/\.(set|ex5)$/i.test(f.filename),
-    );
+    // 永不返回 .set / 单独 .ex5 文件；说明书未上传时不显示"缺少文件"
+    const visibleFiles = files.filter((f) => {
+      if (f.missing && ["guide_cn", "guide_en", "guide_mac"].includes(f.key)) return false;
+      return !f.filename || !/\.(set|ex5)$/i.test(f.filename);
+    });
 
     return {
       authorized: true,
