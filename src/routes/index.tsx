@@ -777,8 +777,8 @@ function XauBacktest() {
         { label: "Sharpe Ratio", value: "3.44" },
         { label: "Trades", value: "188" },
         { label: "Win Rate", value: "31.38", unit: "%" },
-        { label: "Balance Max Drawdown", value: "564.16", unit: "USD (34.60%)" },
-        { label: "Equity Max Drawdown", value: "584.68", unit: "USD (35.48%)" },
+        { label: "Balance Max Drawdown", value: "34.60", unit: "%" },
+        { label: "Equity Max Drawdown", value: "35.48", unit: "%" },
       ]}
       months={XAU_MONTHS}
       curve={XAU_CURVE}
