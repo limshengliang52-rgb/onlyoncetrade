@@ -361,7 +361,12 @@ function ManageSubscriptionSection({
 
       {paused && (
         <p className="mt-4 text-xs text-amber-400">
-          已暂停续约：当前授权在到期时间前仍然有效，到期后 EA 将停止授权。可随时点击下方按钮续费。
+          已暂停续费：当前授权在到期时间前仍然有效，到期后 EA 将停止授权。可随时点击下方按钮续费。
+        </p>
+      )}
+      {!paused && pauseRequested && (
+        <p className="mt-4 text-xs text-amber-400">
+          暂停续费申请待审核：需要客服/管理员确认后才会停止自动续费，审核通过前订阅保持正常续费状态。
         </p>
       )}
       {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
@@ -384,11 +389,18 @@ function ManageSubscriptionSection({
           </button>
           <button
             onClick={pause}
-            disabled={pausing || paused}
+            disabled={pausing || paused || pauseRequested}
             className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-60"
           >
-            {paused ? "已暂停续约" : pausing ? "处理中..." : "暂停续约"}
+            {paused
+              ? "已暂停续费"
+              : pauseRequested
+                ? "暂停续费申请待审核"
+                : pausing
+                  ? "提交中..."
+                  : "申请暂停续费"}
           </button>
+
           <a
             href={SUPPORT_URL}
             target="_blank"
