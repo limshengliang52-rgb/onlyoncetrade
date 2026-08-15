@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import tr1 from "@/assets/tr-1.jpeg.asset.json";
 import tr2 from "@/assets/tr-2.jpeg.asset.json";
 import tr3 from "@/assets/tr-3.jpeg.asset.json";
@@ -94,6 +94,7 @@ function Landing() {
 
 function SectionRail() {
   const [activeId, setActiveId] = useState(SECTION_NAV_ITEMS[0].id);
+  const activeRef = useRef(activeId);
 
   useEffect(() => {
     const sections = SECTION_NAV_ITEMS
@@ -108,13 +109,14 @@ function SectionRail() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-        if (visible?.target.id) {
+        if (visible?.target.id && activeRef.current !== visible.target.id) {
+          activeRef.current = visible.target.id;
           setActiveId(visible.target.id);
         }
       },
       {
         rootMargin: "-28% 0px -52% 0px",
-        threshold: [0.12, 0.25, 0.5, 0.75],
+        threshold: 0.35,
       },
     );
 
@@ -134,29 +136,31 @@ function SectionRail() {
             key={item.id}
             href={`#${item.id}`}
             aria-current={active ? "true" : undefined}
-            className="group flex items-center gap-3 text-right"
+            className="group relative flex items-center justify-end"
           >
             <span
-              className={
-                "max-w-0 overflow-hidden whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] opacity-0 transition-all duration-300 group-hover:max-w-48 group-hover:opacity-100 " +
-                (active ? "max-w-48 text-foreground opacity-100" : "text-muted-foreground")
-              }
+              className={[
+                "absolute right-8 w-48 text-right whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ease-out",
+                active
+                  ? "translate-x-0 text-foreground opacity-100"
+                  : "translate-x-1.5 text-muted-foreground opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+              ].join(" ")}
             >
               {String(index + 1).padStart(2, "0")} · {item.label}
             </span>
             <span
-              className={
-                "grid h-5 w-5 place-items-center rounded-full border transition-all duration-300 " +
-                (active
-                  ? "border-primary/70 bg-primary/15 shadow-[0_0_18px_oklch(0.65_0.18_270/0.45)]"
-                  : "border-border/70 bg-background/40 group-hover:border-primary/45 group-hover:bg-primary/10")
-              }
+              className={[
+                "grid h-5 w-5 place-items-center rounded-full border transition-all duration-300",
+                active
+                  ? "border-primary/70 bg-primary/15"
+                  : "border-border/70 bg-background/40 group-hover:border-primary/45 group-hover:bg-primary/10",
+              ].join(" ")}
             >
               <span
-                className={
-                  "h-1.5 w-1.5 rounded-full transition-all duration-300 " +
-                  (active ? "bg-primary" : "bg-muted-foreground/40 group-hover:bg-primary/70")
-                }
+                className={[
+                  "h-1.5 w-1.5 rounded-full transition-all duration-300",
+                  active ? "bg-primary" : "bg-muted-foreground/40 group-hover:bg-primary/70",
+                ].join(" ")}
               />
             </span>
           </a>
