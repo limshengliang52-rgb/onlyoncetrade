@@ -314,21 +314,27 @@ function ManageSubscriptionSection({
   }
 
   async function pause() {
-    if (!window.confirm("确定暂停续约吗？暂停后到期将不会继续续费。")) return;
+    if (
+      !window.confirm(
+        "提交后不会立即停止续费，需要客服/管理员审核确认；审核通过前订阅保持正常续费状态。确定提交申请吗？",
+      )
+    )
+      return;
     setError(null);
     setPausing(true);
     try {
       await pauseMySubscriptionRenewal({
         data: { id: active.id, environment: getStripeEnvironment() },
       });
-      setPaused(true);
+      setPauseRequested(true);
       onChanged();
     } catch (e: any) {
-      setError(e?.message ?? "暂停续约失败");
+      setError(e?.message ?? "提交暂停续费申请失败");
     } finally {
       setPausing(false);
     }
   }
+
 
   const plan = PLAN_CATALOG[active?.plan as PlanKey];
 
