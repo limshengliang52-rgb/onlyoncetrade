@@ -112,7 +112,7 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-5 py-10">
         <h1 className="font-display text-3xl font-bold">我的授权</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-查看当前方案、授权状态、到期时间，续费或暂停续约，并下载 EA
+查看当前方案、授权状态、到期时间，续费或申请暂停续费，并下载 EA
         </p>
 
         {hasActiveSub ? (
@@ -124,7 +124,7 @@ function DashboardPage() {
           <section className="mt-10">
             <h2 className="font-display text-xl font-semibold">开通 AI 全自动交易策略授权</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              订阅到期前可续费，用户也可在后台暂停续约。
+              订阅到期前可续费。如需暂停续费，可在后台提交申请，由客服确认后处理。
             </p>
             <div className="mt-4 grid gap-5 md:grid-cols-2">
               {(Object.values(PLAN_CATALOG) as (typeof PLAN_CATALOG)[PlanKey][]).map((plan) => (
@@ -181,9 +181,11 @@ function DashboardPage() {
                         </td>
                         <td className="px-5 py-3 text-muted-foreground">
                           {s.expires_at ? new Date(s.expires_at).toLocaleString() : "-"}
-                          {s.cancel_at_period_end && (
-                            <span className="ml-2 text-[11px] text-amber-400">已暂停续约</span>
-                          )}
+                          {s.cancel_at_period_end ? (
+                            <span className="ml-2 text-[11px] text-amber-400">已暂停续费</span>
+                          ) : (s as any).renewal_pause_requested_at ? (
+                            <span className="ml-2 text-[11px] text-amber-400">暂停续费申请待审核</span>
+                          ) : null}
                         </td>
                       </tr>
                     );
@@ -286,6 +288,10 @@ function ManageSubscriptionSection({
   const [error, setError] = useState<string | null>(null);
   const [pausing, setPausing] = useState(false);
   const [paused, setPaused] = useState(!!active?.cancel_at_period_end);
+  const [pauseRequested, setPauseRequested] = useState(
+    !!(active as any)?.renewal_pause_requested_at,
+  );
+
 
   async function renew(plan: PlanKey) {
     setError(null);
@@ -310,21 +316,27 @@ function ManageSubscriptionSection({
   }
 
   async function pause() {
-    if (!window.confirm("确定暂停续约吗？暂停后到期将不会继续续费。")) return;
+    if (
+      !window.confirm(
+        "提交后不会立即停止续费，需要客服/管理员审核确认；审核通过前订阅保持正常续费状态。确定提交申请吗？",
+      )
+    )
+      return;
     setError(null);
     setPausing(true);
     try {
       await pauseMySubscriptionRenewal({
         data: { id: active.id, environment: getStripeEnvironment() },
       });
-      setPaused(true);
+      setPauseRequested(true);
       onChanged();
     } catch (e: any) {
-      setError(e?.message ?? "暂停续约失败");
+      setError(e?.message ?? "提交暂停续费申请失败");
     } finally {
       setPausing(false);
     }
   }
+
 
   const plan = PLAN_CATALOG[active?.plan as PlanKey];
 
@@ -351,7 +363,12 @@ function ManageSubscriptionSection({
 
       {paused && (
         <p className="mt-4 text-xs text-amber-400">
-          已暂停续约：当前授权在到期时间前仍然有效，到期后 EA 将停止授权。可随时点击下方按钮续费。
+          已暂停续费：当前授权在到期时间前仍然有效，到期后 EA 将停止授权。可随时点击下方按钮续费。
+        </p>
+      )}
+      {!paused && pauseRequested && (
+        <p className="mt-4 text-xs text-amber-400">
+          暂停续费申请待审核：需要客服/管理员确认后才会停止自动续费，审核通过前订阅保持正常续费状态。
         </p>
       )}
       {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
@@ -374,11 +391,18 @@ function ManageSubscriptionSection({
           </button>
           <button
             onClick={pause}
-            disabled={pausing || paused}
+            disabled={pausing || paused || pauseRequested}
             className="rounded-lg border border-border px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-60"
           >
-            {paused ? "已暂停续约" : pausing ? "处理中..." : "暂停续约"}
+            {paused
+              ? "已暂停续费"
+              : pauseRequested
+                ? "暂停续费申请待审核"
+                : pausing
+                  ? "提交中..."
+                  : "申请暂停续费"}
           </button>
+
           <a
             href={SUPPORT_URL}
             target="_blank"

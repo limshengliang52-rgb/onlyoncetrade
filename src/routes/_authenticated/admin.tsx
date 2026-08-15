@@ -9,7 +9,9 @@ import {
   adminSuspendSubscription,
   adminUpdateSubscriptionUid,
   adminUpsertSubscription,
+  approveRenewalPauseRequest,
   cancelSuspendRequest,
+  rejectRenewalPauseRequest,
   requestSuspendSubscription,
 } from "@/lib/subscriptions.functions";
 
@@ -89,6 +91,25 @@ function AdminPage() {
       qc.invalidateQueries({ queryKey: ["admin-subs"] });
     },
     onError: (e: any) => toast.error(e?.message ?? "驳回失败"),
+  });
+
+  const approveRenewalPause = useMutation({
+    mutationFn: (v: { id: string; environment: "sandbox" | "live" }) =>
+      approveRenewalPauseRequest({ data: v }),
+    onSuccess: (r: any) => {
+      toast.success("已同意暂停续费，下期将不再自动扣款");
+      if (r?.stripeError) toast.error(`Stripe 取消失败：${r.stripeError}`);
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "同意暂停续费失败"),
+  });
+  const rejectRenewalPause = useMutation({
+    mutationFn: (v: { id: string }) => rejectRenewalPauseRequest({ data: v }),
+    onSuccess: () => {
+      toast.success("已驳回暂停续费申请");
+      qc.invalidateQueries({ queryKey: ["admin-subs"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "驳回暂停续费申请失败"),
   });
 
   const updateUid = useMutation({
@@ -202,6 +223,30 @@ function AdminPage() {
                         <td className="px-4 py-3 font-mono text-xs">
                           <div className="flex items-center gap-2">
                             <span>{s.mt5_uid}</span>
+                            {s.renewal_pause_requested_at && !s.cancel_at_period_end && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    approveRenewalPause.mutate({
+                                      id: s.id,
+                                      environment: getStripeEnvironment(),
+                                    })
+                                  }
+                                  disabled={approveRenewalPause.isPending}
+                                  className="rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-[11px] font-bold text-amber-400 hover:bg-amber-500/20 disabled:opacity-50"
+                                >
+                                  同意暂停续费
+                                </button>
+                                <button
+                                  onClick={() => rejectRenewalPause.mutate({ id: s.id })}
+                                  disabled={rejectRenewalPause.isPending}
+                                  className="rounded-md border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                >
+                                  驳回暂停续费
+                                </button>
+                              </>
+                            )}
+
                             <button
                               onClick={() => {
                                 const raw = prompt("输入新的 MT5 UID (3-32 位字母数字)", s.mt5_uid);
@@ -234,6 +279,14 @@ function AdminPage() {
                             <div className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
                               暂停申请待审核 · 待管理员同意
                             </div>
+                          )}
+                          {s.renewal_pause_requested_at && !s.cancel_at_period_end && (
+                            <div className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">
+                              暂停续费申请待审核
+                            </div>
+                          )}
+                          {s.cancel_at_period_end && (
+                            <div className="mt-1 text-[10px] font-semibold text-amber-400">已暂停续费</div>
                           )}
                         </td>
 
@@ -304,6 +357,30 @@ function AdminPage() {
                               >
                                 申请暂停授权
                               </button>
+                            )}
+
+                            {s.renewal_pause_requested_at && !s.cancel_at_period_end && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    approveRenewalPause.mutate({
+                                      id: s.id,
+                                      environment: getStripeEnvironment(),
+                                    })
+                                  }
+                                  disabled={approveRenewalPause.isPending}
+                                  className="rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-[11px] font-bold text-amber-400 hover:bg-amber-500/20 disabled:opacity-50"
+                                >
+                                  同意暂停续费
+                                </button>
+                                <button
+                                  onClick={() => rejectRenewalPause.mutate({ id: s.id })}
+                                  disabled={rejectRenewalPause.isPending}
+                                  className="rounded-md border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                >
+                                  驳回暂停续费
+                                </button>
+                              </>
                             )}
 
                             <button

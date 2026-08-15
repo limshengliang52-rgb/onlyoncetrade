@@ -464,7 +464,7 @@ function Pricing() {
               <span className="phrase gold-text">策略授权</span>
             </>
           }
-          sub="订阅到期前可续费，用户也可在后台暂停续约。每个方案都包含 XAUUSD EA + BTCUSD EA，付款成功后自动加入 MT5 UID 白名单"
+          sub="订阅到期前可续费。如需暂停续费，可在后台提交申请，由客服确认后处理。每个方案都包含 XAUUSD EA + BTCUSD EA，付款成功后自动加入 MT5 UID 白名单"
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
           {plans.map((p) => (
@@ -491,7 +491,7 @@ function Pricing() {
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          * 所有方案均为 UID 授权制，不出售 EA 文件所有权。订阅到期前可续费，用户也可在后台暂停续约。
+          * 所有方案均为 UID 授权制，不出售 EA 文件所有权。订阅到期前可续费。如需暂停续费，可在后台提交申请，由客服确认后处理。
         </p>
         <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground/80">
           本服务仅提供 EA 工具授权与技术说明，不构成投资建议，也不承诺任何收益。交易存在亏损风险，请自行评估后使用。
@@ -965,7 +965,7 @@ function CTA() {
               <span className="block gold-text">策略授权</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。订阅到期前可续费，用户也可在后台暂停续约。
+              登录账户，选择方案并填写你的 MT5 UID，Stripe 安全付款后系统自动加入 XAUUSD + BTCUSD 白名单。订阅到期前可续费。如需暂停续费，可在后台提交申请，由客服确认后处理。
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a

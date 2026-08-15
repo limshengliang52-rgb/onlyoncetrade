@@ -204,45 +204,49 @@ export const createEARenewalSession = createServerFn({ method: "POST" })
   });
 
 /**
- * 会员自助暂停续约：取消 Stripe 自动续费，但保留当前周期授权，
- * 到期后 EA 授权 API 自动返回 authorized:false。
+ * 会员提交「暂停续费申请」：不会立即取消 Stripe 自动续费，
+ * 必须由管理员在后台同意后才真正设置 cancel_at_period_end=true。
  */
 export const pauseMySubscriptionRenewal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { id: string; environment: StripeEnv }) =>
-    z.object({ id: z.string().uuid(), environment: z.enum(["sandbox", "live"]) }).parse(d),
+  .inputValidator((d: { id: string; environment?: StripeEnv; note?: string }) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        environment: z.enum(["sandbox", "live"]).optional(),
+        note: z.string().max(500).optional(),
+      })
+      .parse(d),
   )
   .handler(async ({ data, context }) => {
     const { data: sub, error } = await context.supabase
       .from("subscriptions")
-      .select("id, user_id, stripe_subscription_id")
+      .select("id, user_id, renewal_pause_requested_at")
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!sub || sub.user_id !== context.userId) throw new Error("订阅不存在");
 
-    let stripeError: string | null = null;
-    if (sub.stripe_subscription_id) {
-      try {
-        const stripe = createStripeClient(data.environment);
-        await stripe.subscriptions.update(sub.stripe_subscription_id as string, {
-          cancel_at_period_end: true,
-        });
-      } catch (e) {
-        stripeError = getStripeErrorMessage(e);
-        console.error("pauseMySubscriptionRenewal: stripe update failed", e);
-      }
+    if (sub.renewal_pause_requested_at) {
+      return { ok: true, alreadyPending: true };
     }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error: upErr } = await supabaseAdmin
       .from("subscriptions")
-      .update({ cancel_at_period_end: true, next_billing_at: null })
+      .update({
+        renewal_pause_requested_at: new Date().toISOString(),
+        renewal_pause_requested_by: context.userId,
+        renewal_pause_request_note: data.note ?? null,
+        renewal_pause_approved_at: null,
+        renewal_pause_rejected_at: null,
+      })
       .eq("id", data.id);
     if (upErr) throw new Error(upErr.message);
 
-    return { ok: true, stripeError };
+    return { ok: true, alreadyPending: false };
   });
+
 
 export const verifyEACheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -615,4 +619,71 @@ export const adminSuspendSubscription = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
 
     return { ok: true, stripeCancelled, stripeError };
+  });
+
+/** 管理员同意「暂停续费申请」：真正取消 Stripe 自动续费。 */
+export const approveRenewalPauseRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; environment: StripeEnv }) =>
+    z.object({ id: z.string().uuid(), environment: z.enum(["sandbox", "live"]) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: sub, error } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id, stripe_subscription_id, renewal_pause_requested_at")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!sub) throw new Error("订阅不存在");
+    if (!sub.renewal_pause_requested_at) throw new Error("该订阅没有待审核的暂停续费申请");
+
+    let stripeError: string | null = null;
+    if (sub.stripe_subscription_id) {
+      try {
+        const stripe = createStripeClient(data.environment);
+        await stripe.subscriptions.update(sub.stripe_subscription_id as string, {
+          cancel_at_period_end: true,
+        });
+      } catch (e) {
+        stripeError = getStripeErrorMessage(e);
+        console.error("approveRenewalPauseRequest: stripe update failed", e);
+      }
+    }
+
+    const { error: upErr } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        cancel_at_period_end: true,
+        next_billing_at: null,
+        renewal_pause_approved_at: new Date().toISOString(),
+        renewal_pause_requested_at: null,
+        renewal_pause_requested_by: null,
+        renewal_pause_request_note: null,
+      })
+      .eq("id", data.id);
+    if (upErr) throw new Error(upErr.message);
+
+    return { ok: true, stripeError };
+  });
+
+/** 管理员驳回「暂停续费申请」：保持自动续费不变。 */
+export const rejectRenewalPauseRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("subscriptions")
+      .update({
+        renewal_pause_requested_at: null,
+        renewal_pause_requested_by: null,
+        renewal_pause_request_note: null,
+        renewal_pause_rejected_at: new Date().toISOString(),
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

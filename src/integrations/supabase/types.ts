@@ -166,6 +166,11 @@ export type Database = {
           notes: string | null
           plan: Database["public"]["Enums"]["plan_type"]
           products: string[]
+          renewal_pause_approved_at: string | null
+          renewal_pause_rejected_at: string | null
+          renewal_pause_request_note: string | null
+          renewal_pause_requested_at: string | null
+          renewal_pause_requested_by: string | null
           source: string
           started_at: string | null
           status: Database["public"]["Enums"]["subscription_status"]
@@ -189,6 +194,11 @@ export type Database = {
           notes?: string | null
           plan: Database["public"]["Enums"]["plan_type"]
           products?: string[]
+          renewal_pause_approved_at?: string | null
+          renewal_pause_rejected_at?: string | null
+          renewal_pause_request_note?: string | null
+          renewal_pause_requested_at?: string | null
+          renewal_pause_requested_by?: string | null
           source?: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
@@ -212,6 +222,11 @@ export type Database = {
           notes?: string | null
           plan?: Database["public"]["Enums"]["plan_type"]
           products?: string[]
+          renewal_pause_approved_at?: string | null
+          renewal_pause_rejected_at?: string | null
+          renewal_pause_request_note?: string | null
+          renewal_pause_requested_at?: string | null
+          renewal_pause_requested_by?: string | null
           source?: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
