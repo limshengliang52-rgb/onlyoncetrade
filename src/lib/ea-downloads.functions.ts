@@ -76,9 +76,21 @@ function matcherFor(key: FileKey): (name: string) => boolean {
         return l === "onlyonce_xau_mac_installer.zip";
       };
     case "btc_windows":
-      return (n) => lower(n) === "onlyonce_btcusd_ea_windows_installer.zip";
+      return (n) => {
+        const l = lower(n);
+        return (
+          l === "onlyonce_btcusd_ea_windows_installer.zip" ||
+          l === "onlyonce btcusd ea - windows.zip"
+        );
+      };
     case "btc_mac":
-      return (n) => lower(n) === "onlyonce_btcusd_ea_mac_installer.zip";
+      return (n) => {
+        const l = lower(n);
+        return (
+          l === "onlyonce_btcusd_ea_mac_installer.zip" ||
+          l === "onlyonce btcusd ea - macbook.zip"
+        );
+      };
     case "guide_cn":
       return (n) => {
         const l = lower(n);
