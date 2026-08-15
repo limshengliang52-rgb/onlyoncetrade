@@ -86,7 +86,7 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
           return respond({ authorized: false, reason: "invalid_params" });
         }
 
-        const admin = getAdmin();
+        const admin = await getAdmin();
         const nowIso = new Date().toISOString();
 
         // Lazy-expire ea_licenses matching this account+product
