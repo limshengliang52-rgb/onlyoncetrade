@@ -94,6 +94,7 @@ function Landing() {
 
 function SectionRail() {
   const [activeId, setActiveId] = useState(SECTION_NAV_ITEMS[0].id);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const activeRef = useRef(activeId);
 
   useEffect(() => {
@@ -124,6 +125,13 @@ function SectionRail() {
     return () => observer.disconnect();
   }, []);
 
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <nav
       aria-label="页面区块导航"
@@ -131,19 +139,29 @@ function SectionRail() {
     >
       {SECTION_NAV_ITEMS.map((item, index) => {
         const active = item.id === activeId;
+        const showLabel = hoveredId !== null ? hoveredId === item.id : active;
         return (
           <a
             key={item.id}
             href={`#${item.id}`}
             aria-current={active ? "true" : undefined}
             className="group relative flex items-center justify-end"
+            onClick={(e) => {
+              e.preventDefault();
+              activeRef.current = item.id;
+              setActiveId(item.id);
+              window.history.replaceState(null, "", `#${item.id}`);
+              scrollTo(item.id);
+            }}
+            onMouseEnter={() => setHoveredId(item.id)}
+            onMouseLeave={() => setHoveredId(null)}
           >
             <span
               className={[
                 "absolute right-8 w-48 text-right whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ease-out",
-                active
+                showLabel
                   ? "translate-x-0 text-foreground opacity-100"
-                  : "translate-x-1.5 text-muted-foreground opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+                  : "translate-x-1.5 text-muted-foreground opacity-0",
               ].join(" ")}
             >
               {String(index + 1).padStart(2, "0")} · {item.label}
