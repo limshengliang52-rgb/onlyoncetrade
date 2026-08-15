@@ -98,9 +98,9 @@ function SectionRail() {
   const activeRef = useRef(activeId);
 
   useEffect(() => {
-    const sections = SECTION_NAV_ITEMS
-      .map((item) => document.getElementById(item.id))
-      .filter((section): section is HTMLElement => Boolean(section));
+    const sections = SECTION_NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(
+      (section): section is HTMLElement => Boolean(section),
+    );
 
     if (sections.length === 0) return;
 
@@ -139,7 +139,7 @@ function SectionRail() {
     >
       {SECTION_NAV_ITEMS.map((item, index) => {
         const active = item.id === activeId;
-        const showLabel = hoveredId !== null ? hoveredId === item.id : active;
+        const hovered = item.id === hoveredId;
         return (
           <a
             key={item.id}
@@ -158,8 +158,8 @@ function SectionRail() {
           >
             <span
               className={[
-                "absolute right-8 w-48 text-right whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ease-out",
-                showLabel
+                "pointer-events-none absolute right-8 w-48 text-right whitespace-nowrap font-sans text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ease-out",
+                hovered
                   ? "translate-x-0 text-foreground opacity-100"
                   : "translate-x-1.5 text-muted-foreground opacity-0",
               ].join(" ")}
@@ -169,15 +169,15 @@ function SectionRail() {
             <span
               className={[
                 "grid h-5 w-5 place-items-center rounded-full border transition-all duration-300",
-                active
-                  ? "border-primary/70 bg-primary/15"
-                  : "border-border/70 bg-background/40 group-hover:border-primary/45 group-hover:bg-primary/10",
+                hovered
+                  ? "border-primary/80 bg-primary/15"
+                  : "border-border/50 bg-background/40",
               ].join(" ")}
             >
               <span
                 className={[
                   "h-1.5 w-1.5 rounded-full transition-all duration-300",
-                  active ? "bg-primary" : "bg-muted-foreground/40 group-hover:bg-primary/70",
+                  hovered ? "bg-primary" : "bg-muted-foreground/40",
                 ].join(" ")}
               />
             </span>
@@ -187,6 +187,7 @@ function SectionRail() {
     </nav>
   );
 }
+
 
 function FloatingWhatsApp() {
   return (
