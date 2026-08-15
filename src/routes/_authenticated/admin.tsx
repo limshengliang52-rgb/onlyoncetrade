@@ -223,30 +223,6 @@ function AdminPage() {
                         <td className="px-4 py-3 font-mono text-xs">
                           <div className="flex items-center gap-2">
                             <span>{s.mt5_uid}</span>
-                            {s.renewal_pause_requested_at && !s.cancel_at_period_end && (
-                              <>
-                                <button
-                                  onClick={() =>
-                                    approveRenewalPause.mutate({
-                                      id: s.id,
-                                      environment: getStripeEnvironment(),
-                                    })
-                                  }
-                                  disabled={approveRenewalPause.isPending}
-                                  className="rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-[11px] font-bold text-amber-400 hover:bg-amber-500/20 disabled:opacity-50"
-                                >
-                                  同意暂停续费
-                                </button>
-                                <button
-                                  onClick={() => rejectRenewalPause.mutate({ id: s.id })}
-                                  disabled={rejectRenewalPause.isPending}
-                                  className="rounded-md border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
-                                >
-                                  驳回暂停续费
-                                </button>
-                              </>
-                            )}
-
                             <button
                               onClick={() => {
                                 const raw = prompt("输入新的 MT5 UID (3-32 位字母数字)", s.mt5_uid);
