@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
-/** 当前显示总人数基线：当前目标显示 102 位 */
+/** 当前显示目标为 102，后续新增有效付款授权客户自动 +1 */
 const BASE_COUNT = 92;
 
 /** 基线时间点：只统计此时间之后新增的有效付费授权客户 */
