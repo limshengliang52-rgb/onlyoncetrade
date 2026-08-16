@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
-/** 当前显示总人数基线：现在正好显示 102 位 */
-const BASE_COUNT = 102;
+/** 当前显示总人数基线：当前目标显示 102 位 */
+const BASE_COUNT = 92;
 
 /** 基线时间点：只统计此时间之后新增的有效付费授权客户 */
 const BASELINE_AT = "2026-08-02T17:00:00.000Z";
