@@ -246,7 +246,7 @@ function Nav() {
 
 function useMemberCount() {
   const { memberCount } = Route.useLoaderData();
-  return memberCount + 2;
+  return memberCount;
 }
 
 
