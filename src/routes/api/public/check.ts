@@ -78,30 +78,21 @@ export const Route = createFileRoute("/api/public/check")({
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       GET: async ({ request }) => {
         const url = new URL(request.url);
-        const uid = url.searchParams.get("uid")?.trim() ?? "";
-        const rawProduct = url.searchParams.get("product")?.trim() ?? "";
-        const apiKey =
-          url.searchParams.get("api_key")?.trim() ??
-          url.searchParams.get("signature")?.trim() ??
-          request.headers.get("x-api-key")?.trim() ??
-          "";
+        const uid =
+          (url.searchParams.get("uid") ??
+            url.searchParams.get("account_id") ??
+            url.searchParams.get("mt5_account_id") ??
+            url.searchParams.get("mt5_uid") ??
+            "").trim();
+        const rawProduct =
+          (url.searchParams.get("product") ??
+            url.searchParams.get("symbol") ??
+            url.searchParams.get("ea") ??
+            "").trim();
 
         const nowIso = new Date().toISOString();
 
-        // Optional API key gate: if EA_LICENSE_API_KEY is set, require it.
-        const expectedKey = process.env.EA_LICENSE_API_KEY;
-        if (expectedKey && apiKey !== expectedKey) {
-          return respond(
-            {
-              authorized: false,
-              status: "unauthorized",
-              uid,
-              server_time: nowIso,
-              message: "invalid api_key",
-            },
-            401,
-          );
-        }
+        // Public license lookup: no api_key / signature required (legacy EA compat).
 
         if (!uid || !UID_RE.test(uid)) {
           return respond(

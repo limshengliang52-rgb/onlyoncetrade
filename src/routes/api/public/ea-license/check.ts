@@ -74,13 +74,7 @@ export const Route = createFileRoute("/api/public/ea-license/check")({
         const uid = pickParam(url, "uid", "mt5_uid");
         const productRaw = pickParam(url, "product", "symbol", "ea") || "xauusd";
         const { product, key: productKey } = normalizeProduct(productRaw);
-        const signature = pickParam(url, "signature");
-
-        // Signature is optional (enhancement only). Reject only if provided AND wrong.
-        const expectedKey = process.env.EA_LICENSE_API_KEY;
-        if (signature && expectedKey && signature !== expectedKey) {
-          return respond({ authorized: false, reason: "invalid_signature" });
-        }
+        // signature is accepted but never used to reject (legacy EA compat).
 
         if (!account_id || !ID_RE.test(account_id)) {
           return respond({ authorized: false, reason: "invalid_params" });
