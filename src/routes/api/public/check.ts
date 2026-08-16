@@ -188,6 +188,7 @@ export const Route = createFileRoute("/api/public/check")({
           authorized: true,
           status: "active",
           uid,
+          account_id: uid,
           plan: data.plan,
           product: rawProduct || null,
           products: allowed,
