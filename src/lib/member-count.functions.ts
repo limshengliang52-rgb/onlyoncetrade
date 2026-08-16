@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 /** 当前显示目标为 102，后续新增有效付款授权客户自动 +1 */
-const BASE_COUNT = 92;
+const BASE_COUNT = 94;
 
 /** 基线时间点：只统计此时间之后新增的有效付费授权客户 */
 const BASELINE_AT = "2026-08-02T17:00:00.000Z";
