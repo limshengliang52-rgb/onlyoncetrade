@@ -79,21 +79,18 @@ export const createEACheckoutSession = createServerFn({ method: "POST" })
       if (!prices.data.length) throw new Error("价格未找到，请联系管理员");
       const price = prices.data[0];
 
-      // Recurring subscription line item. The catalog price object is monthly;
-      // for the 3-month plan we build a price_data with interval_count = 3.
-      const lineItem =
-        catalog.intervalCount === 1
-          ? { price: price.id, quantity: 1 }
-          : {
-              quantity: 1,
-              price_data: {
-                currency: "usd",
-                product:
-                  typeof price.product === "string" ? price.product : price.product.id,
-                unit_amount: catalog.amountUSD * 100,
-                recurring: { interval: "month", interval_count: catalog.intervalCount },
-              },
-            };
+      // Recurring subscription line item. Always build price_data from the catalog
+      // amount so checkout always matches PLAN_CATALOG.amountUSD.
+      const lineItem = {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          product: typeof price.product === "string" ? price.product : price.product.id,
+          unit_amount: catalog.amountUSD * 100,
+          recurring: { interval: "month", interval_count: catalog.intervalCount },
+        },
+      };
+
 
       const metadata = {
         userId: context.userId,
