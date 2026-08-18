@@ -456,7 +456,7 @@ const plans: Plan[] = [
     slug: "plus",
     name: "OnlyOnce EA Plus",
     tagline: "",
-    price: "$99",
+    price: "$120",
     priceNote: "/ 30 天",
     features: PLAN_FEATURES,
     cta: "订阅月费方案",

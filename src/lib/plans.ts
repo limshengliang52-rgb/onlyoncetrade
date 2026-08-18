@@ -5,7 +5,7 @@ export type PlanSlug = "pro" | "plus";
 // are intentionally NOT accepted at /checkout/:slug — they redirect to pricing.
 export const PLAN_SLUG_TO_KEY: Record<PlanSlug, PlanKey> = {
   pro: "basic", // $270 / 90 days (OnlyOnce EA Pro)
-  plus: "access", // $99 / 30 days (OnlyOnce EA Plus)
+  plus: "access", // $120 / 30 days (OnlyOnce EA Plus)
 };
 
 export const PLAN_KEY_TO_SLUG: Record<PlanKey, PlanSlug> = {
@@ -41,8 +41,8 @@ export const PLAN_CATALOG: Record<
     name: "OnlyOnce EA Plus",
     priceId: "plan_plus_monthly_sub_usd",
     intervalCount: 1,
-    billingLabel: "$99 / 30 天",
-    amountUSD: 99,
+    billingLabel: "$120 / 30 天",
+    amountUSD: 120,
     durationDays: 30,
     durationLabel: "/ 月",
     tagline: "30 天订阅方案，包含 XAUUSD EA + BTCUSD EA",
