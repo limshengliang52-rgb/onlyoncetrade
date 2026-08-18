@@ -380,7 +380,7 @@ function ManageSubscriptionSection({
             disabled={!!loading}
             className="rounded-lg bg-gold-gradient px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading === "access" ? "创建结账中..." : "续费 30 天（$99）"}
+            {loading === "access" ? "创建结账中..." : "续费 30 天（$120）"}
           </button>
           <button
             onClick={() => renew("basic")}
