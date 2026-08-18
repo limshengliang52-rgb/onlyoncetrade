@@ -570,6 +570,11 @@ function PlanCard({ plan }: { plan: Plan }) {
         <PlatformNotice variant="compact" />
       </div>
 
+      <div className="mt-4 rounded-xl border border-primary/20 bg-primary/[0.03] p-3 text-xs leading-relaxed text-muted-foreground">
+        <span className="font-semibold text-foreground">退款声明：</span>
+        EA 软件属于数字产品，一经售出，概不退款。请确认适合自身风险承受能力后再购买。
+      </div>
+
       <a
         href={`/checkout/${plan.slug}`}
         className={
