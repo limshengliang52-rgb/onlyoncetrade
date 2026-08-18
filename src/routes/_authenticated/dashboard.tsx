@@ -373,6 +373,11 @@ function ManageSubscriptionSection({
       )}
       {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
 
+      <div className="mt-4 rounded-xl border border-primary/20 bg-primary/[0.03] p-3 text-xs leading-relaxed text-muted-foreground">
+        <span className="font-semibold text-foreground">退款声明：</span>
+        EA 软件属于数字产品，一经售出，概不退款。请确认适合自身风险承受能力后再购买。
+      </div>
+
       {!secret ? (
         <div className="mt-5 flex flex-wrap gap-3">
           <button
@@ -502,6 +507,10 @@ function PurchaseCard({ plan }: { plan: (typeof PLAN_CATALOG)[PlanKey] }) {
             className="mt-1 w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:border-gold/60"
           />
           {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+          <div className="mt-3 rounded-xl border border-primary/20 bg-primary/[0.03] p-3 text-xs leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">退款声明：</span>
+            EA 软件属于数字产品，一经售出，概不退款。请确认适合自身风险承受能力后再购买。
+          </div>
           <button
             onClick={startCheckout}
             disabled={loading}
